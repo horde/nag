@@ -1,14 +1,17 @@
 <?php
-
-$block_name = _("Tasks Summary");
-
 /**
- * @package Horde_Block
  */
-class Horde_Block_nag_summary extends Horde_Block
+class Nag_Block_Summary extends Horde_Block
 {
-    protected $_app = 'nag';
+    /**
+     */
+    public function getName()
+    {
+        return _("Tasks Summary");
+    }
 
+    /**
+     */
     protected function _title()
     {
         global $registry;
@@ -21,6 +24,8 @@ class Horde_Block_nag_summary extends Horde_Block
             . htmlspecialchars($label) . '</a>';
     }
 
+    /**
+     */
     protected function _params()
     {
         $cManager = new Horde_Prefs_CategoryManager();
@@ -40,54 +45,69 @@ class Horde_Block_nag_summary extends Horde_Block
             $tasklists[$id] = $tasklist->get('name');
         }
 
-        return array('block_title' => array(
-                         'type' => 'text',
-                         'name' => _("Block title"),
-                         'default' => $GLOBALS['registry']->get('name')),
-                     'show_pri' => array(
-                         'type' => 'checkbox',
-                         'name' => _("Show priorities?"),
-                         'default' => 1),
-                     'show_actions' => array(
-                         'type' => 'checkbox',
-                         'name' => _("Show action buttons?"),
-                         'default' => 1),
-                     'show_due' => array(
-                         'type' => 'checkbox',
-                         'name' => _("Show due dates?"),
-                         'default' => 1),
-                     'show_tasklist' => array(
-                         'type' => 'checkbox',
-                         'name' => _("Show tasklist name?"),
-                         'default' => 1),
-                     'show_alarms' => array(
-                         'type' => 'checkbox',
-                         'name' => _("Show task alarms?"),
-                         'default' => 1),
-                     'show_category' => array(
-                         'type' => 'checkbox',
-                         'name' => _("Show task category?"),
-                         'default' => 1),
-                     'show_overdue' => array(
-                         'type' => 'checkbox',
-                         'name' => _("Always show overdue tasks?"),
-                         'default' => 1),
-                     'show_completed' => array(
-                         'type' => 'checkbox',
-                         'name' => _("Always show completed and future tasks?"),
-                         'default' => 1),
-                     'show_tasklists' => array(
-                         'type' => 'multienum',
-                         'name' => _("Show tasks from these tasklists"),
-                         'default' => array($GLOBALS['registry']->getAuth()),
-                         'values' => $tasklists),
-                     'show_categories' => array(
-                         'type' => 'multienum',
-                         'name' => _("Show tasks from these categories"),
-                         'default' => array(),
-                         'values' => $categories));
+        return array(
+            'block_title' => array(
+                'type' => 'text',
+                'name' => _("Block title"),
+                'default' => $GLOBALS['registry']->get('name')
+            ),
+            'show_pri' => array(
+                'type' => 'checkbox',
+                'name' => _("Show priorities?"),
+                'default' => 1
+            ),
+            'show_actions' => array(
+                'type' => 'checkbox',
+                'name' => _("Show action buttons?"),
+                'default' => 1
+            ),
+            'show_due' => array(
+                'type' => 'checkbox',
+                'name' => _("Show due dates?"),
+                'default' => 1
+            ),
+            'show_tasklist' => array(
+                'type' => 'checkbox',
+                'name' => _("Show tasklist name?"),
+                'default' => 1
+            ),
+            'show_alarms' => array(
+                'type' => 'checkbox',
+                'name' => _("Show task alarms?"),
+                'default' => 1
+            ),
+            'show_category' => array(
+                'type' => 'checkbox',
+                'name' => _("Show task category?"),
+                'default' => 1
+            ),
+            'show_overdue' => array(
+                'type' => 'checkbox',
+                'name' => _("Always show overdue tasks?"),
+                'default' => 1
+            ),
+            'show_completed' => array(
+                'type' => 'checkbox',
+                'name' => _("Always show completed and future tasks?"),
+                'default' => 1
+            ),
+            'show_tasklists' => array(
+                'type' => 'multienum',
+                'name' => _("Show tasks from these tasklists"),
+                'default' => array($GLOBALS['registry']->getAuth()),
+                'values' => $tasklists
+            ),
+            'show_categories' => array(
+                'type' => 'multienum',
+                'name' => _("Show tasks from these categories"),
+                'default' => array(),
+                'values' => $categories
+            )
+        );
     }
 
+    /**
+     */
     protected function _content()
     {
         global $registry, $prefs;
