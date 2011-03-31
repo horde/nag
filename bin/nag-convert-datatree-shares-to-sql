@@ -6,9 +6,16 @@
  * upgrade script before executing this script.
  */
 
-/* Set up the CLI environment */
-require_once dirname(__FILE__) . '/../../lib/Application.php';
+$baseFile = dirname(__FILE__) . '/../../nag/lib/Application.php';
+if (file_exists($baseFile)) {
+    require_once $baseFile;
+} else {
+    require_once 'PEAR/Config.php';
+    require_once PEAR_Config::singleton()
+        ->get('horde_dir', null, 'pear.horde.org') . '/nag/lib/Application.php';
+}
 Horde_Registry::appInit('nag', array('cli' => true));
+
 /* Grab what we need to steal the DB config */
 require_once HORDE_BASE . '/config/conf.php';
 

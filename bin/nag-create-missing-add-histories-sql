@@ -9,8 +9,14 @@
  * @author Chuck Hagenbuch <chuck@horde.org>
  */
 
-// Do CLI checks and environment setup first.
-require_once dirname(__FILE__) . '/../../lib/Application.php';
+if (file_exists(dirname(__FILE__) . '/../../nag/lib/Application.php')) {
+    $baseDir = dirname(__FILE__) . '/../';
+} else {
+    require_once 'PEAR/Config.php';
+    $baseDir = PEAR_Config::singleton()
+        ->get('horde_dir', null, 'pear.horde.org') . '/nag/';
+}
+require_once $baseDir . 'lib/Application.php';
 Horde_Registry::appInit('nag', array('cli' => true));
 
 $history = $GLOBALS['injector']->getInstance('Horde_History');
