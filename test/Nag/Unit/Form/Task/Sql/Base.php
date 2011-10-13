@@ -1,6 +1,6 @@
 <?php
 /**
- * Test the core Nag driver with a sqlite DB.
+ * Task form test base for the SQL driver.
  *
  * PHP version 5
  *
@@ -13,12 +13,7 @@
  */
 
 /**
- * Prepare the test setup.
- */
-require_once dirname(__FILE__) . '/../../../../Autoload.php';
-
-/**
- * Test the core Nag driver with a sqlite DB.
+ * Task form test base for the SQL driver.
  *
  * Copyright 2011 Horde LLC (http://www.horde.org/)
  *
@@ -32,14 +27,20 @@ require_once dirname(__FILE__) . '/../../../../Autoload.php';
  * @link       http://www.horde.org/apps/nag
  * @license    http://www.horde.org/licenses/gpl GNU General Public License, version 2
  */
-class Nag_Unit_Nag_Sql_Pdo_SqliteTest extends Nag_Unit_Nag_Sql_Base
+class Nag_Unit_Form_Task_Sql_Base extends Nag_Unit_Form_Task_Base
 {
-    protected $backupGlobals = false;
+    static $callback;
 
-    public static function setUpBeforeClass()
+    static public function setUpBeforeClass()
     {
-        self::$setup = new Horde_Test_Setup();
-        self::createSqlPdoSqlite(self::$setup);
         parent::setUpBeforeClass();
+        self::getDb();
+        self::createSqlShares(self::$setup);
+        list($share, $other_share) = self::_createDefaultShares();
+    }
+
+    static protected function getDb()
+    {
+        call_user_func_array(self::$callback, array());
     }
 }
