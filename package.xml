@@ -22,7 +22,7 @@
   <email>chuck@horde.org</email>
   <active>false</active>
  </lead>
- <date>2017-10-13</date>
+ <date>2017-10-16</date>
  <version>
   <release>5.0.0</release>
   <api>5.0.0</api>
@@ -563,7 +563,7 @@
    <file name="index.php" role="horde" />
    <file name="list.php" role="horde" />
    <file name="quick.php" role="horde" />
-   <file name="README" role="doc" />
+   <file name="README.rst" role="doc" />
    <file name="search.php" role="horde" />
    <file name="smartmobile.php" role="horde" />
    <file name="task.php" role="horde" />
@@ -802,7 +802,7 @@
    <install as="nag/index.php" name="index.php" />
    <install as="nag/list.php" name="list.php" />
    <install as="nag/quick.php" name="quick.php" />
-   <install as="README" name="README" />
+   <install as="README.rst" name="README.rst" />
    <install as="nag/search.php" name="search.php" />
    <install as="nag/smartmobile.php" name="smartmobile.php" />
    <install as="nag/task.php" name="task.php" />
@@ -1899,7 +1899,7 @@
    <stability>
     <release>beta</release>
     <api>beta</api></stability>
-   <date>2017-10-13</date>
+   <date>2017-10-16</date>
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
 * [jan] Display recurrence rule in task view.
