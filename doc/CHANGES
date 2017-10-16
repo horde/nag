@@ -1032,7 +1032,7 @@ v0.0.1
 [jon] Display task descriptions using a proportional (fixed) font.
 [jon] Added externally-accessible API for registry integration.
 [jon] HORDE_BASE is now defined in lib/base.php instead of config/conf.php.
-[jon] Added detailed installation documentation (docs/INSTALL).
+[jon] Added detailed installation documentation (doc/INSTALL).
 [jon] Moved task retrieval out of base.php for more efficiency and granularity.
 [jon] Display overdue tasks in a different color.
 [jon] Added status support for Horde messages / errors.
