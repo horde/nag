@@ -22,7 +22,7 @@
   <email>chuck@horde.org</email>
   <active>false</active>
  </lead>
- <date>2017-10-16</date>
+ <date>2017-10-17</date>
  <version>
   <release>5.0.0</release>
   <api>5.0.0</api>
@@ -558,9 +558,9 @@
      <file name="screen.css" role="horde" />
     </dir> <!-- /themes/default -->
    </dir> <!-- /themes -->
-   <file name="COPYING" role="doc" />
    <file name="data.php" role="horde" />
    <file name="index.php" role="horde" />
+   <file name="LICENSE" role="doc" />
    <file name="list.php" role="horde" />
    <file name="quick.php" role="horde" />
    <file name="README.rst" role="doc" />
@@ -797,16 +797,6 @@
  </usesrole>
  <phprelease>
   <filelist>
-   <install as="COPYING" name="COPYING" />
-   <install as="nag/data.php" name="data.php" />
-   <install as="nag/index.php" name="index.php" />
-   <install as="nag/list.php" name="list.php" />
-   <install as="nag/quick.php" name="quick.php" />
-   <install as="README.rst" name="README.rst" />
-   <install as="nag/search.php" name="search.php" />
-   <install as="nag/smartmobile.php" name="smartmobile.php" />
-   <install as="nag/task.php" name="task.php" />
-   <install as="nag/view.php" name="view.php" />
    <install as="nag/app/controllers/CompleteTask.php" name="app/controllers/CompleteTask.php" />
    <install as="nag/app/controllers/SaveTask.php" name="app/controllers/SaveTask.php" />
    <install as="nag-convert-datatree-shares-to-sql" name="bin/nag-convert-datatree-shares-to-sql" />
@@ -820,6 +810,7 @@
    <install as="nag/config/menu.php.dist" name="config/menu.php.dist" />
    <install as="nag/config/prefs.php" name="config/prefs.php" />
    <install as="nag/config/routes.php" name="config/routes.php" />
+   <install as="nag/data.php" name="data.php" />
    <install as="CHANGES" name="doc/CHANGES" />
    <install as="CREDITS" name="doc/CREDITS" />
    <install as="INSTALL" name="doc/INSTALL" />
@@ -828,32 +819,25 @@
    <install as="TODO" name="doc/TODO" />
    <install as="UPGRADING" name="doc/UPGRADING" />
    <install as="vtodo/todo.ics" name="doc/vtodo/todo.ics" />
+   <install as="nag/index.php" name="index.php" />
    <install as="nag/js/calendar.js" name="js/calendar.js" />
    <install as="nag/js/smartmobile.js" name="js/smartmobile.js" />
    <install as="nag/js/task.js" name="js/task.js" />
    <install as="nag/lib/.htaccess" name="lib/.htaccess" />
-   <install as="nag/lib/Api.php" name="lib/Api.php" />
-   <install as="nag/lib/Application.php" name="lib/Application.php" />
-   <install as="nag/lib/CompleteTask.php" name="lib/CompleteTask.php" />
-   <install as="nag/lib/Driver.php" name="lib/Driver.php" />
-   <install as="nag/lib/Exception.php" name="lib/Exception.php" />
-   <install as="nag/lib/Nag.php" name="lib/Nag.php" />
-   <install as="nag/lib/QuickParser.php" name="lib/QuickParser.php" />
-   <install as="nag/lib/Search.php" name="lib/Search.php" />
-   <install as="nag/lib/Smartmobile.php" name="lib/Smartmobile.php" />
-   <install as="nag/lib/TagBrowser.php" name="lib/TagBrowser.php" />
-   <install as="nag/lib/Tagger.php" name="lib/Tagger.php" />
-   <install as="nag/lib/Task.php" name="lib/Task.php" />
-   <install as="nag/lib/Tasklist.php" name="lib/Tasklist.php" />
    <install as="nag/lib/Ajax/Application.php" name="lib/Ajax/Application.php" />
    <install as="nag/lib/Ajax/Application/Handler/Smartmobile.php" name="lib/Ajax/Application/Handler/Smartmobile.php" />
    <install as="nag/lib/Ajax/Imple/ContactAutoCompleter.php" name="lib/Ajax/Imple/ContactAutoCompleter.php" />
    <install as="nag/lib/Ajax/Imple/TagAutoCompleter.php" name="lib/Ajax/Imple/TagAutoCompleter.php" />
+   <install as="nag/lib/Api.php" name="lib/Api.php" />
+   <install as="nag/lib/Application.php" name="lib/Application.php" />
    <install as="nag/lib/Backup/Tasks.php" name="lib/Backup/Tasks.php" />
    <install as="nag/lib/Block/Summary.php" name="lib/Block/Summary.php" />
+   <install as="nag/lib/CompleteTask.php" name="lib/CompleteTask.php" />
+   <install as="nag/lib/Driver.php" name="lib/Driver.php" />
    <install as="nag/lib/Driver/Kolab.php" name="lib/Driver/Kolab.php" />
    <install as="nag/lib/Driver/Smartlist.php" name="lib/Driver/Smartlist.php" />
    <install as="nag/lib/Driver/Sql.php" name="lib/Driver/Sql.php" />
+   <install as="nag/lib/Exception.php" name="lib/Exception.php" />
    <install as="nag/lib/Factory/Driver.php" name="lib/Factory/Driver.php" />
    <install as="nag/lib/Factory/TagBrowser.php" name="lib/Factory/TagBrowser.php" />
    <install as="nag/lib/Factory/Tasklists.php" name="lib/Factory/Tasklists.php" />
@@ -871,15 +855,24 @@
    <install as="nag/lib/Form/Type/NagStart.php" name="lib/Form/Type/NagStart.php" />
    <install as="nag/lib/Form/Type/NagTags.php" name="lib/Form/Type/NagTags.php" />
    <install as="nag/lib/LoginTasks/Task/PurgeCompleted.php" name="lib/LoginTasks/Task/PurgeCompleted.php" />
+   <install as="nag/lib/Nag.php" name="lib/Nag.php" />
    <install as="nag/lib/Prefs/Special/TaskAlarms.php" name="lib/Prefs/Special/TaskAlarms.php" />
+   <install as="nag/lib/QuickParser.php" name="lib/QuickParser.php" />
+   <install as="nag/lib/Search.php" name="lib/Search.php" />
+   <install as="nag/lib/Smartmobile.php" name="lib/Smartmobile.php" />
+   <install as="nag/lib/TagBrowser.php" name="lib/TagBrowser.php" />
+   <install as="nag/lib/Tagger.php" name="lib/Tagger.php" />
+   <install as="nag/lib/Task.php" name="lib/Task.php" />
+   <install as="nag/lib/Tasklist.php" name="lib/Tasklist.php" />
    <install as="nag/lib/Tasklists/Base.php" name="lib/Tasklists/Base.php" />
    <install as="nag/lib/Tasklists/Default.php" name="lib/Tasklists/Default.php" />
    <install as="nag/lib/Tasklists/Kolab.php" name="lib/Tasklists/Kolab.php" />
    <install as="nag/lib/Ui/VarRenderer/Nag.php" name="lib/Ui/VarRenderer/Nag.php" />
-   <install as="nag/lib/View/List.php" name="lib/View/List.php" />
    <install as="nag/lib/View/Helper/List.php" name="lib/View/Helper/List.php" />
+   <install as="nag/lib/View/List.php" name="lib/View/List.php" />
+   <install as="LICENSE" name="LICENSE" />
+   <install as="nag/list.php" name="list.php" />
    <install as="nag/locale/.htaccess" name="locale/.htaccess" />
-   <install as="nag/locale/nag.pot" name="locale/nag.pot" />
    <install as="nag/locale/ar/LC_MESSAGES/nag.mo" name="locale/ar/LC_MESSAGES/nag.mo" />
    <install as="nag/locale/ar/LC_MESSAGES/nag.po" name="locale/ar/LC_MESSAGES/nag.po" />
    <install as="nag/locale/bg/LC_MESSAGES/nag.mo" name="locale/bg/LC_MESSAGES/nag.mo" />
@@ -929,6 +922,7 @@
    <install as="nag/locale/lv/help.xml" name="locale/lv/help.xml" />
    <install as="nag/locale/lv/LC_MESSAGES/nag.mo" name="locale/lv/LC_MESSAGES/nag.mo" />
    <install as="nag/locale/lv/LC_MESSAGES/nag.po" name="locale/lv/LC_MESSAGES/nag.po" />
+   <install as="nag/locale/nag.pot" name="locale/nag.pot" />
    <install as="nag/locale/nb/LC_MESSAGES/nag.mo" name="locale/nb/LC_MESSAGES/nag.mo" />
    <install as="nag/locale/nb/LC_MESSAGES/nag.po" name="locale/nb/LC_MESSAGES/nag.po" />
    <install as="nag/locale/nl/help.xml" name="locale/nl/help.xml" />
@@ -979,6 +973,11 @@
    <install as="nag/migration/15_nag_upgrade_addorganizer.php" name="migration/15_nag_upgrade_addorganizer.php" />
    <install as="nag/migration/16_nag_upgrade_addactual.php" name="migration/16_nag_upgrade_addactual.php" />
    <install as="nag/migration/17_nag_upgrade_task_parent.php" name="migration/17_nag_upgrade_task_parent.php" />
+   <install as="nag/quick.php" name="quick.php" />
+   <install as="README.rst" name="README.rst" />
+   <install as="nag/search.php" name="search.php" />
+   <install as="nag/smartmobile.php" name="smartmobile.php" />
+   <install as="nag/task.php" name="task.php" />
    <install as="nag/task/complete.php" name="task/complete.php" />
    <install as="nag/task/save.php" name="task/save.php" />
    <install as="nag/tasklists/create.php" name="tasklists/create.php" />
@@ -987,18 +986,18 @@
    <install as="nag/tasklists/index.html" name="tasklists/index.html" />
    <install as="nag/tasks/index.php" name="tasks/index.php" />
    <install as="nag/templates/.htaccess" name="templates/.htaccess" />
-   <install as="nag/templates/javascript_defs.php" name="templates/javascript_defs.php" />
-   <install as="nag/templates/list.html.php" name="templates/list.html.php" />
-   <install as="nag/templates/quick.inc" name="templates/quick.inc" />
    <install as="nag/templates/alarm/mail.html.php" name="templates/alarm/mail.html.php" />
    <install as="nag/templates/alarm/mail.plain.php" name="templates/alarm/mail.plain.php" />
    <install as="nag/templates/data/export.inc" name="templates/data/export.inc" />
    <install as="nag/templates/data/import.inc" name="templates/data/import.inc" />
    <install as="nag/templates/itip/notification.html.php" name="templates/itip/notification.html.php" />
    <install as="nag/templates/itip/notification.plain.php" name="templates/itip/notification.plain.php" />
+   <install as="nag/templates/javascript_defs.php" name="templates/javascript_defs.php" />
+   <install as="nag/templates/list.html.php" name="templates/list.html.php" />
    <install as="nag/templates/list/header.html.php" name="templates/list/header.html.php" />
    <install as="nag/templates/list/task_headers.html.php" name="templates/list/task_headers.html.php" />
    <install as="nag/templates/list/_task.html.php" name="templates/list/_task.html.php" />
+   <install as="nag/templates/quick.inc" name="templates/quick.inc" />
    <install as="nag/templates/smartmobile/lists.html.php" name="templates/smartmobile/lists.html.php" />
    <install as="nag/templates/smartmobile/main.html.php" name="templates/smartmobile/main.html.php" />
    <install as="nag/templates/smartmobile/taskform.html.php" name="templates/smartmobile/taskform.html.php" />
@@ -1021,7 +1020,6 @@
    <install as="Nag/Unit/Nag/KolabTest.php" name="test/Nag/Unit/Nag/KolabTest.php" />
    <install as="Nag/Unit/Nag/Sql/Base.php" name="test/Nag/Unit/Nag/Sql/Base.php" />
    <install as="Nag/Unit/Nag/Sql/Pdo/SqliteTest.php" name="test/Nag/Unit/Nag/Sql/Pdo/SqliteTest.php" />
-   <install as="nag/themes/default/screen.css" name="themes/default/screen.css" />
    <install as="nag/themes/default/block/screen.css" name="themes/default/block/screen.css" />
    <install as="nag/themes/default/graphics/add.png" name="themes/default/graphics/add.png" />
    <install as="nag/themes/default/graphics/alarm.png" name="themes/default/graphics/alarm.png" />
@@ -1046,7 +1044,9 @@
    <install as="nag/themes/default/graphics/tasklists.png" name="themes/default/graphics/tasklists.png" />
    <install as="nag/themes/default/graphics/unchecked.png" name="themes/default/graphics/unchecked.png" />
    <install as="nag/themes/default/graphics/za.png" name="themes/default/graphics/za.png" />
+   <install as="nag/themes/default/screen.css" name="themes/default/screen.css" />
    <install as="nag/themes/default/smartmobile/screen.css" name="themes/default/smartmobile/screen.css" />
+   <install as="nag/view.php" name="view.php" />
   </filelist>
  </phprelease>
  <changelog>
@@ -1899,7 +1899,7 @@
    <stability>
     <release>beta</release>
     <api>beta</api></stability>
-   <date>2017-10-16</date>
+   <date>2017-10-17</date>
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
 * [jan] Display recurrence rule in task view.
