@@ -22,7 +22,7 @@
   <email>chuck@horde.org</email>
   <active>false</active>
  </lead>
- <date>2017-10-17</date>
+ <date>2017-10-20</date>
  <version>
   <release>5.0.0</release>
   <api>5.0.0</api>
@@ -518,7 +518,6 @@
      <file name="AllTests.php" role="test" />
      <file name="Autoload.php" role="test" />
      <file name="bootstrap.php" role="test" />
-     <file name="phpunit.xml" role="test" />
      <file name="TestCase.php" role="test" />
     </dir> <!-- /test/Nag -->
    </dir> <!-- /test -->
@@ -1005,7 +1004,6 @@
    <install as="Nag/AllTests.php" name="test/Nag/AllTests.php" />
    <install as="Nag/Autoload.php" name="test/Nag/Autoload.php" />
    <install as="Nag/bootstrap.php" name="test/Nag/bootstrap.php" />
-   <install as="Nag/phpunit.xml" name="test/Nag/phpunit.xml" />
    <install as="Nag/TestCase.php" name="test/Nag/TestCase.php" />
    <install as="Nag/Unit/Driver/Base.php" name="test/Nag/Unit/Driver/Base.php" />
    <install as="Nag/Unit/Driver/KolabTest.php" name="test/Nag/Unit/Driver/KolabTest.php" />
@@ -1899,7 +1897,7 @@
    <stability>
     <release>beta</release>
     <api>beta</api></stability>
-   <date>2017-10-17</date>
+   <date>2017-10-20</date>
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
 * [jan] Display recurrence rule in task view.
