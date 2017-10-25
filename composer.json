@@ -22,7 +22,7 @@
         }
     ],
     "version": "5.0.0",
-    "time": "2016-12-13",
+    "time": "2017-10-20",
     "repositories": [
         {
             "type": "pear",
@@ -30,11 +30,12 @@
         }
     ],
     "require": {
-        "php": "^5.3",
+        "php": "^5.3 || ^7",
         "pear-pear.horde.org/content": "^2.0.5",
         "pear-pear.horde.org/horde": "^5",
         "pear-pear.horde.org/Horde_Auth": "^2",
-        "pear-pear.horde.org/Horde_Core": "^2.6.1",
+        "pear-pear.horde.org/Horde_Controller": "^2",
+        "pear-pear.horde.org/Horde_Core": "^2.31",
         "pear-pear.horde.org/Horde_Data": "^2",
         "pear-pear.horde.org/Horde_Date": "^2.1",
         "pear-pear.horde.org/Horde_Date_Parser": "^2",
@@ -59,8 +60,18 @@
     },
     "suggest": {
         "pear-pear.horde.org/Horde_ActiveSync": "^2.4",
+        "pear-pear.horde.org/Horde_Backup": "^1",
         "pear-pear.horde.org/Horde_Db": "^2",
         "pear-pear.horde.org/Horde_OpenXchange": "^1",
         "pear-pear.horde.org/Horde_Test": "^2"
+    },
+    "replace": {
+        "pear-pear.horde.org/nag": "5.*",
+        "pear-horde/nag": "5.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Nag": "lib/"
+        }
     }
 }
