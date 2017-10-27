@@ -1068,6 +1068,15 @@
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
 * First alpha release for Horde 4.
+* [jan] Provide default configuration files instead of .dist versions.
+* [jan] Send alarm notifications with HTML part and convert to Horde_View.
+* [jan] Default task lists no longer have the user name as the ID.
+* [jan] Create a default task list if the user doesn&apos;t own any yet.
+* [jan] Add start date to possible colums in task list (Joel Smith &lt;js-horde@jk1.net&gt;, Request #9083).
+* [jan] Add system task lists (Request #2059).
+* [jan] Set colors per task list (Request #7480).
+* [cjh] Quick Add support: there is a javascript UI element for quickly adding tasks, and an API method (tasks/quickAdd) that provides the same functionality.
+* [jan] Add individual notification methods for single tasks (Alfonso Marín Marín &lt;almarin@um.es&gt;).
    </notes>
   </release>
   <release>
@@ -1082,9 +1091,9 @@
    <date>2011-03-16</date>
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
-* Fix saving tasks via PUT method.
-* Fix deleting task lists.
-* Fix hiding the External prefs group (Bug #9643).
+* [mjr] Fix saving tasks via PUT method.
+* [mjr] Fix deleting task lists.
+* [mjr] Fix hiding the External prefs group (Bug #9643).
    </notes>
   </release>
   <release>
@@ -1100,6 +1109,7 @@
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
 * First release candidate for Horde 4.
+* [jan] Update installation and upgrade instructions.
 * [gwr] Adapted the Kolab driver to Horde 4.
    </notes>
   </release>
@@ -1597,7 +1607,6 @@
    <date>2014-07-01</date>
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
-*
    </notes>
   </release>
   <release>
