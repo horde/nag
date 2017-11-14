@@ -1,8 +1,8 @@
 {
     "name": "horde/nag",
-    "description": "A web based task list manager",
-    "type": "library",
-    "homepage": "https://pear.horde.org",
+    "description": "Task list application",
+    "type": "project",
+    "homepage": "https://www.horde.org/apps/nag",
     "license": "GPL-2.0",
     "authors": [
         {
@@ -22,7 +22,7 @@
         }
     ],
     "version": "4.2.18",
-    "time": "2017-09-21",
+    "time": "2017-11-14",
     "repositories": [
         {
             "type": "pear",
