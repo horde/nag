@@ -1380,7 +1380,9 @@ class Nag_Task
 
         /* Completion */
         if ($this->completed) {
-            $message->datecompleted = new Horde_Date($this->completed_date);
+            if ($this->completed_date) {
+                $message->datecompleted = new Horde_Date($this->completed_date);
+            }
             $message->complete = Horde_ActiveSync_Message_Task::TASK_COMPLETE_TRUE;
         } else {
             $message->complete = Horde_ActiveSync_Message_Task::TASK_COMPLETE_FALSE;
@@ -1388,13 +1390,17 @@ class Nag_Task
 
         /* Due Date */
         if (!empty($this->due)) {
-            $message->utcduedate = new Horde_Date($this->due);
+            if ($this->due) {
+                $message->utcduedate = new Horde_Date($this->due);
+            }
             $message->duedate = clone($message->utcduedate);
         }
 
         /* Start Date */
         if (!empty($this->start)) {
-            $message->utcstartdate = new Horde_Date($this->start);
+            if ($this->start) {
+                $message->utcstartdate = new Horde_Date($this->start);
+            }
             $message->startdate = clone($message->utcstartdate);
         }
 
