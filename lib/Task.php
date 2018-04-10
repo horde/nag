@@ -1391,7 +1391,7 @@ class Nag_Task
         /* Due Date */
         if (!empty($this->due)) {
             if ($this->due) {
-                $message->utcduedate = new Horde_Date($this->due);
+                $message->utcduedate = new Horde_Date($this->getNextDue());
             }
             $message->duedate = clone($message->utcduedate);
         }
@@ -1619,7 +1619,8 @@ class Nag_Task
         $this->name = $message->subject;
         $tz = date_default_timezone_get();
 
-        /* Completion */
+        /* Completion: Note we don't use self::toggleCompletion() becuase of
+         * the way that EAS hanldes recurring tasks (see below). */
         if ($this->completed = $message->complete) {
             if ($message->datecompleted) {
                 $message->datecompleted->setTimezone($tz);
@@ -1690,15 +1691,25 @@ class Nag_Task
             $this->alarm = ($this->due - $alarm->timestamp()) / 60;
         }
 
-        if ($rrule = $message->getRecurrence()) {
-            $this->recurrence = $rrule;
-        }
-
         $this->tasklist = $GLOBALS['prefs']->getValue('default_tasklist');
 
         /* Categories */
         if (is_array($message->categories) && count($message->categories)) {
             $this->tags = implode(',', $message->categories);
+        }
+
+        // Recurrence is handled by the client deleting the original event
+        // and recreating a "dead" completed event and an active recurring
+        // event with the first due date being the next due date in the
+        // series. So, if deadoccur is set, we have to ignore the recurrence
+        // properties. Otherwise, editing the "dead" occurance will recreate
+        // a completely new recurring series on the client.
+        if (!($message->recurrence && $message->recurrence->deadoccur) &&
+            !$message->deadoccur) {
+
+            if ($rrule = $message->getRecurrence()) {
+                $this->recurrence = $rrule;
+            }
         }
     }
 
