@@ -33,6 +33,7 @@
  </stability>
  <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
  <notes>
+* [mjr] Fix issue with NULL created dates breaking EAS.
 * [jan] Fix notice when re-exporting tasks without priority (Bug #14699).
 * [jan] Fix regression in exporting single tags to iCalendar CATEGORIES (Bug #14699).
  </notes>
@@ -2358,7 +2359,7 @@
    <date>2014-07-01</date>
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
-*
+* 
    </notes>
   </release>
   <release>
@@ -2692,16 +2693,7 @@
    <date>2017-09-21</date>
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
-* [mjr] Fix issue with null created dates breaking EAS sync.
-* [mjr] Fix issue with null created dates breaking EAS sync.
-* [mjr] Fix issue with null created dates breaking EAS sync.
-* [mjr] Fix issue with null created dates breaking EAS sync.
-* [mjr] Fix issue with null created dates breaking EAS sync.
-* [mjr] Fix issue with null created dates breaking EAS sync.
-* [mjr] Fix issue with null created dates breaking EAS sync.
-* [mjr] Fix issue with null created dates breaking EAS sync.
-* [mjr] Fix issue with null created dates breaking EAS sync.
-* [mjr] Fix issue with null created dates breaking EAS sync.
+* [mjr] Fix issue with NULL created dates breaking EAS.
 * [jan] Fix notice when re-exporting tasks without priority (Bug #14699).
 * [jan] Fix regression in exporting single tags to iCalendar CATEGORIES (Bug #14699).
    </notes>
