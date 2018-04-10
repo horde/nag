@@ -49,7 +49,7 @@
  </tr>
  <tr>
   <td class="horde-label"><?php echo _("Due By") ?>:</td>
-  <td><?php echo Nag::formatDate($task->due) ?></td>
+  <td><?php echo $task->due ? Nag::formatDate($task->getNextDue()->timestamp()) : '' ?></td>
  </tr>
  <?php if ($task->recurs()): ?>
  <tr>
