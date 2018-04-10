@@ -33,6 +33,7 @@
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
   notes: |
+    [mjr] Fix handling of recurring task completion over EAS.
     [mjr] Fix issue with NULL created dates breaking EAS.
     [jan] Fix notice when re-exporting tasks without priority (Bug #14699).
     [jan] Fix regression in exporting single tags to iCalendar CATEGORIES (Bug #14699).
