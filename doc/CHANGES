@@ -1,6 +1,6 @@
-----------
-v5.0.0-git
-----------
+------
+v5.0.0
+------
 
 [jan] Display recurrence rule in task view.
 [jan] Add API to backup and restore user data.
@@ -634,9 +634,9 @@ v2.3.1
 [mms] Upgrade prototype.js to v1.6.0.3.
 
 
-----
-v2.3
-----
+------
+v2.3.0
+------
 
 [jan] Change group field in shares table to work with LDAP groups (Bug #6883).
 [jan] Log completion date if adding a completed task (Bug #7275).
@@ -645,9 +645,9 @@ v2.3
 [jan] Fix displayed WebDAV subscription URLs in the task list manager.
 
 
---------
-v2.3-RC1
---------
+---------
+v2.3.0RC1
+---------
 
 [jan] Log moving of tasks in the history backend (Bug #3207).
 [jan] Fix deleting all tasks over WebDAV (Bug #7004).
@@ -666,9 +666,9 @@ v2.3-RC1
       list to not be deleted (Bug #6969).
 
 
-----
-v2.2
-----
+------
+v2.2.0
+------
 
 [cjh] Improve resource usage in datatree_to_sql share migration script (Bug
       #6740).
@@ -676,9 +676,9 @@ v2.2
 [cjh] Fix displayed WebDAV subscription URLs in the panel (Bug #6709).
 
 
---------
-v2.2-RC3
---------
+---------
+v2.2.0RC3
+---------
 
 [bak] Move tasklists into per-owner subdirectories when viewed through WebDAV.
       (Request #6595)
@@ -691,9 +691,9 @@ v2.2-RC3
 [jan] Add Turkish translation (METU <horde-tr@metu.edu.tr>).
 
 
---------
-v2.2-RC2
---------
+---------
+v2.2.0RC2
+---------
 
 [jan] SECURITY: Fix privilege escalation in Horde API.
 [cjh] SECURITY: Fix missing ownership validation on share changes.
@@ -704,9 +704,9 @@ v2.2-RC2
 [jan] Fix 2006-04-18_add_creator_and_assignee_fields.php upgrade script.
 
 
---------
-v2.2-RC1
---------
+---------
+v2.2.0RC1
+---------
 
 [jan] Implement WebDAV access.
 [jan] Add exportTasklist() API method.
@@ -715,9 +715,9 @@ v2.2-RC1
 [cjh] Fix generation of UIDs with PHP 5.2+.
 
 
-----------
-v2.2-ALPHA
-----------
+-----------
+v2.2.0alpha
+-----------
 
 [cjh] Add preferences for turning due dates on by default, setting the default
       due date's number of days in the future, and setting the default due
@@ -789,16 +789,16 @@ v2.1.1
 [jan] Add 1.1 to 2.x upgrade script for Oracle.
 
 
-----
-v2.1
-----
+------
+v2.1.0
+------
 
 [ben] Better support for MS-SQL.
 
 
---------
-v2.1-RC1
---------
+---------
+v2.1.0RC1
+---------
 
 [jan] Add Portuguese translation (Manuel Menezes de Sequeira
       <Manuel.Sequeira>).
@@ -863,9 +863,9 @@ v2.0.1
 [jan] Add Japanese translation (Hiromi Kimura <hiromi@tac.tsukuba.ac.jp>).
 
 
-----
-v2.0
-----
+------
+v2.0.0
+------
 
 [cjh] UIDs need to be stored in the History system with a nag: prefix and with
       the tasklist_id so as not to confuse different instances of the same task
@@ -874,31 +874,31 @@ v2.0
 [jan] Fix upgrade script to create unique IDs.
 
 
---------
-v2.0-RC3
---------
+---------
+v2.0.0RC3
+---------
 
 [jan] Add Polish translation (Piotr Kuczynski <pkuczynski@hypode.pl>).
 [cjh] Add My Tasklists menu entry.
 
 
---------
-v2.0-RC2
---------
+---------
+v2.0.0RC2
+---------
 
 [jan] Add Latvian translation (Janis Eisaks <jancs@dv.lv>).
 
 
---------
-v2.0-RC1
---------
+---------
+v2.0.0RC1
+---------
 
 [jan] Tweak layout of the summary block.
 
 
----------
-v2.0-BETA
----------
+----------
+v2.0.0beta
+----------
 
 [jan] Add special black-on-white styles for message printing.
 [cjh] Users can now specify a secondary sort column (Andrew Coleman
@@ -908,9 +908,9 @@ v2.0-BETA
 [cjh] Add Kolab drivers (Stuart Bingë <s.binge@codefusion.co.za>).
 
 
-----------
-v2.0-ALPHA
-----------
+-----------
+v2.0.0alpha
+-----------
 
 [cjh] GUIDs now only contain nag: and the task ID - sharename is not needed.
 [cjh] Task IDs are now 32-character unique strings, to be useable as GUIDs. The
@@ -974,9 +974,9 @@ v1.1.1
       (John Morrissey <jwm@horde.net>).
 
 
-----
-v1.1
-----
+------
+v1.1.0
+------
 
 [jan] Add Greek translation (Stefanos I. Dimitriou <sdimitri@teiath.gr>).
 [jan] Add print task button (mac).
@@ -997,9 +997,9 @@ v1.1
 [jan] Add Danish translation (Martin List-Petersen <martin@list-petersen.dk>).
 
 
-----
-v1.0
-----
+------
+v1.0.0
+------
 
 [jan] Add Hungarian translation (Laszlo L. Tornoci <torlasz@xenia.sote.hu>).
 [jan] Add Simplified Chinese translation (Peter Wang <whw@oulink.net>).
