@@ -32,8 +32,9 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |+
-    
+  notes: |
+    [mjr] SECURITY: Fix multiple XSS vulnerabilities when displaying and filtering task lists.
+    |+
 4.2.18:
   api: 4.2.0
   state:
