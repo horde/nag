@@ -34,7 +34,6 @@
  <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
  <notes>
 * [mjr] SECURITY: Fix multiple XSS vulnerabilities when displaying and filtering task lists.
-* |+
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -2358,7 +2357,7 @@
    <date>2014-07-01</date>
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
-* 
+*
    </notes>
   </release>
   <release>
@@ -2711,7 +2710,6 @@
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
 * [mjr] SECURITY: Fix multiple XSS vulnerabilities when displaying and filtering task lists.
-* |+
    </notes>
   </release>
   <release>

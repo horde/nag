@@ -28,13 +28,12 @@
   state:
     release: stable
     api: stable
-  date: 2018-07-04
+  date: 2018-09-28
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
   notes: |
     [mjr] SECURITY: Fix multiple XSS vulnerabilities when displaying and filtering task lists.
-    |+
 4.2.18:
   api: 4.2.0
   state:
