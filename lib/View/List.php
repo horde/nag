@@ -109,7 +109,7 @@ class Nag_View_List
         foreach (Nag::listTasklists() as $list) {
             if ($list->get('issmart')) {
                 $tabs->addTab(
-                    $list->get('name'),
+                    htmlspecialchars($list->get('name')),
                     $listurl->add(array('actionID' => 'smart', 'list' => $list->getName())),
                     array('img' => 'search.png', 'tabname' => $list->getName()));
             }
@@ -206,7 +206,7 @@ class Nag_View_List
         case 'browse_remove':
         case 'browse':
             // The tag to add|remove from the browse search.
-            $tag = trim($this->_vars->get('tag'));
+            $tag = trim(urldecode($this->_vars->get('tag')));
             if (!empty($tag)) {
                 if ($this->_vars->actionID == 'browse_add') {
                     $this->_browser->addTag($tag);
@@ -455,7 +455,7 @@ class Nag_View_List
      */
     protected function _linkAddTag($tag)
     {
-        return Horde::url('list.php')->add(array('actionID' => 'browse_add', 'tag' => $tag));
+        return Horde::url('list.php')->add(array('actionID' => 'browse_add', 'tag' => urlencode($tag)));
     }
 
 }
