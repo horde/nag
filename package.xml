@@ -33,7 +33,8 @@
  </stability>
  <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
  <notes>
-* 
+* [mjr] Fix generating view links from searchTag API.
+* |+
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -2724,7 +2725,8 @@
    <date>2018-09-28</date>
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
-* 
+* [mjr] Fix generating view links from searchTag API.
+* |+
    </notes>
   </release>
   <release>
