@@ -32,8 +32,9 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |+
-    
+  notes: |
+    [mjr] Fix generating view links from searchTag API.
+    |+
 4.2.19:
   api: 4.2.0
   state:
