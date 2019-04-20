@@ -23,6 +23,17 @@
     [jan] Import iCalendar 2.0 alarms.
     [jan] Import and export recurrence rules to iCalendar.
     [jan] Return ETags with browse() API method.
+4.2.20:
+  api: 4.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2018-09-28
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: |
+    [mjr] Fix generating view links from searchTag API.
 4.2.19:
   api: 4.2.0
   state:
