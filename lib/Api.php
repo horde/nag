@@ -1517,7 +1517,7 @@ class Nag_Api extends Horde_Registry_Api
         }
 
         $return = array();
-        $redirectUrl = Horde::url('redirect.php');
+        $redirectUrl = Horde::url('view.php', true);
         foreach ($results as $task_id) {
             try {
                 $task = $injector->getInstance('Nag_Factory_Driver')
@@ -1526,7 +1526,7 @@ class Nag_Api extends Horde_Registry_Api
                 $return[] = array(
                     'title' => $task->name,
                     'desc' => $task->description,
-                    'view_url' => $redirectUrl->add('b', $task->id),
+                    'view_url' => $redirectUrl->add('uid', $task->uid),
                     'app' => 'nag'
                 );
             } catch (Exception $e) {
