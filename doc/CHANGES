@@ -1,6 +1,6 @@
-------
-v5.0.0
-------
+------------
+v5.0.0alpha1
+------------
 
 [jan] Display recurrence rule in task view.
 [jan] Add API to backup and restore user data.
@@ -16,6 +16,21 @@ v5.0.0
 [jan] Import iCalendar 2.0 alarms.
 [jan] Import and export recurrence rules to iCalendar.
 [jan] Return ETags with browse() API method.
+
+
+-------
+v4.2.20
+-------
+
+[mjr] Fix generating view links from searchTag API.
+
+
+-------
+v4.2.19
+-------
+
+[mjr] SECURITY: Fix multiple XSS vulnerabilities when displaying and filtering
+      task lists.
 
 
 -------

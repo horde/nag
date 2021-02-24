@@ -8,7 +8,7 @@ description: >-
   todo lists). It also includes strong integration with the other Horde
   applications and allows users to share task lists or enable light-weight
   project management.
-list:
+list: ~
 type: application
 homepage: https://www.horde.org/apps/nag
 authors:
@@ -31,11 +31,11 @@ authors:
     active: false
     role: lead
 version:
-  release: 5.0.0
-  api: 5.0.0
+  release: 5.0.0alpha1
+  api: 5.0.0alpha1
 state:
-  release: beta
-  api: beta
+  release: alpha
+  api: alpha
 license:
   identifier: GPL-2.0
   uri: http://www.horde.org/licenses/gpl
