@@ -24,7 +24,7 @@
  </lead>
  <date>2021-02-24</date>
  <version>
-  <release>5.0.0alpha1</release>
+  <release>5.0.0alpha2</release>
   <api>5.0.0alpha1</api>
  </version>
  <stability>
@@ -33,20 +33,7 @@
  </stability>
  <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
  <notes>
-* [jan] Display recurrence rule in task view.
-* [jan] Add API to backup and restore user data.
-* [jan] Add support for monthly recurrence on last weekday (Request #1922).
-* [jan] Keep original file names when PUTing tasks via WebDAV.
-* [mjr] Add an "actual" field for tracking actual time spent.
-* [mjr] Add support for task organizer and iTip functionality.
-* [jan] Fall back to sort by name if sort criteria are equal.
-* [jan] Remove configuration option for database table.
-* [jan] Improve priority display in basic view.
-* [jan] Display task list background color in basic view.
-* [jan] Import snooze information from iCalendar alarms.
-* [jan] Import iCalendar 2.0 alarms.
-* [jan] Import and export recurrence rules to iCalendar.
-* [jan] Return ETags with browse() API method.
+* 
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -843,6 +830,98 @@
   </filelist>
  </phprelease>
  <changelog>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
   <release>
    <version>
     <release>0.0.1</release>
@@ -2569,10 +2648,10 @@
     <api>5.0.0alpha1</api>
    </version>
    <stability>
-    <release>alpha</release>
-    <api>alpha</api>
+    <release>beta</release>
+    <api>beta</api>
    </stability>
-   <date>2017-10-20</date>
+   <date>2021-02-24</date>
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
 * [jan] Display recurrence rule in task view.
@@ -2589,6 +2668,21 @@
 * [jan] Import iCalendar 2.0 alarms.
 * [jan] Import and export recurrence rules to iCalendar.
 * [jan] Return ETags with browse() API method.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>5.0.0alpha2</release>
+    <api>5.0.0alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2021-02-24</date>
+   <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
+   <notes>
+* 
    </notes>
   </release>
  </changelog>
