@@ -572,229 +572,17 @@
  <dependencies>
   <required>
    <php>
-    <min>5.3.0</min>
+    <min>7.0.0</min>
     <max>8.0.0alpha1</max>
     <exclude>8.0.0alpha1</exclude>
    </php>
    <pearinstaller>
     <min>1.7.0</min>
    </pearinstaller>
-   <package>
-    <name>content</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.5</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>horde</name>
-    <channel>pear.horde.org</channel>
-    <min>5.0.0</min>
-    <max>6.0.0alpha1</max>
-    <exclude>6.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Auth</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Controller</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Core</name>
-    <channel>pear.horde.org</channel>
-    <min>2.31.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Data</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Date</name>
-    <channel>pear.horde.org</channel>
-    <min>2.1.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Date_Parser</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Dav</name>
-    <channel>pear.horde.org</channel>
-    <min>1.0.0</min>
-    <max>2.0.0alpha1</max>
-    <exclude>2.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Exception</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Form</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Group</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_History</name>
-    <channel>pear.horde.org</channel>
-    <min>2.1.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Icalendar</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Mail</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Mime</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Perms</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Prefs</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Routes</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Share</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Support</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Text_Filter</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Url</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Util</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_View</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
    <extension>
     <name>gettext</name>
    </extension>
   </required>
-  <optional>
-   <package>
-    <name>Horde_ActiveSync</name>
-    <channel>pear.horde.org</channel>
-    <min>2.4.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Backup</name>
-    <channel>pear.horde.org</channel>
-    <min>1.0.0</min>
-    <max>2.0.0alpha1</max>
-    <exclude>2.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Db</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_OpenXchange</name>
-    <channel>pear.horde.org</channel>
-    <min>1.0.0</min>
-    <max>2.0.0alpha1</max>
-    <exclude>2.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Test</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-  </optional>
  </dependencies>
  <usesrole>
   <role>horde</role>
@@ -1065,7 +853,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [cjh] Start application-specific constants at 100 and prefix them with NAG_.
 * [cjh] Add a Horde summary API function.
@@ -1101,7 +889,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Add Hungarian translation (Laszlo L. Tornoci &lt;torlasz@xenia.sote.hu&gt;).
 * [jan] Add Simplified Chinese translation (Peter Wang &lt;whw@oulink.net&gt;).
@@ -1166,7 +954,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Add Greek translation (Stefanos I. Dimitriou &lt;sdimitri@teiath.gr&gt;).
 * [jan] Add print task button (mac).
@@ -1193,7 +981,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Add Indonesian language (Slamin &lt;slamin@unej.ac.id&gt;).
 * [jan] Add Arabic (Syria) translation (Platinum Development Team &lt;devteam@platinum-sy.net&gt;).
@@ -1211,7 +999,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Add Polish translation (Piotr Kuczynski &lt;pkuczynski@hypode.pl&gt;).
 * [cjh] Fix changing of task attributes that have not been set previously (rvs@angara.ru, Bug #569).
@@ -1227,7 +1015,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Close XSS when setting the parent frame&apos;s page title by javascript (cjh).
    </notes>
@@ -1242,7 +1030,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [cjh] GUIDs now only contain nag: and the task ID - sharename is not needed.
 * [cjh] Task IDs are now 32-character unique strings, to be useable as GUIDs. The SQL table definition has changed; conversion scripts are in scripts/.
@@ -1275,7 +1063,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Add special black-on-white styles for message printing.
 * [cjh] Users can now specify a secondary sort column (Andrew Coleman &lt;mercury@appisolutions.net&gt;).
@@ -1294,7 +1082,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Tweak layout of the summary block.
    </notes>
@@ -1309,7 +1097,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Add Latvian translation (Janis Eisaks &lt;jancs@dv.lv&gt;).
    </notes>
@@ -1324,7 +1112,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Add Polish translation (Piotr Kuczynski &lt;pkuczynski@hypode.pl&gt;).
 * [cjh] Add My Tasklists menu entry.
@@ -1340,7 +1128,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [cjh] UIDs need to be stored in the History system with a nag: prefix and with the tasklist_id so as not to confuse different instances of the same task (if two users both have a task on their seperate tasklists, they should have unique histories for that task).
 * [jan] Fix upgrade script to create unique IDs.
@@ -1356,7 +1144,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Allow to select the "Unfiled" category in the portal block (Mathieu Clabaut &lt;mathieu.clabaut@free.fr&gt;, Bug #1237).
 * [cjh] Don&apos;t highlight the New Task menu item when editing tasks.
@@ -1375,7 +1163,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [cjh] Add a PostgreSQL upgrade script (Bug #1780).
 * [cjh] Use bind variables in the SQL driver (selsky@columbia.edu, Bug #1681).
@@ -1396,7 +1184,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Allow to import more than one task from vTodo data at once.
    </notes>
@@ -1411,7 +1199,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [cjh] Close several XSS vulnerabilities with task and tasklist data.
    </notes>
@@ -1426,7 +1214,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Add Portuguese translation (Manuel Menezes de Sequeira &lt;Manuel.Sequeira&gt;).
 * [jan] Add preference to send email notifications to users when tasks have been added, edited, or deleted in their calendars (kevin_myer@iu13.org, Request #2332).
@@ -1452,7 +1240,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [ben] Better support for MS-SQL.
    </notes>
@@ -1467,7 +1255,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Only load completed/incomplete tasks from backend where sufficient (Request #2387).
 * [jan] Don&apos;t show tooltips for tasks without read permissions (Bug #3836).
@@ -1485,7 +1273,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Show error message if imported file didn&apos;t contain tasks.
 * [jan] Add categories from imported contacts to the user&apos;s categories.
@@ -1504,7 +1292,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Show alarms for overdue tasks too.
 * [jan] Add Catalan translation (Jordi Giralt &lt;projecte.k2@upcnet.es&gt;).
@@ -1520,7 +1308,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] SECURITY: Fix privilege escalation in Horde API.
 * [cjh] SECURITY: Fix missing ownership validation on share changes.
@@ -1537,7 +1325,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [cjh] Add preferences for turning due dates on by default, setting the default due date&apos;s number of days in the future, and setting the default due date&apos;s time.
 * [cjh] Add vCalendar 2.0 alarm export (munzli@olmero.ch, Bug #4851).
@@ -1570,7 +1358,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Implement WebDAV access.
 * [jan] Add exportTasklist() API method.
@@ -1589,7 +1377,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] SECURITY: Fix privilege escalation in Horde API.
 * [cjh] SECURITY: Fix missing ownership validation on share changes.
@@ -1610,7 +1398,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [bak] Move tasklists into per-owner subdirectories when viewed through WebDAV. (Request #6595)
 * [cjh] Apply fix for http://dev.rubyonrails.org/ticket/11473 to prototype.js (Request #6590).
@@ -1630,7 +1418,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [cjh] Improve resource usage in datatree_to_sql share migration script (Bug #6740).
 * [jan] Allow to import all fields that can be exported.
@@ -1647,7 +1435,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Log moving of tasks in the history backend (Bug #3207).
 * [jan] Fix deleting all tasks over WebDAV (Bug #7004).
@@ -1672,7 +1460,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Change group field in shares table to work with LDAP groups (Bug #6883).
 * [jan] Log completion date if adding a completed task (Bug #7275).
@@ -1690,7 +1478,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [cjh] Add a PostgreSQL-specific upgrade script for 2.2 to 2.3.
 * [cjh] Fix fatal error when completing tasks (Bug #7400).
@@ -1707,7 +1495,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Don&apos;t allow to set alarms if no due date has been set.
 * [cjh] Work around BC break with Horde versions before 3.2 (Bug #7820).
@@ -1727,7 +1515,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [mms] Upgrade prototype.js to v1.6.1.
 * [jan] Fix synchronization with output compression enabled (Bug #7769).
@@ -1745,7 +1533,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Add and fix Oracle-specific SQL scripts.
 * [jan] Fix importing due date attribute from iCalendar (Bug #8644).
@@ -1763,7 +1551,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Set an alarm to one minute, if users try to set an alarm without time.
 * [jan] Add missing preference for not sending update notifications to yourself (Joel Smith &lt;js-horde@jk1.net&gt;, Request #8978).
@@ -1780,7 +1568,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Remove stray closing tag when displaying the date of completion.
 * [mjr] Do not remove history entries when removing user data (Bug #8755).
@@ -1796,7 +1584,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri="" />
+   <license uri=""></license>
    <notes>
 * [jan] Add upgrade scripts for next-generation SQL share driver.
    </notes>
@@ -2747,6 +2535,36 @@
   </release>
   <release>
    <version>
+    <release>4.2.19</release>
+    <api>4.2.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2018-09-28</date>
+   <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
+   <notes>
+* [mjr] SECURITY: Fix multiple XSS vulnerabilities when displaying and filtering task lists.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>4.2.20</release>
+    <api>4.2.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2018-09-28</date>
+   <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
+   <notes>
+* [mjr] Fix generating view links from searchTag API.
+   </notes>
+  </release>
+  <release>
+   <version>
     <release>5.0.0alpha1</release>
     <api>5.0.0alpha1</api>
    </version>
@@ -2754,7 +2572,7 @@
     <release>alpha</release>
     <api>alpha</api>
    </stability>
-   <date>2021-02-24</date>
+   <date>2017-10-20</date>
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
 * [jan] Display recurrence rule in task view.
