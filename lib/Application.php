@@ -598,7 +598,7 @@ class Nag_Application extends Horde_Registry_Application
                     $share->get('desc'),
                 '{http://apple.com/ns/ical/}calendar-color' =>
                     $share->get('color'),
-                '{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set' => new Sabre\CalDAV\Property\SupportedCalendarComponentSet(array('VTODO')),
+                '{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set' => new Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet(array('VTODO')),
                 '{http://sabredav.org/ns}read-only' => !$share->hasPermission($hordeUser, Horde_Perms::EDIT),
             );
         }
