@@ -143,6 +143,7 @@ abstract class Nag_Driver
                 'status' => null,
                 'tags' => '',
                 'uid' => strval(new Horde_Support_Guid()),
+                'other' => []
             ),
             $task
         );

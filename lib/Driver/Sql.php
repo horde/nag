@@ -183,8 +183,8 @@ class Nag_Driver_Sql extends Nag_Driver
             . 'task_alarm, task_alarm_methods, task_private, task_parent, '
             . 'task_organizer, task_status, task_actual, task_recurtype, '
             . 'task_recurinterval, task_recurenddate, task_recurcount, '
-            . 'task_recurdays, task_exceptions, task_completions) '
-            . 'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+            . 'task_recurdays, task_exceptions, task_completions, task_other_attributes) '
+            . 'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
         $values = array(
             $this->_tasklist,
@@ -217,6 +217,7 @@ class Nag_Driver_Sql extends Nag_Driver
         );
 
         $this->_addRecurrenceFields($values, $task);
+        $values[] = $task['other'] ?? '[]';
 
         try {
             $this->_db->insert($query, $values);
@@ -282,7 +283,8 @@ class Nag_Driver_Sql extends Nag_Driver
                  'task_recurcount = ?, ' .
                  'task_recurdays = ?, ' .
                  'task_exceptions = ?, ' .
-                 'task_completions = ? ' .
+                 'task_completions = ?, ' .
+                 'task_other_attributes = ? ' .
                  'WHERE task_owner = ? AND task_id = ?';
 
         $values = array(
@@ -308,9 +310,10 @@ class Nag_Driver_Sql extends Nag_Driver
             (int)$task['private'],
             $task['organizer'],
             $task['status'],
-            number_format(floatval($task['actual']), 2)
+            number_format(floatval($task['actual']), 2),
         );
         $this->_addRecurrenceFields($values, $task);
+        $values[] = $task['other'] ?? '[]';
         $values[] = $this->_tasklist;
         $values[] = $taskId;
 
@@ -694,7 +697,8 @@ class Nag_Driver_Sql extends Nag_Driver
             'recurrence' => $recurrence,
             'organizer' => $row['task_organizer'],
             'status' => $row['task_status'],
-            'actual' => $row['task_actual']
+            'actual' => $row['task_actual'],
+            'other' => $row['task_other_attributes'] ?? '[]'
         );
 
         if ($include_history) {

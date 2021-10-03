@@ -255,6 +255,34 @@ class Nag_Task
      */
     protected $_storage;
 
+    public array $ourCaldavAttributes = [
+        'AALARM',
+        'ALARM',
+        'ATTENDEE',
+        'CATEGORIES',
+        'CLASS',
+        'CREATED', // Assume Horde History is right about this. This may not always be true.
+        'DCREATED',
+        'DTSTART',
+        'DESCRIPTION',
+        'DUE',
+        'EXDATE',
+        'LAST-MODIFIED', // Let Horde History handle LAST-MODIFIED attribute
+        'ORGANIZER',
+        'PRIORITY',
+        'RELATED-TO',
+        'RRULE',
+        'STATUS',
+        'SUMMARY',
+        'UID',
+        'X-MOZ-LASTACK',
+        'X-MOZ-SNOOZE-TIME',
+        'X-HORDE-ESTIMATE',
+        'X-HORDE-EFFORT'
+    ];
+
+    public array $otherCaldavAttributes = [];
+
     /**
      * Internal flag.
      *
@@ -399,6 +427,10 @@ class Nag_Task
                 break;
             case 'parent':
                 $key = 'parent_id';
+                break;
+            case 'other':
+                $key = 'otherCaldavAttributes';
+                $val = json_decode($val, true);
                 break;
             }
             $this->$key = $val;
@@ -1096,7 +1128,7 @@ class Nag_Task
      */
     public function toHash()
     {
-        $hash = array(
+        $hash = [
             'tasklist_id' => $this->tasklist,
             'task_id' => $this->id,
             'uid' => $this->uid,
@@ -1118,7 +1150,9 @@ class Nag_Task
             'tags' => $this->tags,
             'organizer' => $this->organizer,
             'status' => $this->status,
-            'actual' => $this->actual);
+            'actual' => $this->actual,
+            'other' => json_encode($this->otherCaldavAttributes)
+        ];
 
         return $hash;
     }
@@ -1139,6 +1173,7 @@ class Nag_Task
         $json->p = $this->parent_id;
         $json->i = $this->indent;
         $json->n = $this->name;
+        $json->other = to_json($this->ourCaldavAttributes);
         if ($this->desc) {
             //TODO: Get the proper amount of characters, and cut by last
             //whitespace
@@ -1298,6 +1333,10 @@ class Nag_Task
         $v1 = $calendar->getAttribute('VERSION') == '1.0';
 
         $vTodo->setAttribute('UID', $this->uid);
+
+        foreach ($this->otherCaldavAttributes as $attribute) {
+            $vTodo->setAttribute($attribute['name'], $attribute['value'], $attribute['params'], true, $attribute['values']);
+        }
 
         if (!empty($this->assignee)) {
             $vTodo->setAttribute('ATTENDEE', Nag::getUserEmail($this->assignee), array('ROLE' => 'REQ-PARTICIPANT'));
@@ -1640,6 +1679,7 @@ class Nag_Task
                 if (empty($params[$id]['RELTYPE']) ||
                     Horde_String::upper($params[$id]['RELTYPE']) == 'PARENT') {
                     try {
+                        // Shouldn't this rather be [this->tasklist]?
                         $parent = $this->_storage->getByUID($relation, $this->tasklist);
                         $this->parent_id = $parent->id;
                     } catch (Horde_Exception_NotFound $e) {
@@ -1852,6 +1892,18 @@ class Nag_Task
             $effort = $vTodo->getAttribute('X-HORDE-EFFORT');
             if (!is_array($effort)) {
                 $this->actual = $effort;
+            }
+        } catch (Horde_Icalendar_Exception $e) {
+        }
+        // Catch attributes nag is not aware of
+        try {
+            foreach ($vTodo->getAllAttributes() as $attribute) {
+            // drop all known attributes
+            if (in_array($attribute['name'], $this->ourCaldavAttributes)) {
+                continue;
+            }
+            $this->otherCaldavAttributes[] = $attribute;
+
             }
         } catch (Horde_Icalendar_Exception $e) {
         }

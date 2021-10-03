@@ -69,6 +69,7 @@ class Nag_Form_Task extends Horde_Form
         $this->addHidden('', 'owner', 'text', false);
         $this->addHidden('', 'list', 'text', false);
         $this->addHidden('', 'tab_name', 'text', false);
+        $this->addHidden('', 'other', 'text', false);
 
         $this->setSection(self::SECTION_GENERAL, _("General"));
         $this->addVariable(_("Name"), 'name', 'text', true);
