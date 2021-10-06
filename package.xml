@@ -22,7 +22,7 @@
   <email>chuck@horde.org</email>
   <active>no</active>
  </lead>
- <date>2021-03-13</date>
+ <date>2021-10-06</date>
  <version>
   <release>5.0.0alpha4</release>
   <api>5.0.0alpha1</api>
@@ -33,10 +33,15 @@
  </stability>
  <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
  <notes>
-* 
+* |+
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
+   <dir name=".github">
+    <dir name="workflows">
+     <file name="update-satis.yml" role="horde" />
+    </dir> <!-- /.github/workflows -->
+   </dir> <!-- /.github -->
    <dir name="app">
     <dir name="controllers">
      <file name="CompleteTask.php" role="horde" />
@@ -418,6 +423,7 @@
     <file name="15_nag_upgrade_addorganizer.php" role="horde" />
     <file name="16_nag_upgrade_addactual.php" role="horde" />
     <file name="17_nag_upgrade_task_parent.php" role="horde" />
+    <file name="18_nag_upgrade_other_fields.php" role="horde" />
    </dir> <!-- /migration -->
    <dir name="task">
     <file name="complete.php" role="horde" />
@@ -578,6 +584,7 @@
  </usesrole>
  <phprelease>
   <filelist>
+   <install as="nag/.github/workflows/update-satis.yml" name=".github/workflows/update-satis.yml" />
    <install as="nag/app/controllers/CompleteTask.php" name="app/controllers/CompleteTask.php" />
    <install as="nag/app/controllers/SaveTask.php" name="app/controllers/SaveTask.php" />
    <install as="nag-convert-datatree-shares-to-sql" name="bin/nag-convert-datatree-shares-to-sql" />
@@ -754,6 +761,7 @@
    <install as="nag/migration/15_nag_upgrade_addorganizer.php" name="migration/15_nag_upgrade_addorganizer.php" />
    <install as="nag/migration/16_nag_upgrade_addactual.php" name="migration/16_nag_upgrade_addactual.php" />
    <install as="nag/migration/17_nag_upgrade_task_parent.php" name="migration/17_nag_upgrade_task_parent.php" />
+   <install as="nag/migration/18_nag_upgrade_other_fields.php" name="migration/18_nag_upgrade_other_fields.php" />
    <install as="nag/quick.php" name="quick.php" />
    <install as="README.rst" name="README.rst" />
    <install as="nag/search.php" name="search.php" />
@@ -830,100 +838,6 @@
   </filelist>
  </phprelease>
  <changelog>
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
   <release>
    <version>
     <release>0.0.1</release>
@@ -2714,7 +2628,7 @@
    <date>2021-03-13</date>
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
-* 
+* |+
    </notes>
   </release>
  </changelog>

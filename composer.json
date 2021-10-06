@@ -1,5 +1,4 @@
 {
-    "minimum-stability": "dev",
     "name": "horde/nag",
     "description": "Task list application",
     "type": "horde-application",
@@ -22,7 +21,7 @@
             "role": "lead"
         }
     ],
-    "time": "2021-03-13",
+    "time": "2021-10-06",
     "repositories": [
         {
             "type": "composer",
@@ -30,52 +29,58 @@
         }
     ],
     "require": {
-        "horde/horde-installer-plugin": "dev-FRAMEWORK_6_0",
+        "horde/horde-installer-plugin": "*",
         "php": "^7",
-        "horde/content": "^3 || dev-FRAMEWORK_6_0",
-        "horde/horde": "^6 || dev-FRAMEWORK_6_0",
-        "horde/auth": "^3 || dev-FRAMEWORK_6_0",
-        "horde/controller": "^3 || dev-FRAMEWORK_6_0",
-        "horde/core": "^3 || dev-FRAMEWORK_6_0",
-        "horde/data": "^3 || dev-FRAMEWORK_6_0",
-        "horde/date": "^3 || dev-FRAMEWORK_6_0",
-        "horde/date_parser": "^3 || dev-FRAMEWORK_6_0",
-        "horde/dav": "^2 || dev-FRAMEWORK_6_0",
-        "horde/exception": "^3 || dev-FRAMEWORK_6_0",
-        "horde/form": "^3 || dev-FRAMEWORK_6_0",
-        "horde/group": "^3 || dev-FRAMEWORK_6_0",
-        "horde/history": "^3 || dev-FRAMEWORK_6_0",
-        "horde/icalendar": "^3 || dev-FRAMEWORK_6_0",
-        "horde/mail": "^3 || dev-FRAMEWORK_6_0",
-        "horde/mime": "^3 || dev-FRAMEWORK_6_0",
-        "horde/perms": "^3 || dev-FRAMEWORK_6_0",
-        "horde/prefs": "^3 || dev-FRAMEWORK_6_0",
-        "horde/routes": "^3 || dev-FRAMEWORK_6_0",
-        "horde/share": "^3 || dev-FRAMEWORK_6_0",
-        "horde/support": "^3 || dev-FRAMEWORK_6_0",
-        "horde/text_filter": "^3 || dev-FRAMEWORK_6_0",
-        "horde/url": "^3 || dev-FRAMEWORK_6_0",
-        "horde/util": "^3 || dev-FRAMEWORK_6_0",
-        "horde/view": "^3 || dev-FRAMEWORK_6_0",
+        "horde/content": "^3",
+        "horde/horde": "^6",
+        "horde/auth": "^3",
+        "horde/controller": "^3",
+        "horde/core": "^3",
+        "horde/data": "^3",
+        "horde/date": "^3",
+        "horde/date_parser": "^3",
+        "horde/dav": "^2",
+        "horde/exception": "^3",
+        "horde/form": "^3",
+        "horde/group": "^3",
+        "horde/history": "^3",
+        "horde/icalendar": "^3",
+        "horde/mail": "^3",
+        "horde/mime": "^3",
+        "horde/perms": "^3",
+        "horde/prefs": "^3",
+        "horde/routes": "^3",
+        "horde/share": "^3",
+        "horde/support": "^3",
+        "horde/text_filter": "^3",
+        "horde/url": "^3",
+        "horde/util": "^3",
+        "horde/view": "^3",
         "ext-gettext": "*"
     },
+    "require-dev": {},
     "suggest": {
-        "horde/activesync": "^3 || dev-FRAMEWORK_6_0",
-        "horde/backup": "^2 || dev-FRAMEWORK_6_0",
-        "horde/db": "^3 || dev-FRAMEWORK_6_0",
-        "horde/openxchange": "^2 || dev-FRAMEWORK_6_0",
-        "horde/test": "^3 || dev-FRAMEWORK_6_0"
+        "horde/activesync": "^3",
+        "horde/backup": "^2",
+        "horde/db": "^3",
+        "horde/openxchange": "^2",
+        "horde/test": "^3"
     },
     "autoload": {
         "psr-0": {
             "Nag": "lib/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Horde\\Nag\\Test\\": "test/"
+        }
+    },
     "bin": [
+        "bin/nag-create-missing-add-histories-sql",
         "bin/nag-convert-datatree-shares-to-sql",
         "bin/nag-convert-sql-shares-to-sqlng",
-        "bin/nag-create-missing-add-histories-sql",
-        "bin/nag-import-openxchange",
-        "bin/nag-import-vtodos"
+        "bin/nag-import-vtodos",
+        "bin/nag-import-openxchange"
     ]
 }
