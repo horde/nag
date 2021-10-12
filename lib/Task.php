@@ -1173,7 +1173,7 @@ class Nag_Task
         $json->p = $this->parent_id;
         $json->i = $this->indent;
         $json->n = $this->name;
-        $json->other = to_json($this->ourCaldavAttributes);
+        $json->other = json_encode($this->otherCaldavAttributes);
         if ($this->desc) {
             //TODO: Get the proper amount of characters, and cut by last
             //whitespace
