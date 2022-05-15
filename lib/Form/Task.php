@@ -178,7 +178,8 @@ class Nag_Form_Task extends Horde_Form
         $this->setButtons($buttons);
     }
 
-    public function renderActive()
+    public function renderActive($renderer = null, $vars = null, $action = '',
+                          $method = 'get', $enctype = null, $focus = true)
     {
         global $conf;
 
@@ -190,7 +191,9 @@ class Nag_Form_Task extends Horde_Form
                     ? 't/save'
                     : 'task/save.php'
             ),
-            'post'
+            'post',
+            $enctype,
+            $focus
         );
     }
 

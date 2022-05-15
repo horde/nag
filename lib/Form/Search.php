@@ -74,7 +74,8 @@ class Nag_Form_Search extends Horde_Form
 
     }
 
-    public function renderActive()
+    public function renderActive($renderer = null, $vars = null, $action = '',
+                          $method = 'get', $enctype = null, $focus = true)
     {
         $url = Horde::url('list.php');
         if ($this->_vars->get('smart_id')) {
@@ -85,7 +86,10 @@ class Nag_Form_Search extends Horde_Form
             $this->getRenderer(array('varrenderer_driver' => array('nag', 'nag'))),
             $this->_vars,
             $url->setRaw(true),
-            'post');
+            'post',
+            $enctype,
+            $focus
+        );
     }
 
 }
