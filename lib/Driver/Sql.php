@@ -217,7 +217,13 @@ class Nag_Driver_Sql extends Nag_Driver
         );
 
         $this->_addRecurrenceFields($values, $task);
-        $values[] = $task['other'] ?? '[]';
+        $other = $task['other'] ?? '[]';
+        if (is_array($other) || is_object($other)) {
+            $other = json_encode($other);
+        } elseif (empty($other)) {
+            $other = '[]';
+        }
+        $values[] = $other;
 
         try {
             $this->_db->insert($query, $values);
