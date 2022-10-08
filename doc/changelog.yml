@@ -4,12 +4,13 @@
   state:
     release: alpha
     api: alpha
-  date: 2021-10-06
+  date: 2022-10-08
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |+
-    
+  notes: |
+    [rla] Fix some PHP 8.1 issues.
+    |+
 5.0.0alpha4:
   api: 5.0.0alpha1
   state:

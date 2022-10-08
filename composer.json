@@ -1,5 +1,4 @@
 {
-    "minimum-stability": "dev",
     "name": "horde/nag",
     "description": "Task list application",
     "type": "horde-application",
@@ -22,15 +21,15 @@
             "role": "lead"
         }
     ],
-    "time": "2021-10-06",
+    "time": "2022-10-08",
     "repositories": [
         {
             "type": "composer",
-            "url": "https://horde-satis.maintaina.com/"
+            "url": "https://horde-satis.maintaina.com"
         }
     ],
     "require": {
-        "horde/horde-installer-plugin": "^2 || dev-FRAMEWORK_6_0",
+        "horde/horde-installer-plugin": "dev-FRAMEWORK_6_0 || ^2",
         "php": "^7.4 || ^8",
         "horde/content": "^3 || dev-FRAMEWORK_6_0",
         "horde/horde": "^6 || dev-FRAMEWORK_6_0",
@@ -78,10 +77,15 @@
         }
     },
     "bin": [
-        "bin/nag-create-missing-add-histories-sql",
         "bin/nag-convert-datatree-shares-to-sql",
         "bin/nag-convert-sql-shares-to-sqlng",
-        "bin/nag-import-vtodos",
-        "bin/nag-import-openxchange"
-    ]
+        "bin/nag-create-missing-add-histories-sql",
+        "bin/nag-import-openxchange",
+        "bin/nag-import-vtodos"
+    ],
+    "config": {
+        "allow-plugins": {
+            "horde/horde-installer-plugin": true
+        }
+    }
 }
