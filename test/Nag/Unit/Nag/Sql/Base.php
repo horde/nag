@@ -29,7 +29,7 @@
  */
 class Nag_Unit_Nag_Sql_Base extends Nag_Unit_Nag_Base
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         self::createSqlShares(self::$setup);

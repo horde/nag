@@ -38,7 +38,7 @@ class Nag_Unit_Nag_KolabTest extends Nag_Unit_Nag_Base
      */
     protected $default_name = 'Tasks';
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$setup = new Horde_Test_Setup();
         parent::setUpBeforeClass();

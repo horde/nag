@@ -29,7 +29,7 @@
  */
 abstract class Nag_Unit_Form_Task_Sql_Base extends Nag_Unit_Form_Task_Base
 {
-    static public function setUpBeforeClass()
+    static public function setUpBeforeClass(): void
     {
         return;
 

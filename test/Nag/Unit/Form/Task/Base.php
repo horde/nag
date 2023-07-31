@@ -38,14 +38,14 @@ class Nag_Unit_Form_Task_Base extends Nag_TestCase
 
     private $_old_errorreporting;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$setup = new Horde_Test_Setup();
         self::createBasicNagSetup(self::$setup);
         parent::setUpBeforeClass();
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -58,7 +58,7 @@ class Nag_Unit_Form_Task_Base extends Nag_TestCase
         error_reporting(E_ALL & ~(E_STRICT | E_DEPRECATED));
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         error_reporting($this->_old_errorreporting);
         parent::tearDown();

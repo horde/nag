@@ -31,7 +31,7 @@ class Nag_Unit_Driver_Sql_Base extends Nag_Unit_Driver_Base
 {
     static $callback;
 
-    static public function setUpBeforeClass()
+    static public function setUpBeforeClass(): void
     {
         return;
 

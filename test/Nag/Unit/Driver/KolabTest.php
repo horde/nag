@@ -31,7 +31,7 @@ class Nag_Unit_Driver_KolabTest extends Nag_Unit_Driver_Base
 {
     protected $backupGlobals = false;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         return;
 

@@ -31,7 +31,7 @@ class Nag_Unit_Form_Task_KolabTest extends Nag_Unit_Form_Task_Base
 {
     protected $backupGlobals = false;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         return;
 

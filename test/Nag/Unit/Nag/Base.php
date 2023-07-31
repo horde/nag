@@ -43,13 +43,13 @@ class Nag_Unit_Nag_Base extends Nag_TestCase
      */
     protected $default_name = 'Task list of test@example.com';
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::createBasicNagSetup(self::$setup);
         parent::setUpBeforeClass();
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $error = self::$setup->getError();
@@ -58,7 +58,7 @@ class Nag_Unit_Nag_Base extends Nag_TestCase
         }
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         foreach ($GLOBALS['nag_shares']->listShares('test@example.com') as $share) {
             $GLOBALS['nag_shares']->removeShare($share);

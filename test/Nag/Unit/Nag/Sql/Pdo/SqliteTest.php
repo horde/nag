@@ -31,7 +31,7 @@ class Nag_Unit_Nag_Sql_Pdo_SqliteTest extends Nag_Unit_Nag_Sql_Base
 {
     protected $backupGlobals = false;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$setup = new Horde_Test_Setup();
         self::createSqlPdoSqlite(self::$setup);

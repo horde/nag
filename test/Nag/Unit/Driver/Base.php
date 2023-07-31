@@ -46,20 +46,20 @@ class Nag_Unit_Driver_Base extends Nag_TestCase
      */
     private $_added = array();
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$setup = new Horde_Test_Setup();
         self::createBasicNagSetup(self::$setup);
         parent::setUpBeforeClass();
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         self::$driver = null;
         parent::tearDownAfterClass();
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $error = self::$setup->getError();
@@ -68,7 +68,7 @@ class Nag_Unit_Driver_Base extends Nag_TestCase
         }
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         foreach ($this->_added as $added) {

@@ -28,9 +28,9 @@
  * @license    http://www.horde.org/licenses/gpl GNU General Public License, version 2
  */
 class Nag_TestCase
-extends PHPUnit_Framework_TestCase
+extends Horde_Test_Case
 {
-    public function setUp()
+    public function setUp(): void
     {
         $this->markTestIncomplete('Needs some love');
     }
