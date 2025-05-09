@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Defines the AJAX interface for Nag.
  *
@@ -23,9 +24,9 @@ class Nag_Ajax_Application extends Horde_Core_Ajax_Application
         $this->addHandler('Horde_Core_Ajax_Application_Handler_Prefs');
 
         switch ($registry->getView()) {
-        case $registry::VIEW_SMARTMOBILE:
-            $this->addHandler('Nag_Ajax_Application_Handler_Smartmobile');
-            break;
+            case $registry::VIEW_SMARTMOBILE:
+                $this->addHandler('Nag_Ajax_Application_Handler_Smartmobile');
+                break;
         }
     }
 

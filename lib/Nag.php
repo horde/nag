@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Nag Base Class.
  *
@@ -15,105 +16,105 @@ class Nag
     /**
      * Status codes
      */
-    const RESPONSE_NONE      = 1;
-    const RESPONSE_ACCEPTED  = 2;
-    const RESPONSE_DECLINED  = 3;
+    public const RESPONSE_NONE      = 1;
+    public const RESPONSE_ACCEPTED  = 2;
+    public const RESPONSE_DECLINED  = 3;
 
     /** iTip requests */
-    const ITIP_REQUEST = 1;
-    const ITIP_CANCEL  = 2;
-    const ITIP_UPDATE  = 3;
-    const RANGE_THISANDFUTURE = 'THISANDFUTURE';
+    public const ITIP_REQUEST = 1;
+    public const ITIP_CANCEL  = 2;
+    public const ITIP_UPDATE  = 3;
+    public const RANGE_THISANDFUTURE = 'THISANDFUTURE';
 
     /**
      * Sort by task name.
      */
-    const SORT_NAME = 'name';
+    public const SORT_NAME = 'name';
 
     /**
      * Sort by priority.
      */
-    const SORT_PRIORITY = 'priority';
+    public const SORT_PRIORITY = 'priority';
 
     /**
      * Sort by due date.
      */
-    const SORT_DUE = 'due';
+    public const SORT_DUE = 'due';
 
     /**
      * Sort by start date.
      */
-    const SORT_START = 'start';
+    public const SORT_START = 'start';
 
     /**
      * Sort by completion.
      */
-    const SORT_COMPLETION = 'completed';
+    public const SORT_COMPLETION = 'completed';
 
     /**
      * Sort by owner.
      */
-    const SORT_OWNER = 'tasklist';
+    public const SORT_OWNER = 'tasklist';
 
     /**
      * Sort by estimate.
      */
-    const SORT_ESTIMATE = 'estimate';
+    public const SORT_ESTIMATE = 'estimate';
 
     /**
      * Sort by assignee.
      */
-    const SORT_ASSIGNEE = 'assignee';
+    public const SORT_ASSIGNEE = 'assignee';
 
     /**
      * Sort in ascending order.
      */
-    const SORT_ASCEND = 0;
+    public const SORT_ASCEND = 0;
 
     /**
      * Sort in descending order.
      */
-    const SORT_DESCEND = 1;
+    public const SORT_DESCEND = 1;
 
     /**
      * Incomplete tasks
      */
-    const VIEW_INCOMPLETE = 0;
+    public const VIEW_INCOMPLETE = 0;
 
     /**
      * All tasks
      */
-    const VIEW_ALL = 1;
+    public const VIEW_ALL = 1;
 
     /**
      * Complete tasks
      */
-    const VIEW_COMPLETE = 2;
+    public const VIEW_COMPLETE = 2;
 
     /**
      * Future tasks
      */
-    const VIEW_FUTURE = 3;
+    public const VIEW_FUTURE = 3;
 
     /**
      * Future and incompleted tasks
      */
-    const VIEW_FUTURE_INCOMPLETE = 4;
+    public const VIEW_FUTURE_INCOMPLETE = 4;
 
     /**
      * WebDAV task list.
      */
-    const DAV_WEBDAV = 1;
+    public const DAV_WEBDAV = 1;
 
     /**
      * CalDAV task list.
      */
-    const DAV_CALDAV = 2;
+    public const DAV_CALDAV = 2;
 
     /**
      * CalDAV principal.
      */
-    const DAV_ACCOUNT = 3;
+    public const DAV_ACCOUNT = 3;
 
     /**
      *
@@ -194,12 +195,13 @@ class Nag
         }
 
         return new Horde_Date(
-            array('year'  => $date_arr['tm_year'] + 1900,
-                  'month' => $date_arr['tm_mon'] + 1,
-                  'mday'  => $date_arr['tm_mday'],
-                  'hour'  => $date_arr['tm_hour'],
-                  'min'   => $date_arr['tm_min'],
-                  'sec'   => $date_arr['tm_sec']));
+            ['year'  => $date_arr['tm_year'] + 1900,
+                'month' => $date_arr['tm_mon'] + 1,
+                'mday'  => $date_arr['tm_mday'],
+                'hour'  => $date_arr['tm_hour'],
+                'min'   => $date_arr['tm_min'],
+                'sec'   => $date_arr['tm_sec']]
+        );
     }
 
     /**
@@ -230,7 +232,7 @@ class Nag
      *
      * @return Nag_Task  A list of the requested tasks.
      */
-    public static function listTasks(array $options = array())
+    public static function listTasks(array $options = [])
     {
         global $prefs, $registry;
 
@@ -240,7 +242,7 @@ class Nag
         }
 
         $options = array_merge(
-            array(
+            [
                 'sortby' => $prefs->getValue('sortby'),
                 'sortdir' => $prefs->getValue('sortdir'),
                 'altsortby' => $prefs->getValue('altsortby'),
@@ -248,13 +250,13 @@ class Nag
                 'completed' => $prefs->getValue('show_completed'),
                 'include_tags' => false,
                 'external' => true,
-                'include_history' => true
-            ),
+                'include_history' => true,
+            ],
             $options
         );
 
         if (!is_array($options['tasklists'])) {
-            $options['tasklists'] = array($options['tasklists']);
+            $options['tasklists'] = [$options['tasklists']];
         }
         $tasks = new Nag_Task();
         foreach ($options['tasklists'] as $tasklist) {
@@ -289,7 +291,7 @@ class Nag
                 }
 
                 try {
-                    $newtasks = $registry->callByPackage($app, 'listAs', array('taskHash'));
+                    $newtasks = $registry->callByPackage($app, 'listAs', ['taskHash']);
                     foreach ($newtasks as $task) {
                         if (!isset($task['priority'])) {
                             $task['priority'] = 3;
@@ -398,19 +400,20 @@ class Nag
             ->getInstance('Nag_Factory_Driver')
             ->create($tasklist);
         $dateParser = Horde_Date_Parser::factory(
-            array('locale' => $GLOBALS['prefs']->getValue('language')) );
+            ['locale' => $GLOBALS['prefs']->getValue('language')]
+        );
 
         $quickParser = new Nag_QuickParser();
         $tasks = $quickParser->parse($text);
 
-        $uids = array();
+        $uids = [];
         foreach ($tasks as &$task) {
             if (!is_array($task)) {
                 $name = $task;
-                $task = array($name);
+                $task = [$name];
             }
 
-            $r = $dateParser->parse($task[0], array('return' => 'result'));
+            $r = $dateParser->parse($task[0], ['return' => 'result']);
             if ($d = $r->guess()) {
                 $name = $r->untaggedText();
                 $due = $d->timestamp();
@@ -421,19 +424,19 @@ class Nag
 
             // Look for tags to be added in the text.
             $pattern = '/#\w+/';
-            $tags = array();
+            $tags = [];
             if (preg_match_all($pattern, $name, $results)) {
                 $tags = $results[0];
                 $name = str_replace($tags, '', $name);
-                $tags = array_map(function($x) { return substr($x, -(strlen($x) - 1)); }, $tags);
+                $tags = array_map(function ($x) { return substr($x, -(strlen($x) - 1)); }, $tags);
             } else {
                 $tags = '';
             }
 
             if (isset($task['parent'])) {
-                $newTask = $storage->add(array('name' => $name, 'due' => $due, 'parent' => $tasks[$task['parent']]['id'], 'tags' => $tags));
+                $newTask = $storage->add(['name' => $name, 'due' => $due, 'parent' => $tasks[$task['parent']]['id'], 'tags' => $tags]);
             } else {
-                $newTask = $storage->add(array('name' => $name, 'due' => $due, 'tags' => $tags));
+                $newTask = $storage->add(['name' => $name, 'due' => $due, 'tags' => $tags]);
             }
             $uids[] = $newTask[1];
             $task['id'] = $newTask[0];
@@ -456,7 +459,7 @@ class Nag
             $tasklists = $GLOBALS['display_tasklists'];
         }
 
-        $tasks = array();
+        $tasks = [];
         foreach ($tasklists as $tasklist) {
             /* Create a Nag storage instance. */
             $storage = $GLOBALS['injector']
@@ -489,16 +492,17 @@ class Nag
      *
      * @return array  The task lists.
      */
-    public static function listTasklists($owneronly = false,
-                                         $permission = Horde_Perms::SHOW,
-                                         $smart = true)
-    {
+    public static function listTasklists(
+        $owneronly = false,
+        $permission = Horde_Perms::SHOW,
+        $smart = true
+    ) {
         if ($owneronly && !$GLOBALS['registry']->getAuth()) {
-            return array();
+            return [];
         }
-        $att = array();
+        $att = [];
         if ($owneronly) {
-            $att = array('owner' => $GLOBALS['registry']->getAuth());
+            $att = ['owner' => $GLOBALS['registry']->getAuth()];
         }
         if (!$smart) {
             $att['issmart'] = 0;
@@ -507,9 +511,10 @@ class Nag
         try {
             $tasklists = $GLOBALS['nag_shares']->listShares(
                 $GLOBALS['registry']->getAuth(),
-                array('perm' => $permission,
-                      'attributes' => $att,
-                      'sort_by' => 'name'));
+                ['perm' => $permission,
+                    'attributes' => $att,
+                    'sort_by' => 'name']
+            );
             if ($GLOBALS['registry']->isAdmin()) {
                 $tasklists = array_merge(
                     $tasklists,
@@ -518,7 +523,7 @@ class Nag
             }
         } catch (Horde_Share_Exception $e) {
             Horde::log($e->getMessage(), 'ERR');
-            return array();
+            return [];
         }
 
         if ($owneronly) {
@@ -536,7 +541,7 @@ class Nag
                 } catch (Horde_Exception_NotFound $e) {
                 } catch (Horde_Share_Exception $e) {
                     Horde::log($e);
-                    return array();
+                    return [];
                 }
             }
         }
@@ -610,7 +615,9 @@ class Nag
         try {
             $tasklist = $GLOBALS['nag_shares']->newShare(
                 $GLOBALS['registry']->getAuth(),
-                strval(new Horde_Support_Randomid()), $info['name']);
+                strval(new Horde_Support_Randomid()),
+                $info['name']
+            );
             $tasklist->set('color', $info['color']);
             $tasklist->set('desc', $info['description']);
             if (!empty($info['system'])) {
@@ -736,42 +743,42 @@ class Nag
             $conf['urls']['pretty'] == 'rewrite';
 
         switch ($type) {
-        case Nag::DAV_WEBDAV:
-            if ($rewrite) {
-                $url .= '/rpc/nag/';
-            } else {
-                $url .= '/rpc.php/nag/';
-            }
-            $url = Horde::url($url, true, -1)
-                . ($tasklist->get('owner')
-                   ? $registry->convertUsername($tasklist->get('owner'), false)
-                   : '-system-')
-                . '/' . $tasklist->getName() . '.ics';
-            break;
+            case Nag::DAV_WEBDAV:
+                if ($rewrite) {
+                    $url .= '/rpc/nag/';
+                } else {
+                    $url .= '/rpc.php/nag/';
+                }
+                $url = Horde::url($url, true, -1)
+                    . ($tasklist->get('owner')
+                       ? $registry->convertUsername($tasklist->get('owner'), false)
+                       : '-system-')
+                    . '/' . $tasklist->getName() . '.ics';
+                break;
 
-        case Nag::DAV_CALDAV:
-            if ($rewrite) {
-                $url .= '/rpc/calendars/';
-            } else {
-                $url .= '/rpc.php/calendars/';
-            }
-            $url = Horde::url($url, true, -1)
-                . $registry->convertUsername($registry->getAuth(), false)
-                . '/'
-                . $injector->getInstance('Horde_Dav_Storage')
-                    ->getExternalCollectionId($tasklist->getName(), 'tasks')
-                . '/';
-            break;
+            case Nag::DAV_CALDAV:
+                if ($rewrite) {
+                    $url .= '/rpc/calendars/';
+                } else {
+                    $url .= '/rpc.php/calendars/';
+                }
+                $url = Horde::url($url, true, -1)
+                    . $registry->convertUsername($registry->getAuth(), false)
+                    . '/'
+                    . $injector->getInstance('Horde_Dav_Storage')
+                        ->getExternalCollectionId($tasklist->getName(), 'tasks')
+                    . '/';
+                break;
 
-        case Nag::DAV_ACCOUNT:
-            if ($rewrite) {
-                $url .= '/rpc/';
-            } else {
-                $url .= '/rpc.php/';
-            }
-            $url = Horde::url($url, true, -1)
-                . 'principals/' . $registry->convertUsername($registry->getAuth(), false) . '/';
-            break;
+            case Nag::DAV_ACCOUNT:
+                if ($rewrite) {
+                    $url .= '/rpc/';
+                } else {
+                    $url .= '/rpc.php/';
+                }
+                $url = Horde::url($url, true, -1)
+                    . 'principals/' . $registry->convertUsername($registry->getAuth(), false) . '/';
+                break;
         }
 
         return $url;
@@ -801,7 +808,7 @@ class Nag
      */
     public static function buildPriorityWidget($name, $selected = -1)
     {
-        $descs = array(1 => _("(highest)"), 5 => _("(lowest)"));
+        $descs = [1 => _("(highest)"), 5 => _("(lowest)")];
 
         $html = "<select id=\"$name\" name=\"$name\">";
         for ($priority = 1; $priority <= 5; $priority++) {
@@ -850,9 +857,11 @@ class Nag
             return $date;
         }
 
-        return sprintf(_("%s at %s"),
-                       $date,
-                       strftime($prefs->getValue('twentyFour') ? '%H:%M' : '%I:%M %p', $unixdate));
+        return sprintf(
+            _("%s at %s"),
+            $date,
+            strftime($prefs->getValue('twentyFour') ? '%H:%M' : '%I:%M %p', $unixdate)
+        );
     }
 
     /**
@@ -878,7 +887,7 @@ class Nag
      */
     public static function formatPriority($priority)
     {
-        return '<span class="pri-' . (int)$priority . '">' . (int)$priority .
+        return '<span class="pri-' . (int) $priority . '">' . (int) $priority .
             '</span>';
     }
 
@@ -926,15 +935,16 @@ class Nag
             return;
         }
         $rfc = new Horde_Mail_Rfc822();
-        $list = $rfc->parseAddressList(str_ireplace('mailto:', '', $organizer), array('limit' => 1));
+        $list = $rfc->parseAddressList(str_ireplace('mailto:', '', $organizer), ['limit' => 1]);
         if (empty($list)) {
             return;
         }
         $email = $list[0];
         if ($link && $GLOBALS['registry']->hasMethod('mail/compose')) {
             return Horde::link($GLOBALS['registry']->call(
-                                   'mail/compose',
-                                   array(array('to' => $email->bare_address))))
+                'mail/compose',
+                [['to' => $email->bare_address]]
+            ))
                 . htmlspecialchars($email->writeAddress())
                 . '</a>';
         } else {
@@ -972,8 +982,9 @@ class Nag
         if ($link && !empty($email) &&
             $GLOBALS['registry']->hasMethod('mail/compose')) {
             return Horde::link($GLOBALS['registry']->call(
-                                   'mail/compose',
-                                   array(array('to' => $email))))
+                'mail/compose',
+                [['to' => $email]]
+            ))
                 . htmlspecialchars($fullname . ' <' . $email . '>')
                 . '</a>';
         }
@@ -996,28 +1007,28 @@ class Nag
         // some available list.
         $GLOBALS['display_tasklists'] = @unserialize($GLOBALS['prefs']->getValue('display_tasklists'));
         if (!$GLOBALS['display_tasklists']) {
-            $GLOBALS['display_tasklists'] = array();
+            $GLOBALS['display_tasklists'] = [];
         }
         if (($actionID = Horde_Util::getFormData('actionID')) !== null) {
             $tasklistId = Horde_Util::getFormData('display_tasklist');
             switch ($actionID) {
-            case 'add_displaylist':
-                if (!in_array($tasklistId, $GLOBALS['display_tasklists'])) {
-                    $GLOBALS['display_tasklists'][] = $tasklistId;
-                }
-                break;
-            case 'remove_displaylist':
-                if (in_array($tasklistId, $GLOBALS['display_tasklists'])) {
-                    $key = array_search($tasklistId, $GLOBALS['display_tasklists']);
-                    unset($GLOBALS['display_tasklists'][$key]);
-                }
+                case 'add_displaylist':
+                    if (!in_array($tasklistId, $GLOBALS['display_tasklists'])) {
+                        $GLOBALS['display_tasklists'][] = $tasklistId;
+                    }
+                    break;
+                case 'remove_displaylist':
+                    if (in_array($tasklistId, $GLOBALS['display_tasklists'])) {
+                        $key = array_search($tasklistId, $GLOBALS['display_tasklists']);
+                        unset($GLOBALS['display_tasklists'][$key]);
+                    }
             }
         }
 
         // Make sure all task lists exist now, to save on checking later.
         $_temp = $GLOBALS['display_tasklists'];
         $GLOBALS['all_tasklists'] = self::listTasklists();
-        $GLOBALS['display_tasklists'] = array();
+        $GLOBALS['display_tasklists'] = [];
         foreach ($_temp as $id) {
             if (isset($GLOBALS['all_tasklists'][$id])) {
                 $GLOBALS['display_tasklists'][] = $id;
@@ -1051,7 +1062,7 @@ class Nag
             // Get any alarms in the next hour.
             try {
                 $alarmList = self::listAlarms($_SERVER['REQUEST_TIME']);
-                $messages = array();
+                $messages = [];
                 foreach ($alarmList as $task) {
                     $differential = $task->due - $_SERVER['REQUEST_TIME'];
                     $key = $differential;
@@ -1059,10 +1070,13 @@ class Nag
                         $key++;
                     }
                     if ($differential >= -60 && $differential < 60) {
-                        $messages[$key] = array(sprintf(_("%s is due now."), $task->name), 'horde.alarm');
+                        $messages[$key] = [sprintf(_("%s is due now."), $task->name), 'horde.alarm'];
                     } elseif ($differential >= 60) {
-                        $messages[$key] = array(sprintf(_("%s is due in %s"), $task->name,
-                                                        self::secondsToString($differential)), 'horde.alarm');
+                        $messages[$key] = [sprintf(
+                            _("%s is due in %s"),
+                            $task->name,
+                            self::secondsToString($differential)
+                        ), 'horde.alarm'];
                     }
                 }
 
@@ -1083,7 +1097,7 @@ class Nag
         }
 
         // Display all notifications.
-        $notification->notify(array('listeners' => 'status'));
+        $notification->notify(['listeners' => 'status']);
     }
 
     /**
@@ -1099,7 +1113,7 @@ class Nag
      */
     public static function sendNotification($action, $task, $old_task = null)
     {
-        if (!in_array($action, array('add', 'edit', 'delete'))) {
+        if (!in_array($action, ['add', 'edit', 'delete'])) {
             throw new Nag_Exception('Unknown event action: ' . $action);
         }
 
@@ -1111,7 +1125,7 @@ class Nag
         }
 
         $groups = $GLOBALS['injector']->getInstance('Horde_Group');
-        $recipients = array();
+        $recipients = [];
         $identity = $GLOBALS['injector']->getInstance('Horde_Core_Factory_Identity')->create();
         $from = $identity->getDefaultFromAddress(true);
 
@@ -1140,7 +1154,7 @@ class Nag
             }
         }
 
-        $addresses = array();
+        $addresses = [];
         foreach ($recipients as $user => $vals) {
             if (!$vals) {
                 continue;
@@ -1151,7 +1165,7 @@ class Nag
                 continue;
             }
             if (!isset($addresses[$vals['lang']][$vals['tf']][$vals['df']])) {
-                $addresses[$vals['lang']][$vals['tf']][$vals['df']] = array();
+                $addresses[$vals['lang']][$vals['tf']][$vals['df']] = [];
             }
 
             $tmp = new Horde_Mail_Rfc822_Address($email);
@@ -1163,137 +1177,165 @@ class Nag
             return;
         }
 
-        $mail = new Horde_Mime_Mail(array(
+        $mail = new Horde_Mime_Mail([
             'User-Agent' => 'Nag ' . $GLOBALS['registry']->getVersion(),
             'Precedence' => 'bulk',
             'Auto-Submitted' => 'auto-generated',
-            'From' => $from));
+            'From' => $from]);
 
         foreach ($addresses as $lang => $twentyFour) {
             $GLOBALS['registry']->setLanguageEnvironment($lang);
 
-            $view_link = Horde::url('view.php', true)->add(array(
+            $view_link = Horde::url('view.php', true)->add([
                 'tasklist' => $task->tasklist,
-                'task' => $task->id
-            ))->setRaw(true);
+                'task' => $task->id,
+            ])->setRaw(true);
 
             switch ($action) {
-            case 'add':
-                $subject = _("Task added:");
-                $notification_message = _("You requested to be notified when tasks are added to your task lists.")
-                    . "\n\n"
-                    . ($task->due
-                       ? _("The task \"%s\" has been added to task list \"%s\", with a due date of: %s.")
-                       : _("The task \"%s\" has been added to task list \"%s\"."))
-                    . "\n"
-                    . str_replace('%', '%%', $view_link);
-                break;
+                case 'add':
+                    $subject = _("Task added:");
+                    $notification_message = _("You requested to be notified when tasks are added to your task lists.")
+                        . "\n\n"
+                        . ($task->due
+                           ? _("The task \"%s\" has been added to task list \"%s\", with a due date of: %s.")
+                           : _("The task \"%s\" has been added to task list \"%s\"."))
+                        . "\n"
+                        . str_replace('%', '%%', $view_link);
+                    break;
 
-            case 'edit':
-                $subject = _("Task modified:");
-                $notification_message = _("You requested to be notified when tasks are edited on your task lists.")
-                    . "\n\n"
-                    . _("The task \"%s\" has been edited on task list \"%s\".")
-                    . "\n"
-                    . str_replace('%', '%%', $view_link)
-                    . "\n\n"
-                    . _("Changes made for this task:");
-                if ($old_task->name != $task->name) {
-                    $notification_message .= "\n - "
-                        . sprintf(_("Changed name from \"%s\" to \"%s\""),
-                                  $old_task->name, $task->name);
-                }
-                if ($old_task->tasklist != $task->tasklist) {
-                    $old_share = $GLOBALS['nag_shares']->getShare($old_task->tasklist);
-                    $notification_message .= "\n - "
-                        . sprintf(_("Changed task list from \"%s\" to \"%s\""),
-                                  Nag::getLabel($old_share), Nag::getLabel($share));
-                }
-                if ($old_task->parent_id != $task->parent_id) {
-                    $old_parent = $old_task->getParent();
-                    try {
-                        $parent = $task->getParent();
+                case 'edit':
+                    $subject = _("Task modified:");
+                    $notification_message = _("You requested to be notified when tasks are edited on your task lists.")
+                        . "\n\n"
+                        . _("The task \"%s\" has been edited on task list \"%s\".")
+                        . "\n"
+                        . str_replace('%', '%%', $view_link)
+                        . "\n\n"
+                        . _("Changes made for this task:");
+                    if ($old_task->name != $task->name) {
                         $notification_message .= "\n - "
-                            . sprintf(_("Changed parent task from \"%s\" to \"%s\""),
-                                      $old_parent ? $old_parent->name : _("no parent"),
-                                      $parent ? $parent->name : _("no parent"));
-                    } catch (Nag_Exception $e) {
+                            . sprintf(
+                                _("Changed name from \"%s\" to \"%s\""),
+                                $old_task->name,
+                                $task->name
+                            );
                     }
-                }
-                if ($old_task->assignee != $task->assignee) {
-                    $identity = $GLOBALS['injector']->getInstance('Horde_Core_Factory_Identity')->create($old_task->assignee);
-                    $old_name = $identity->getValue('fullname');
-                    if (!strlen($old_name)) {
-                        $old_name = $old_task->assignee;
+                    if ($old_task->tasklist != $task->tasklist) {
+                        $old_share = $GLOBALS['nag_shares']->getShare($old_task->tasklist);
+                        $notification_message .= "\n - "
+                            . sprintf(
+                                _("Changed task list from \"%s\" to \"%s\""),
+                                Nag::getLabel($old_share),
+                                Nag::getLabel($share)
+                            );
                     }
-                    $identity = $GLOBALS['injector']->getInstance('Horde_Core_Factory_Identity')->create($task->assignee);
-                    $new_name = $identity->getValue('fullname');
-                    if (!strlen($new_name)) {
-                        $new_name = $new_task->assignee;
+                    if ($old_task->parent_id != $task->parent_id) {
+                        $old_parent = $old_task->getParent();
+                        try {
+                            $parent = $task->getParent();
+                            $notification_message .= "\n - "
+                                . sprintf(
+                                    _("Changed parent task from \"%s\" to \"%s\""),
+                                    $old_parent ? $old_parent->name : _("no parent"),
+                                    $parent ? $parent->name : _("no parent")
+                                );
+                        } catch (Nag_Exception $e) {
+                        }
                     }
-                    $notification_message .= "\n - "
-                        . sprintf(_("Changed assignee from \"%s\" to \"%s\""),
-                                  $old_name, $new_name);
-                }
-                if ($old_task->private != $task->private) {
-                    $notification_message .= "\n - "
-                        . ($task->private ? _("Turned privacy on") : _("Turned privacy off"));
-                }
-                if ($old_task->due != $task->due) {
-                    $notification_message .= "\n - "
-                        . sprintf(_("Changed due date from %s to %s"),
-                                  $old_task->due ? self::formatDate($old_task->due) : _("no due date"),
-                                  $task->due ? self::formatDate($task->due) : _("no due date"));
-                }
-                if ($old_task->start != $task->start) {
-                    $notification_message .= "\n - "
-                        . sprintf(_("Changed start date from %s to %s"),
-                                  $old_task->start ? self::formatDate($old_task->start) : _("no start date"),
-                                  $task->start ? self::formatDate($task->start) : _("no start date"));
-                }
-                if ($old_task->alarm != $task->alarm) {
-                    $notification_message .= "\n - "
-                        . sprintf(_("Changed alarm from %s to %s"),
-                                  self::formatAlarm($old_task->alarm), self::formatAlarm($task->alarm));
-                }
-                if ($old_task->priority != $task->priority) {
-                    $notification_message .= "\n - "
-                        . sprintf(_("Changed priority from %s to %s"),
-                                  $old_task->priority, $task->priority);
-                }
-                if ($old_task->estimate != $task->estimate) {
-                    $notification_message .= "\n - "
-                        . sprintf(_("Changed estimate from %s to %s"),
-                                  $old_task->estimate, $task->estimate);
-                }
-                if ($old_task->completed != $task->completed) {
-                    $notification_message .= "\n - "
-                        . sprintf(_("Changed completion from %s to %s"),
-                                  $old_task->completed ? _("completed") : _("not completed"),
-                                  $task->completed ? _("completed") : _("not completed"));
-                }
-                if ($old_task->desc != $task->desc) {
-                    $notification_message .= "\n - " . _("Changed description");
-                }
-                break;
+                    if ($old_task->assignee != $task->assignee) {
+                        $identity = $GLOBALS['injector']->getInstance('Horde_Core_Factory_Identity')->create($old_task->assignee);
+                        $old_name = $identity->getValue('fullname');
+                        if (!strlen($old_name)) {
+                            $old_name = $old_task->assignee;
+                        }
+                        $identity = $GLOBALS['injector']->getInstance('Horde_Core_Factory_Identity')->create($task->assignee);
+                        $new_name = $identity->getValue('fullname');
+                        if (!strlen($new_name)) {
+                            $new_name = $new_task->assignee;
+                        }
+                        $notification_message .= "\n - "
+                            . sprintf(
+                                _("Changed assignee from \"%s\" to \"%s\""),
+                                $old_name,
+                                $new_name
+                            );
+                    }
+                    if ($old_task->private != $task->private) {
+                        $notification_message .= "\n - "
+                            . ($task->private ? _("Turned privacy on") : _("Turned privacy off"));
+                    }
+                    if ($old_task->due != $task->due) {
+                        $notification_message .= "\n - "
+                            . sprintf(
+                                _("Changed due date from %s to %s"),
+                                $old_task->due ? self::formatDate($old_task->due) : _("no due date"),
+                                $task->due ? self::formatDate($task->due) : _("no due date")
+                            );
+                    }
+                    if ($old_task->start != $task->start) {
+                        $notification_message .= "\n - "
+                            . sprintf(
+                                _("Changed start date from %s to %s"),
+                                $old_task->start ? self::formatDate($old_task->start) : _("no start date"),
+                                $task->start ? self::formatDate($task->start) : _("no start date")
+                            );
+                    }
+                    if ($old_task->alarm != $task->alarm) {
+                        $notification_message .= "\n - "
+                            . sprintf(
+                                _("Changed alarm from %s to %s"),
+                                self::formatAlarm($old_task->alarm),
+                                self::formatAlarm($task->alarm)
+                            );
+                    }
+                    if ($old_task->priority != $task->priority) {
+                        $notification_message .= "\n - "
+                            . sprintf(
+                                _("Changed priority from %s to %s"),
+                                $old_task->priority,
+                                $task->priority
+                            );
+                    }
+                    if ($old_task->estimate != $task->estimate) {
+                        $notification_message .= "\n - "
+                            . sprintf(
+                                _("Changed estimate from %s to %s"),
+                                $old_task->estimate,
+                                $task->estimate
+                            );
+                    }
+                    if ($old_task->completed != $task->completed) {
+                        $notification_message .= "\n - "
+                            . sprintf(
+                                _("Changed completion from %s to %s"),
+                                $old_task->completed ? _("completed") : _("not completed"),
+                                $task->completed ? _("completed") : _("not completed")
+                            );
+                    }
+                    if ($old_task->desc != $task->desc) {
+                        $notification_message .= "\n - " . _("Changed description");
+                    }
+                    break;
 
-            case 'delete':
-                $subject = _("Task deleted:");
-                $notification_message =
-                    _("You requested to be notified when tasks are deleted from your task lists.")
-                    . "\n\n"
-                    . _("The task \"%s\" has been deleted from task list \"%s\".");
-                break;
+                case 'delete':
+                    $subject = _("Task deleted:");
+                    $notification_message =
+                        _("You requested to be notified when tasks are deleted from your task lists.")
+                        . "\n\n"
+                        . _("The task \"%s\" has been deleted from task list \"%s\".");
+                    break;
             }
 
             $mail->addHeader('Subject', $subject . ' ' . $task->name);
 
             foreach ($twentyFour as $tf => $dateFormat) {
                 foreach ($dateFormat as $df => $df_recipients) {
-                    $message = sprintf($notification_message,
-                                       $task->name,
-                                       Nag::getLabel($share),
-                                       $task->due ? strftime($df, $task->due) . ' ' . date($tf ? 'H:i' : 'h:ia', $task->due) : '');
+                    $message = sprintf(
+                        $notification_message,
+                        $task->name,
+                        Nag::getLabel($share),
+                        $task->due ? strftime($df, $task->due) . ' ' . date($tf ? 'H:i' : 'h:ia', $task->due) : ''
+                    );
                     if (strlen(trim($task->desc))) {
                         $message .= "\n\n" . _("Task description:") . "\n\n" . $task->desc;
                     }
@@ -1319,9 +1361,11 @@ class Nag
      *
      * @return Horde_Mime_Part  A multipart/alternative MIME part.
      */
-    public static function buildMimeMessage(Horde_View $view, $template,
-                                            Horde_Mime_Part $image)
-    {
+    public static function buildMimeMessage(
+        Horde_View $view,
+        $template,
+        Horde_Mime_Part $image
+    ) {
         $multipart = new Horde_Mime_Part();
         $multipart->setType('multipart/alternative');
         $bodyText = new Horde_Mime_Part();
@@ -1371,7 +1415,7 @@ class Nag
      */
     public static function getUserName($uid)
     {
-        static $names = array();
+        static $names = [];
 
         if (!isset($names[$uid])) {
             $ident = $GLOBALS['injector']->getInstance('Horde_Core_Factory_Identity')->create($uid);
@@ -1405,13 +1449,13 @@ class Nag
      */
     protected static function _notificationPref($user, $mode, $tasklist = null)
     {
-        $prefs = $GLOBALS['injector']->getInstance('Horde_Core_Factory_Prefs')->create('nag', array(
+        $prefs = $GLOBALS['injector']->getInstance('Horde_Core_Factory_Prefs')->create('nag', [
             'cache' => false,
-            'user' => $user
-        ));
-        $vals = array('lang' => $prefs->getValue('language'),
-                      'tf' => $prefs->getValue('twentyFour'),
-                      'df' => $prefs->getValue('date_format'));
+            'user' => $user,
+        ]);
+        $vals = ['lang' => $prefs->getValue('language'),
+            'tf' => $prefs->getValue('twentyFour'),
+            'df' => $prefs->getValue('date_format')];
 
         if ($prefs->getValue('task_notification_exclude_self') &&
             $user == $GLOBALS['registry']->getAuth()) {
@@ -1420,15 +1464,15 @@ class Nag
 
         $notification = $prefs->getValue('task_notification');
         switch ($notification) {
-        case 'owner':
-            return $mode == 'owner' ? $vals : false;
-        case 'read':
-            return $mode == 'read' ? $vals : false;
-        case 'show':
-            if ($mode == 'read') {
-                $display_tasklists = unserialize($prefs->getValue('display_tasklists'));
-                return in_array($tasklist, $display_tasklists) ? $vals : false;
-            }
+            case 'owner':
+                return $mode == 'owner' ? $vals : false;
+            case 'read':
+                return $mode == 'read' ? $vals : false;
+            case 'show':
+                if ($mode == 'read') {
+                    $display_tasklists = unserialize($prefs->getValue('display_tasklists'));
+                    return in_array($tasklist, $display_tasklists) ? $vals : false;
+                }
         }
 
         return false;
@@ -1754,10 +1798,10 @@ class Nag
         }
 
         if ($cs = self::getDefaultTasklist(Horde_Perms::EDIT)) {
-            return array($cs);
+            return [$cs];
         }
 
-        return array();
+        return [];
     }
 
     public static function getUserEmail($user)
@@ -1780,15 +1824,15 @@ class Nag
     public static function responseFromICal($response)
     {
         switch (Horde_String::upper($response)) {
-        case 'ACCEPTED':
-            return self::RESPONSE_ACCEPTED;
+            case 'ACCEPTED':
+                return self::RESPONSE_ACCEPTED;
 
-        case 'DECLINED':
-            return self::RESPONSE_DECLINED;
+            case 'DECLINED':
+                return self::RESPONSE_DECLINED;
 
-        case 'NEEDS-ACTION':
-        default:
-            return self::RESPONSE_NONE;
+            case 'NEEDS-ACTION':
+            default:
+                return self::RESPONSE_NONE;
         }
     }
 
@@ -1809,9 +1853,12 @@ class Nag
      *                        Possible values are self::RANGE_THISANDFUTURE
      */
     public static function sendITipNotifications(
-        Nag_Task $task, Horde_Notification_Handler $notification,
-        $action, Horde_Date $instance = null, $range = null)
-    {
+        Nag_Task $task,
+        Horde_Notification_Handler $notification,
+        $action,
+        Horde_Date $instance = null,
+        $range = null
+    ) {
         global $injector, $registry, $nag_shares;
 
         if (!$task->assignee) {
@@ -1820,7 +1867,7 @@ class Nag
 
         $ident = $injector->getInstance('Horde_Core_Factory_Identity')->create($task->creator);
         if (!$ident->getValue('from_addr')) {
-            $notification->push(sprintf(_("You do not have an email address configured in your Personal Information Preferences. You must set one %shere%s before event notifications can be sent."), $registry->getServiceLink('prefs', 'kronolith')->add(array('app' => 'horde', 'group' => 'identities'))->link(), '</a>'), 'horde.error', array('content.raw'));
+            $notification->push(sprintf(_("You do not have an email address configured in your Personal Information Preferences. You must set one %shere%s before event notifications can be sent."), $registry->getServiceLink('prefs', 'kronolith')->add(['app' => 'horde', 'group' => 'identities'])->link(), '</a>'), 'horde.error', ['content.raw']);
             return;
         }
 
@@ -1828,7 +1875,7 @@ class Nag
         // need the Content-ID.
         $image = self::getImagePart('big_invitation.png');
         $share = $nag_shares->getShare($task->tasklist);
-        $view = new Horde_View(array('templatePath' => NAG_TEMPLATES . '/itip'));
+        $view = new Horde_View(['templatePath' => NAG_TEMPLATES . '/itip']);
         new Horde_View_Helper_Text($view);
         $view->identity = $ident;
         $view->task = $task;
@@ -1842,37 +1889,38 @@ class Nag
         /* Determine all notification-specific strings. */
         $method = 'REQUEST';
         switch ($action) {
-        case self::ITIP_CANCEL:
-            /* Cancellation. */
-            $method = 'CANCEL';
-            $filename = 'task-cancellation.ics';
-            $view->subject = sprintf(_("Cancelled: %s"), $task->name);
-            if (empty($instance)) {
-                $view->header = sprintf(_("%s has cancelled \"%s\"."), $ident->getName(), $task->name);
-            } else {
-                $view->header = sprintf(_("%s has cancelled an instance of the recurring \"%s\"."), $ident->getName(), $task->name);
-            }
-            break;
-        case self::ITIP_UPDATE:
-            if (!empty($task->organizer) && $task->organizer != Nag::getUserEmail($task->creator)) {
-                // Sending a progress update.
-                $method = 'REPLY';
-            } else {
-                $method = 'UPDATE';
-            }
-        case self::ITIP_REQUEST:
-        default:
-            if (empty($task->status) || $task->status == self::RESPONSE_NONE) {
-                /* Invitation. */
-                $filename = 'task-invitation.ics';
-                $view->subject = $task->name;
-                $view->header = sprintf(_("%s wishes to make you aware of \"%s\"."), $ident->getName(), $task->name);
-            } else {
-                $filename = 'task-update.ics';
-                $view->subject = sprintf(_("Updated: %s."), $task->name);
-                $view->header = sprintf(_("%s wants to notify you about changes of \"%s\"."), $ident->getName(), $task->name);
-            }
-            break;
+            case self::ITIP_CANCEL:
+                /* Cancellation. */
+                $method = 'CANCEL';
+                $filename = 'task-cancellation.ics';
+                $view->subject = sprintf(_("Cancelled: %s"), $task->name);
+                if (empty($instance)) {
+                    $view->header = sprintf(_("%s has cancelled \"%s\"."), $ident->getName(), $task->name);
+                } else {
+                    $view->header = sprintf(_("%s has cancelled an instance of the recurring \"%s\"."), $ident->getName(), $task->name);
+                }
+                break;
+            case self::ITIP_UPDATE:
+                if (!empty($task->organizer) && $task->organizer != Nag::getUserEmail($task->creator)) {
+                    // Sending a progress update.
+                    $method = 'REPLY';
+                } else {
+                    $method = 'UPDATE';
+                }
+                // no break
+            case self::ITIP_REQUEST:
+            default:
+                if (empty($task->status) || $task->status == self::RESPONSE_NONE) {
+                    /* Invitation. */
+                    $filename = 'task-invitation.ics';
+                    $view->subject = $task->name;
+                    $view->header = sprintf(_("%s wishes to make you aware of \"%s\"."), $ident->getName(), $task->name);
+                } else {
+                    $filename = 'task-update.ics';
+                    $view->subject = sprintf(_("Updated: %s."), $task->name);
+                    $view->header = sprintf(_("%s wants to notify you about changes of \"%s\"."), $ident->getName(), $task->name);
+                }
+                break;
         }
         $view->attendees = $email;
         $view->organizer = empty($task->organizer)
@@ -1912,10 +1960,11 @@ class Nag
             : new Horde_Mail_Rfc822_Address($task->organizer);
 
         $mail = new Horde_Mime_Mail(
-            array('Subject' => $view->subject,
-                  'To' => $recipient,
-                  'From' => $ident->getDefaultFromAddress(true),
-                  'User-Agent' => 'Nag ' . $registry->getVersion()));
+            ['Subject' => $view->subject,
+                'To' => $recipient,
+                'From' => $ident->getDefaultFromAddress(true),
+                'User-Agent' => 'Nag ' . $registry->getVersion()]
+        );
         $mail->setBasePart($multipart);
 
         try {

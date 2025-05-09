@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Special prefs handling for the 'task_alarms_select' preference.
  *
@@ -25,17 +26,17 @@ class Nag_Prefs_Special_TaskAlarms implements Horde_Core_Prefs_Ui_Special
      */
     public function display(Horde_Core_Prefs_Ui $ui)
     {
-        return Horde_Core_Prefs_Ui_Widgets::alarm(array(
+        return Horde_Core_Prefs_Ui_Widgets::alarm([
             'label' => _("Choose how you want to receive reminders for tasks with alarms:"),
-            'pref' => 'task_alarms'
-        ));
+            'pref' => 'task_alarms',
+        ]);
     }
 
     /**
      */
     public function update(Horde_Core_Prefs_Ui $ui)
     {
-        $data = Horde_Core_Prefs_Ui_Widgets::alarmUpdate($ui, array('pref' => 'task_alarms'));
+        $data = Horde_Core_Prefs_Ui_Widgets::alarmUpdate($ui, ['pref' => 'task_alarms']);
         if (is_null($data)) {
             return false;
         }

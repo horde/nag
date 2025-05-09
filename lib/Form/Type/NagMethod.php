@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Horde_Form_Type_nag_method class provides a form field for editing
  * notification methods for a task alarm.
@@ -12,16 +13,16 @@ class Nag_Form_Type_NagMethod extends Horde_Form_Type
     {
         $info = $var->getValue($vars);
         if (empty($info['on'])) {
-            $info = array();
+            $info = [];
             return;
         }
 
         $types = $vars->get('task_alarms');
-        $info = array();
+        $info = [];
         if (!empty($types)) {
             foreach ($types as $type) {
-                $info[$type] = array();
-                switch ($type){
+                $info[$type] = [];
+                switch ($type) {
                     case 'notify':
                         $info[$type]['sound'] = $vars->get('task_alarms_sound');
                         break;
@@ -38,7 +39,7 @@ class Nag_Form_Type_NagMethod extends Horde_Form_Type
     public function isValid(&$var, &$vars, $value, &$message)
     {
         $alarm = $vars->get('alarm');
-        if ($value['on'] && !$alarm['on']){
+        if ($value['on'] && !$alarm['on']) {
             $message = _("An alarm must be set to specify a notification method");
             return false;
         }

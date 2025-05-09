@@ -1,11 +1,12 @@
 <?php
+
 /**
  */
 class Nag_Block_Summary extends Horde_Core_Block
 {
     /**
      */
-    public function __construct($app, $params = array())
+    public function __construct($app, $params = [])
     {
         parent::__construct($app, $params);
 
@@ -30,59 +31,59 @@ class Nag_Block_Summary extends Horde_Core_Block
      */
     protected function _params()
     {
-        $tasklists = array();
+        $tasklists = [];
         foreach (Nag::listTasklists() as $id => $tasklist) {
             $tasklists[$id] = Nag::getLabel($tasklist);
         }
 
-        return array(
-            'block_title' => array(
+        return [
+            'block_title' => [
                 'type' => 'text',
                 'name' => _("Block title"),
-                'default' => $GLOBALS['registry']->get('name')
-            ),
-            'show_pri' => array(
+                'default' => $GLOBALS['registry']->get('name'),
+            ],
+            'show_pri' => [
                 'type' => 'checkbox',
                 'name' => _("Show priorities?"),
-                'default' => 1
-            ),
-            'show_actions' => array(
+                'default' => 1,
+            ],
+            'show_actions' => [
                 'type' => 'checkbox',
                 'name' => _("Show action buttons?"),
-                'default' => 1
-            ),
-            'show_due' => array(
+                'default' => 1,
+            ],
+            'show_due' => [
                 'type' => 'checkbox',
                 'name' => _("Show due dates?"),
-                'default' => 1
-            ),
-            'show_tasklist' => array(
+                'default' => 1,
+            ],
+            'show_tasklist' => [
                 'type' => 'checkbox',
                 'name' => _("Show task list name?"),
-                'default' => 1
-            ),
-            'show_alarms' => array(
+                'default' => 1,
+            ],
+            'show_alarms' => [
                 'type' => 'checkbox',
                 'name' => _("Show task alarms?"),
-                'default' => 1
-            ),
-            'show_overdue' => array(
+                'default' => 1,
+            ],
+            'show_overdue' => [
                 'type' => 'checkbox',
                 'name' => _("Always show overdue tasks?"),
-                'default' => 1
-            ),
-            'show_completed' => array(
+                'default' => 1,
+            ],
+            'show_completed' => [
                 'type' => 'checkbox',
                 'name' => _("Always show completed and future tasks?"),
-                'default' => 1
-            ),
-            'show_tasklists' => array(
+                'default' => 1,
+            ],
+            'show_tasklists' => [
                 'type' => 'multienum',
                 'name' => _("Show tasks from these task lists"),
-                'default' => array(),
-                'values' => $tasklists
-            )
-        );
+                'default' => [],
+                'values' => $tasklists,
+            ],
+        ];
     }
 
     /**
@@ -94,7 +95,7 @@ class Nag_Block_Summary extends Horde_Core_Block
         $html = '';
 
         if (!empty($this->_params['show_alarms'])) {
-            $messages = array();
+            $messages = [];
             try {
                 $alarmList = Nag::listAlarms($_SERVER['REQUEST_TIME']);
             } catch (Nag_Exception $e) {
@@ -107,10 +108,10 @@ class Nag_Block_Summary extends Horde_Core_Block
                 while (isset($messages[$key])) {
                     $key++;
                 }
-                $viewurl = Horde::url('view.php', true)->add(array(
+                $viewurl = Horde::url('view.php', true)->add([
                     'task' => $task->id,
-                    'tasklist' => $task->tasklist
-                ));
+                    'tasklist' => $task->tasklist,
+                ]);
                 $link = $viewurl->link() .
                     (!empty($task->name) ? htmlspecialchars($task->name) : _("[none]")) .
                     '</a>';
@@ -119,7 +120,9 @@ class Nag_Block_Summary extends Horde_Core_Block
                 } elseif ($differential >= 60) {
                     $messages[$key] = sprintf(
                         _("%s is due in %s"),
-                        $link, Nag::secondsToString($differential));
+                        $link,
+                        Nag::secondsToString($differential)
+                    );
                 }
             }
 
@@ -137,14 +140,14 @@ class Nag_Block_Summary extends Horde_Core_Block
 
         $i = 0;
         try {
-            $tasks = Nag::listTasks(array(
-                'tasklists' => isset($this->_params['show_tasklists'])
-                    ? $this->_params['show_tasklists']
-                    : array_keys(Nag::listTasklists(false, Horde_Perms::READ)),
-                'completed' => empty($this->_params['show_completed'])
-                    ? Nag::VIEW_INCOMPLETE
-                    : Nag::VIEW_ALL,
-                'include_history' => false)
+            $tasks = Nag::listTasks(
+                [
+                    'tasklists' => $this->_params['show_tasklists']
+                        ?? array_keys(Nag::listTasklists(false, Horde_Perms::READ)),
+                    'completed' => empty($this->_params['show_completed'])
+                        ? Nag::VIEW_INCOMPLETE
+                        : Nag::VIEW_ALL,
+                    'include_history' => false]
             );
         } catch (Nag_Exception $e) {
             return '<em>' . htmlspecialchars($e->getMessage()) . '</em>';
@@ -173,11 +176,11 @@ class Nag_Block_Summary extends Horde_Core_Block
             $html .= '<tr class="' . $class . '">';
 
             if (!empty($this->_params['show_actions'])) {
-                $taskurl = Horde::url('task.php', true)->add(array(
+                $taskurl = Horde::url('task.php', true)->add([
                     'task' => $task->id,
                     'tasklist' => $task->tasklist,
-                    'url' => Horde::signUrl(Horde::selfUrl(true))
-                ));
+                    'url' => Horde::signUrl(Horde::selfUrl(true)),
+                ]);
                 $label = sprintf(_("Edit \"%s\""), $task->name);
                 $html .= '<td width="1%"' . $style . '>'
                     . $taskurl->copy()->add('actionID', 'modify_task')->link()
@@ -193,11 +196,11 @@ class Nag_Block_Summary extends Horde_Core_Block
                             $conf['urls']['pretty'] == 'rewrite'
                                 ? 't/complete'
                                 : 'task/complete.php'
-                        )->add(array(
+                        )->add([
                             'task' => $task->id,
                             'tasklist' => $task->tasklist,
-                            'url' => Horde::selfUrl(true)
-                        ))->link()
+                            'url' => Horde::selfUrl(true),
+                        ])->link()
                         . Horde::img('unchecked.png', $label) . '</a></td>';
                 }
             }
@@ -215,12 +218,12 @@ class Nag_Block_Summary extends Horde_Core_Block
 
             $html .= '<td' . $style . '>';
 
-            $viewurl = Horde::url('view.php', true)->add(array(
+            $viewurl = Horde::url('view.php', true)->add([
                 'task' => $task->id,
-                'tasklist' => $task->tasklist
-            ));
+                'tasklist' => $task->tasklist,
+            ]);
             $html .= $task->treeIcons()
-                . $viewurl->link(array('title' => $task->desc, 'style' => 'color:' . $task->foregroundColor()))
+                . $viewurl->link(['title' => $task->desc, 'style' => 'color:' . $task->foregroundColor()])
                 . (!empty($task->name)
                    ? htmlspecialchars($task->name) : _("[none]"))
                 . '</a>';

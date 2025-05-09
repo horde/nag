@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Horde_Form_Type_nag_alarm class provides a form field for editing task
  * alarms.

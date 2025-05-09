@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file contains all Horde_Form extensions required for editing tasks.
  *
@@ -16,9 +17,9 @@
  */
 class Nag_Form_Task extends Horde_Form
 {
-    const SECTION_GENERAL = 1;
-    const SECTION_RECUR   = 2;
-    const SECTION_DESC    = 3;
+    public const SECTION_GENERAL = 1;
+    public const SECTION_RECUR   = 2;
+    public const SECTION_DESC    = 3;
 
     /**
      *
@@ -41,7 +42,7 @@ class Nag_Form_Task extends Horde_Form
         parent::__construct($vars, $title);
 
         $user = $registry->getAuth();
-        $tasklist_enums = array();
+        $tasklist_enums = [];
         foreach (Nag::listTasklists(false, Horde_Perms::SHOW, false) as $tl_id => $tl) {
             if (!$tl->hasPermission($user, Horde_Perms::EDIT)) {
                 continue;
@@ -54,13 +55,13 @@ class Nag_Form_Task extends Horde_Form
             $tasklist = key($tasklist_enums);
         }
 
-        $priorities = array(
+        $priorities = [
             1 => '1 ' . _("(highest)"),
             2 => 2,
             3 => 3,
             4 => 4,
-            5 => '5 ' . _("(lowest)")
-        );
+            5 => '5 ' . _("(lowest)"),
+        ];
         $this->addHidden('', 'mobile', 'boolean', false);
         $this->addHidden('', 'task_id', 'text', false);
         $this->addHidden('', 'old_tasklist', 'text', false);
@@ -76,21 +77,28 @@ class Nag_Form_Task extends Horde_Form
         if (!$prefs->isLocked('default_tasklist') &&
             count($tasklist_enums) > 1) {
             $v = $this->addVariable(
-                _("Task List"), 'tasklist_id', 'enum', true, false, false,
-                array($tasklist_enums));
+                _("Task List"),
+                'tasklist_id',
+                'enum',
+                true,
+                false,
+                false,
+                [$tasklist_enums]
+            );
             if (!$vars->get('mobile')) {
                 $v->setAction(Horde_Form_Action::factory('reload'));
             }
         }
 
         if (!$vars->get('mobile')) {
-            $tasks = Nag::listTasks(array(
-                'tasklists' => array($tasklist),
-                'complete' => Nag::VIEW_FUTURE_INCOMPLETE,
-                'include_history' => false,
-                'external' => false)
+            $tasks = Nag::listTasks(
+                [
+                    'tasklists' => [$tasklist],
+                    'complete' => Nag::VIEW_FUTURE_INCOMPLETE,
+                    'include_history' => false,
+                    'external' => false]
             );
-            $task_enums = array('' => _("No parent task"));
+            $task_enums = ['' => _("No parent task")];
             $tasks->reset();
             while ($task = $tasks->each()) {
                 if ($vars->get('task_id') == $task->id) {
@@ -100,7 +108,14 @@ class Nag_Form_Task extends Horde_Form
             }
 
             $v = $this->addVariable(
-                _("Parent task"), 'parent', 'enum', false, false, false, array($task_enums));
+                _("Parent task"),
+                'parent',
+                'enum',
+                false,
+                false,
+                false,
+                [$task_enums]
+            );
             $v->setOption('htmlchars', true);
         }
 
@@ -117,8 +132,10 @@ class Nag_Form_Task extends Horde_Form
             if (count($groups)) {
                 $horde_group = $injector->getInstance('Horde_Group');
                 foreach ($groups as $group) {
-                    $users = array_merge($users,
-                                         $horde_group->listUsers($group));
+                    $users = array_merge(
+                        $users,
+                        $horde_group->listUsers($group)
+                    );
                 }
             }
             if (empty($GLOBALS['conf']['assignees']['allow_external'])) {
@@ -130,8 +147,15 @@ class Nag_Form_Task extends Horde_Form
                         $users[$user] = strlen($fullname) ? $fullname : $user;
                     }
                 }
-                $this->addVariable(_("Assignee"), 'assignee', 'enum', false, false,
-                                   null, array($users, _("None")));
+                $this->addVariable(
+                    _("Assignee"),
+                    'assignee',
+                    'enum',
+                    false,
+                    false,
+                    null,
+                    [$users, _("None")]
+                );
             } else {
                 $this->addVariable(_("Assignee"), 'assignee', 'Nag:NagContact', false);
             }
@@ -148,7 +172,7 @@ class Nag_Form_Task extends Horde_Form
             $v = $this->addVariable(_("Notification"), 'methods', 'Nag:NagMethod', false);
             $v->setAction(Horde_Form_Action::factory('reload'));
 
-            $v = $this->addVariable(_("Priority"), 'priority', 'enum', false, false, false, array($priorities));
+            $v = $this->addVariable(_("Priority"), 'priority', 'enum', false, false, false, [$priorities]);
             $v->setDefault(3);
             $this->addVariable(_("Estimated Time"), 'estimate', 'number', false);
             $this->addVariable(_("Actual Time"), 'actual', 'number', false);
@@ -159,32 +183,37 @@ class Nag_Form_Task extends Horde_Form
 
         $this->setSection(self::SECTION_DESC, _("Description"));
         try {
-            $description = Horde::callHook('description_help', array(), 'nag');
+            $description = Horde::callHook('description_help', [], 'nag');
         } catch (Horde_Exception_HookNotSet $e) {
             $description = '';
         }
         $this->addVariable(_("Description"), 'desc', 'longtext', false, false, $description);
 
-        $buttons = array(array('value' => _("Save")));
+        $buttons = [['value' => _("Save")]];
         if ($delete) {
-            $buttons[] = array('value' => _("Delete"), 'name' => 'deletebutton', 'class' => 'horde-delete');
+            $buttons[] = ['value' => _("Delete"), 'name' => 'deletebutton', 'class' => 'horde-delete'];
         }
         if (!$vars->get('task_id')) {
-            $buttons[] = array('value' => _("Save and New"), 'name' => 'savenewbutton', 'class' => 'horde-create');
+            $buttons[] = ['value' => _("Save and New"), 'name' => 'savenewbutton', 'class' => 'horde-create'];
         }
         if (Horde_Util::getFormData('have_search')) {
-            $buttons[] = array('value' => _("Return to Search Results"), 'name' => 'search_return', 'class' => 'horde-button');
+            $buttons[] = ['value' => _("Return to Search Results"), 'name' => 'search_return', 'class' => 'horde-button'];
         }
         $this->setButtons($buttons);
     }
 
-    public function renderActive($renderer = null, $vars = null, $action = '',
-                          $method = 'get', $enctype = null, $focus = true)
-    {
+    public function renderActive(
+        $renderer = null,
+        $vars = null,
+        $action = '',
+        $method = 'get',
+        $enctype = null,
+        $focus = true
+    ) {
         global $conf;
 
         return parent::renderActive(
-            $this->getRenderer(array('varrenderer_driver' => array('nag', 'nag'))),
+            $this->getRenderer(['varrenderer_driver' => ['nag', 'nag']]),
             $this->_vars,
             Horde::url(
                 $conf['urls']['pretty'] == 'rewrite'

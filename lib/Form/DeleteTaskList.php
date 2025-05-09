@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Horde_Form for deleting task lists.
  *
@@ -35,13 +36,18 @@ class Nag_Form_DeleteTaskList extends Horde_Form
         parent::__construct($vars, sprintf(_("Delete %s"), $tasklist->get('name')));
         $this->addHidden('', 't', 'text', true);
         $this->addVariable(
-            sprintf(_("Really delete the task list \"%s\"? This cannot be undone and all data on this task list will be permanently removed."),
-                    htmlspecialchars($this->_tasklist->get('name'))), 'desc', 'description', false
+            sprintf(
+                _("Really delete the task list \"%s\"? This cannot be undone and all data on this task list will be permanently removed."),
+                htmlspecialchars($this->_tasklist->get('name'))
+            ),
+            'desc',
+            'description',
+            false
         );
-        $this->setButtons(array(
-            array('class' => 'horde-delete', 'value' => _("Delete")),
-            array('class' => 'horde-cancel', 'value' => _("Cancel")),
-        ));
+        $this->setButtons([
+            ['class' => 'horde-delete', 'value' => _("Delete")],
+            ['class' => 'horde-cancel', 'value' => _("Cancel")],
+        ]);
     }
 
     public function execute()

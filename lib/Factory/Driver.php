@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Horde_Injector based factory for Nag_Driver.
  */
@@ -9,7 +10,7 @@ class Nag_Factory_Driver extends Horde_Core_Factory_Base
      *
      * @var array
      */
-    private $_instances = array();
+    private $_instances = [];
 
     /**
      * Return the driver instance.
@@ -22,7 +23,7 @@ class Nag_Factory_Driver extends Horde_Core_Factory_Base
     public function create($tasklist)
     {
         $driver = null;
-        $params = array();
+        $params = [];
 
         if (!empty($tasklist)) {
             $signature = $tasklist;
@@ -38,7 +39,7 @@ class Nag_Factory_Driver extends Horde_Core_Factory_Base
         if (!$driver) {
             $driver = $GLOBALS['conf']['storage']['driver'];
             $params = Horde::getDriverConfig('storage', $driver);
-            $signature = serialize(array($tasklist, $driver, $params));
+            $signature = serialize([$tasklist, $driver, $params]);
         }
 
         if (isset($this->_instances[$signature])) {
@@ -48,16 +49,16 @@ class Nag_Factory_Driver extends Horde_Core_Factory_Base
         $driver = ucfirst(basename($driver));
         $class = 'Nag_Driver_' . $driver;
         switch ($driver) {
-        case 'Sql':
-            $params['db'] = $GLOBALS['injector']
-                ->getInstance('Horde_Core_Factory_Db')
-                ->create('nag', 'storage');
-            break;
-        case 'Kolab':
-            $params['kolab'] = $GLOBALS['injector']->getInstance('Horde_Kolab_Storage');
-            break;
-        case 'Smartlist':
-            $params['driver'] = $this->create('');
+            case 'Sql':
+                $params['db'] = $GLOBALS['injector']
+                    ->getInstance('Horde_Core_Factory_Db')
+                    ->create('nag', 'storage');
+                break;
+            case 'Kolab':
+                $params['kolab'] = $GLOBALS['injector']->getInstance('Horde_Kolab_Storage');
+                break;
+            case 'Smartlist':
+                $params['driver'] = $this->create('');
         }
 
         if (class_exists($class)) {

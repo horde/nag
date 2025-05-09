@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Nag_Task handles as single task as well as a list of tasks and implements a
  * recursive iterator to handle a (hierarchical) list of tasks.
@@ -232,7 +233,7 @@ class Nag_Task
      *
      * @var array
      */
-    public $children = array();
+    public $children = [];
 
     /**
      * This task's idention (child) level.
@@ -278,7 +279,7 @@ class Nag_Task
         'X-MOZ-LASTACK',
         'X-MOZ-SNOOZE-TIME',
         'X-HORDE-ESTIMATE',
-        'X-HORDE-EFFORT'
+        'X-HORDE-EFFORT',
     ];
 
     public array $otherCaldavAttributes = [];
@@ -304,7 +305,7 @@ class Nag_Task
      *
      * @var array
      */
-    protected $_dict = array();
+    protected $_dict = [];
 
     /**
      * Task tags from the storage backend (e.g. Kolab)
@@ -364,18 +365,20 @@ class Nag_Task
     public function __get($name)
     {
         switch ($name) {
-        case 'tags':
-            if (!isset($this->_tags)) {
-                $this->synchronizeTags($GLOBALS['injector']->getInstance('Nag_Tagger')->getTags($this->uid, 'task'));
-            }
-            return $this->_tags;
+            case 'tags':
+                if (!isset($this->_tags)) {
+                    $this->synchronizeTags($GLOBALS['injector']->getInstance('Nag_Tagger')->getTags($this->uid, 'task'));
+                }
+                return $this->_tags;
         }
 
         $trace = debug_backtrace();
-        trigger_error('Undefined property via __get(): ' . $name
+        trigger_error(
+            'Undefined property via __get(): ' . $name
                       . ' in ' . $trace[0]['file']
                       . ' on line ' . $trace[0]['line'],
-                      E_USER_NOTICE);
+            E_USER_NOTICE
+        );
         return null;
     }
 
@@ -388,15 +391,17 @@ class Nag_Task
     public function __set($name, $value)
     {
         switch ($name) {
-        case 'tags':
-            $this->_tags = $value;
-            return;
+            case 'tags':
+                $this->_tags = $value;
+                return;
         }
         $trace = debug_backtrace();
-        trigger_error('Undefined property via __set(): ' . $name
+        trigger_error(
+            'Undefined property via __set(): ' . $name
                       . ' in ' . $trace[0]['file']
                       . ' on line ' . $trace[0]['line'],
-                      E_USER_NOTICE);
+            E_USER_NOTICE
+        );
     }
 
     /**
@@ -419,19 +424,19 @@ class Nag_Task
     {
         foreach ($task as $key => $val) {
             switch ($key) {
-            case 'tasklist_id':
-                $key = 'tasklist';
-                break;
-            case 'task_id':
-                $key = 'id';
-                break;
-            case 'parent':
-                $key = 'parent_id';
-                break;
-            case 'other':
-                $key = 'otherCaldavAttributes';
-                $val = json_decode($val, true);
-                break;
+                case 'tasklist_id':
+                    $key = 'tasklist';
+                    break;
+                case 'task_id':
+                    $key = 'id';
+                    break;
+                case 'parent':
+                    $key = 'parent_id';
+                    break;
+                case 'other':
+                    $key = 'otherCaldavAttributes';
+                    $val = json_decode($val, true);
+                    break;
             }
             $this->$key = $val;
         }
@@ -445,8 +450,8 @@ class Nag_Task
      */
     public function orphan()
     {
-        $this->children = array();
-        $this->_dict = array();
+        $this->children = [];
+        $this->_dict = [];
         $this->lastChild = null;
         $this->indent = null;
     }
@@ -486,7 +491,7 @@ class Nag_Task
             $task->parent = $this;
             $this->children[] = $task;
         } elseif ($replace) {
-            $this->children[$this->_dict[$task->id]]= $task;
+            $this->children[$this->_dict[$task->id]] = $task;
         }
     }
 
@@ -499,7 +504,8 @@ class Nag_Task
     {
         try {
             $this->children = $this->_storage->getChildren($this->id, $include_history);
-        } catch (Nag_Exception $e) {}
+        } catch (Nag_Exception $e) {
+        }
     }
 
     /**
@@ -674,7 +680,7 @@ class Nag_Task
                 /* Only delete the latest completion. */
                 $completions = $this->recurrence->getCompletions();
                 sort($completions);
-                list($year, $month, $mday) = sscanf(
+                [$year, $month, $mday] = sscanf(
                     end($completions),
                     '%04d%02d%02d'
                 );
@@ -687,9 +693,11 @@ class Nag_Task
             /* Get current occurrence (task due date) */
             $current = $this->recurrence->nextActiveRecurrence(new Horde_Date($this->due));
             if ($current) {
-                $this->recurrence->addCompletion($current->year,
-                                                 $current->month,
-                                                 $current->mday);
+                $this->recurrence->addCompletion(
+                    $current->year,
+                    $current->month,
+                    $current->mday
+                );
                 /* Advance this occurence by a day to indicate that we want the
                  * following occurence (Recurrence uses days as minimal time
                  * duration between occurrences). */
@@ -726,7 +734,7 @@ class Nag_Task
         }
 
         sort($completions);
-        list($year, $month, $mday) = sscanf(
+        [$year, $month, $mday] = sscanf(
             end($completions),
             '%04d%02d%02d'
         );
@@ -767,11 +775,13 @@ class Nag_Task
     {
         $desc = $GLOBALS['injector']
             ->getInstance('Horde_Core_Factory_TextFilter')
-            ->filter($this->desc,
-                     'text2html',
-                     array('parselevel' => Horde_Text_Filter_Text2html::MICRO));
+            ->filter(
+                $this->desc,
+                'text2html',
+                ['parselevel' => Horde_Text_Filter_Text2html::MICRO]
+            );
         try {
-            return Horde::callHook('format_description', array($desc), 'nag');
+            return Horde::callHook('format_description', [$desc], 'nag');
         } catch (Horde_Exception_HookNotSet $e) {
             return $desc;
         }
@@ -939,11 +949,11 @@ class Nag_Task
             $conf['urls']['pretty'] == 'rewrite'
                 ? 't/complete'
                 : 'task/complete.php'
-            )->add(array(
-                'url' => Horde::signUrl(Horde::url('list.php')),
-                'task' => $this->id,
-                'tasklist' => $this->tasklist
-            ));
+        )->add([
+            'url' => Horde::signUrl(Horde::url('list.php')),
+            'task' => $this->id,
+            'tasklist' => $this->tasklist,
+        ]);
         $this->edit_link = $task_url_task->copy()->add('actionID', 'modify_task');
         $this->delete_link = $task_url_task->copy()->add('actionID', 'delete_task');
     }
@@ -1011,7 +1021,7 @@ class Nag_Task
      */
     public function loadTags()
     {
-        $ids = array();
+        $ids = [];
         if (!isset($this->_tags)) {
             $ids[] = $this->uid;
         }
@@ -1074,7 +1084,7 @@ class Nag_Task
     public function sort($sortby, $sortdir, $altsortby)
     {
         /* Sorting criteria for the task list. */
-        $sort_functions = array(
+        $sort_functions = [
             Nag::SORT_PRIORITY => 'ByPriority',
             Nag::SORT_NAME => 'ByName',
             Nag::SORT_DUE => 'ByDue',
@@ -1082,25 +1092,25 @@ class Nag_Task
             Nag::SORT_COMPLETION => 'ByCompletion',
             Nag::SORT_ASSIGNEE => 'ByAssignee',
             Nag::SORT_ESTIMATE => 'ByEstimate',
-            Nag::SORT_OWNER => 'ByOwner'
-        );
+            Nag::SORT_OWNER => 'ByOwner',
+        ];
 
         /* Sort the array if we have a sort function defined for this
          * field. */
         if (isset($sort_functions[$sortby])) {
             $prefix = ($sortdir == Nag::SORT_DESCEND) ? '_rsort' : '_sort';
-            usort($this->children, array('Nag', $prefix . $sort_functions[$sortby]));
+            usort($this->children, ['Nag', $prefix . $sort_functions[$sortby]]);
             if (isset($sort_functions[$altsortby]) && $altsortby !== $sortby) {
-                $task_buckets = array();
+                $task_buckets = [];
                 for ($i = 0, $c = count($this->children); $i < $c; ++$i) {
                     if (!isset($task_buckets[$this->children[$i]->$sortby])) {
-                        $task_buckets[$this->children[$i]->$sortby] = array();
+                        $task_buckets[$this->children[$i]->$sortby] = [];
                     }
                     $task_buckets[$this->children[$i]->$sortby][] = $this->children[$i];
                 }
-                $tasks = array();
+                $tasks = [];
                 foreach ($task_buckets as $task_bucket) {
-                    usort($task_bucket, array('Nag', $prefix . $sort_functions[$altsortby]));
+                    usort($task_bucket, ['Nag', $prefix . $sort_functions[$altsortby]]);
                     $tasks = array_merge($tasks, $task_bucket);
                 }
                 $this->children = $tasks;
@@ -1151,7 +1161,7 @@ class Nag_Task
             'organizer' => $this->organizer,
             'status' => $this->status,
             'actual' => $this->actual,
-            'other' => json_encode($this->otherCaldavAttributes)
+            'other' => json_encode($this->otherCaldavAttributes),
         ];
 
         return $hash;
@@ -1168,7 +1178,7 @@ class Nag_Task
      */
     public function toJson($full = false, $time_format = 'H:i')
     {
-        $json = new stdClass;
+        $json = new stdClass();
         $json->l = $this->tasklist;
         $json->p = $this->parent_id;
         $json->i = $this->indent;
@@ -1179,14 +1189,14 @@ class Nag_Task
             //whitespace
             $json->sd = Horde_String::substr($this->desc, 0, 80);
         }
-        $json->cp = (boolean)$this->completed;
+        $json->cp = (bool) $this->completed;
         if ($this->due && ($due = $this->getNextDue())) {
             $json->du = $due->toJson();
         }
         if ($this->start && ($start = $this->getNextStart())) {
             $json->s = $start->toJson();
         }
-        $json->pr = (int)$this->priority;
+        $json->pr = (int) $this->priority;
         if ($this->recurs()) {
             $json->r = $this->recurrence->getRecurType();
         }
@@ -1213,7 +1223,7 @@ class Nag_Task
                 $json->cd = $date->toJson();
             }
             */
-            $json->a = (int)$this->alarm;
+            $json->a = (int) $this->alarm;
             $json->m = $this->methods;
             //$json->pv = (boolean)$this->private;
             if ($this->recurs()) {
@@ -1221,8 +1231,8 @@ class Nag_Task
             }
 
             if ($this->tasklist == '**EXTERNAL**') {
-                $json->vl = (string)$this->view_link;
-                $json->cl = (string)$this->complete_link;
+                $json->vl = (string) $this->view_link;
+                $json->cl = (string) $this->complete_link;
                 $json->pe = $json->pd = false;
             } else {
                 try {
@@ -1268,30 +1278,30 @@ class Nag_Task
 
         $methods = !empty($this->methods) ? $this->methods : @unserialize($prefs->getValue('task_alarms'));
         if (!$methods) {
-            $methods = array();
+            $methods = [];
         }
 
         if (isset($methods['notify'])) {
-            $methods['notify']['show'] = array(
+            $methods['notify']['show'] = [
                 '__app' => $GLOBALS['registry']->getApp(),
                 'task' => $this->id,
-                'tasklist' => $this->tasklist);
+                'tasklist' => $this->tasklist];
             $methods['notify']['ajax'] = 'task:' . $this->tasklist . ':' . $this->id;
             if (!empty($methods['notify']['sound'])) {
                 if ($methods['notify']['sound'] == 'on') {
                     // Handle boolean sound preferences;
-                    $methods['notify']['sound'] = (string)Horde_Themes::sound('theetone.wav');
+                    $methods['notify']['sound'] = (string) Horde_Themes::sound('theetone.wav');
                 } else {
                     // Else we know we have a sound name that can be
                     // served from Horde.
-                    $methods['notify']['sound'] = (string)Horde_Themes::sound($methods['notify']['sound']);
+                    $methods['notify']['sound'] = (string) Horde_Themes::sound($methods['notify']['sound']);
                 }
             }
         }
         if (isset($methods['mail'])) {
             $image = Nag::getImagePart('big_alarm.png');
 
-            $view = new Horde_View(array('templatePath' => NAG_TEMPLATES . '/alarm', 'encoding' => 'UTF-8'));
+            $view = new Horde_View(['templatePath' => NAG_TEMPLATES . '/alarm', 'encoding' => 'UTF-8']);
             new Horde_View_Helper_Text($view);
             $view->task = $this;
             $view->imageId = $image->getContentId();
@@ -1309,14 +1319,14 @@ class Nag_Task
             $methods['desktop']['url'] = Horde::url('view.php', true)->add('tasklist', $this->tasklist)->add('task', $this->id)->toString(true, true);
         }
 
-        return array(
+        return [
             'id' => $this->uid,
             'user' => $user,
             'start' => new Horde_Date($this->due - $this->alarm * 60),
             'methods' => array_keys($methods),
             'params' => $methods,
             'title' => $this->name,
-            'text' => $this->desc);
+            'text' => $this->desc];
     }
 
     /**
@@ -1339,7 +1349,7 @@ class Nag_Task
         }
 
         if (!empty($this->assignee)) {
-            $vTodo->setAttribute('ATTENDEE', Nag::getUserEmail($this->assignee), array('ROLE' => 'REQ-PARTICIPANT'));
+            $vTodo->setAttribute('ATTENDEE', Nag::getUserEmail($this->assignee), ['ROLE' => 'REQ-PARTICIPANT']);
         }
 
         $vTodo->setAttribute('ORGANIZER', !empty($this->organizer) ? Nag::getUserEmail($this->organizer) : Nag::getUserEmail($this->owner));
@@ -1353,14 +1363,14 @@ class Nag_Task
         }
 
         if (isset($this->priority)) {
-            $priorityMap = array(
+            $priorityMap = [
                 0 => 5,
                 1 => 1,
                 2 => 3,
                 3 => 5,
                 4 => 7,
                 5 => 9,
-            );
+            ];
             $vTodo->setAttribute('PRIORITY', $priorityMap[$this->priority]);
         }
 
@@ -1442,14 +1452,14 @@ class Nag_Task
                     // Use multiple EXDATE attributes instead of EXDATE
                     // attributes with multiple values to make Apple iCal
                     // happy.
-                    list($year, $month, $mday) = sscanf($exception, '%04d%02d%02d');
-                    $vTodo->setAttribute('EXDATE', array(new Horde_Date($year, $month, $mday)), array('VALUE' => 'DATE'));
+                    [$year, $month, $mday] = sscanf($exception, '%04d%02d%02d');
+                    $vTodo->setAttribute('EXDATE', [new Horde_Date($year, $month, $mday)], ['VALUE' => 'DATE']);
                 }
             }
         }
 
         if ($this->tags) {
-            $vTodo->setAttribute('CATEGORIES', '', array(), true, array_values($this->tags));
+            $vTodo->setAttribute('CATEGORIES', '', [], true, array_values($this->tags));
         }
 
         /* Get the task's history. */
@@ -1458,16 +1468,17 @@ class Nag_Task
             $log = $GLOBALS['injector']->getInstance('Horde_History')->getHistory('nag:' . $this->tasklist . ':' . $this->uid);
             foreach ($log as $entry) {
                 switch ($entry['action']) {
-                case 'add':
-                    $created = $entry['ts'];
-                    break;
+                    case 'add':
+                        $created = $entry['ts'];
+                        break;
 
-                case 'modify':
-                    $modified = $entry['ts'];
-                    break;
+                    case 'modify':
+                        $modified = $entry['ts'];
+                        break;
                 }
             }
-        } catch (Exception $e) {}
+        } catch (Exception $e) {
+        }
         if (!empty($created)) {
             $vTodo->setAttribute($v1 ? 'DCREATED' : 'CREATED', $created);
             if (empty($modified)) {
@@ -1494,10 +1505,11 @@ class Nag_Task
      *
      * @return Horde_ActiveSync_Message_Task
      */
-    public function toASTask(array $options = array())
+    public function toASTask(array $options = [])
     {
-        $message = new Horde_ActiveSync_Message_Task(array(
-            'protocolversion' => $options['protocolversion'])
+        $message = new Horde_ActiveSync_Message_Task(
+            [
+                'protocolversion' => $options['protocolversion']]
         );
 
         /* Notes and Title */
@@ -1510,7 +1522,7 @@ class Nag_Task
                     $truncation = $bp[Horde_ActiveSync::BODYPREF_TYPE_PLAIN]['truncationsize'];
                 } elseif (isset($bp[Horde_ActiveSync::BODYPREF_TYPE_HTML])) {
                     $truncation = $bp[Horde_ActiveSync::BODYPREF_TYPE_HTML]['truncationsize'];
-                    $this->desc = Horde_Text_Filter::filter($this->desc, 'Text2html', array('parselevel' => Horde_Text_Filter_Text2html::MICRO));
+                    $this->desc = Horde_Text_Filter::filter($this->desc, 'Text2html', ['parselevel' => Horde_Text_Filter_Text2html::MICRO]);
                 } else {
                     $truncation = false;
                 }
@@ -1556,19 +1568,19 @@ class Nag_Task
 
         /* Priority */
         switch ($this->priority) {
-        case 5:
-            $priority = Horde_ActiveSync_Message_Task::IMPORTANCE_LOW;
-            break;
-        case 4:
-        case 3:
-        case 2:
-            $priority = Horde_ActiveSync_Message_Task::IMPORTANCE_NORMAL;
-            break;
-        case 1:
-            $priority = Horde_ActiveSync_Message_Task::IMPORTANCE_HIGH;
-            break;
-        default:
-            $priority = Horde_ActiveSync_Message_Task::IMPORTANCE_NORMAL;
+            case 5:
+                $priority = Horde_ActiveSync_Message_Task::IMPORTANCE_LOW;
+                break;
+            case 4:
+            case 3:
+            case 2:
+                $priority = Horde_ActiveSync_Message_Task::IMPORTANCE_NORMAL;
+                break;
+            case 1:
+                $priority = Horde_ActiveSync_Message_Task::IMPORTANCE_HIGH;
+                break;
+            default:
+                $priority = Horde_ActiveSync_Message_Task::IMPORTANCE_NORMAL;
         }
         $message->setImportance($priority);
 
@@ -1626,7 +1638,7 @@ class Nag_Task
         try {
             $atnames = $vTodo->getAttribute('ATTENDEE');
             if (!is_array($atnames)) {
-                $atnames = array($atnames);
+                $atnames = [$atnames];
             }
             $identity = $GLOBALS['injector']->getInstance('Horde_Core_Factory_Identity')->create();
             $all_addrs = $identity->getAll('from_addr');
@@ -1645,7 +1657,7 @@ class Nag_Task
                         continue;
                     }
                     $attendee = $addr_ob->bare_address;
-                    $name = isset($atparms[$index]['CN']) ? $atparms[$index]['CN'] : null;
+                    $name = $atparms[$index]['CN'] ?? null;
                 }
                 if (in_array($attendee, $all_addrs) !== false) {
                     $this->assignee = $GLOBALS['conf']['assignees']['allow_external'] ? $attendee : $GLOBALS['registry']->getAuth();
@@ -1665,14 +1677,16 @@ class Nag_Task
 
         try {
             $uid = $vTodo->getAttribute('UID');
-            if (!is_array($uid)) { $this->uid = $uid; }
+            if (!is_array($uid)) {
+                $this->uid = $uid;
+            }
         } catch (Horde_Icalendar_Exception $e) {
         }
 
         try {
             $relations = $vTodo->getAttribute('RELATED-TO');
             if (!is_array($relations)) {
-                $relations = array($relations);
+                $relations = [$relations];
             }
             $params = $vTodo->getAttribute('RELATED-TO', true);
             foreach ($relations as $id => $relation) {
@@ -1697,7 +1711,7 @@ class Nag_Task
                 $this->start = $start;
             } else {
                 // Date field
-                $this->start = mktime(0, 0, 0, (int)$start['month'], (int)$start['mday'], (int)$start['year']);
+                $this->start = mktime(0, 0, 0, (int) $start['month'], (int) $start['mday'], (int) $start['year']);
             }
         } catch (Horde_Icalendar_Exception $e) {
         }
@@ -1705,7 +1719,7 @@ class Nag_Task
         try {
             $due = $vTodo->getAttribute('DUE');
             if (is_array($due)) {
-                $this->due = mktime(0, 0, 0, (int)$due['month'], (int)$due['mday'], (int)$due['year']);
+                $this->due = mktime(0, 0, 0, (int) $due['month'], (int) $due['mday'], (int) $due['year']);
             } elseif (!empty($due)) {
                 $this->due = $due;
             }
@@ -1730,9 +1744,10 @@ class Nag_Task
                     foreach ($exdates as $exdate) {
                         if (is_array($exdate)) {
                             $this->recurrence->addCompletion(
-                                (int)$exdate['year'],
-                                (int)$exdate['month'],
-                                (int)$exdate['mday']);
+                                (int) $exdate['year'],
+                                (int) $exdate['month'],
+                                (int) $exdate['mday']
+                            );
                         }
                     }
                 }
@@ -1773,7 +1788,7 @@ class Nag_Task
                 continue;
             }
             if (!is_array($triggerParams)) {
-                $triggerParams = array($triggerParams);
+                $triggerParams = [$triggerParams];
             }
             $haveTrigger = false;
             foreach ($triggerParams as $tp) {
@@ -1836,7 +1851,7 @@ class Nag_Task
         try {
             $priority = $vTodo->getAttribute('PRIORITY');
             if (!is_array($priority)) {
-                $priorityMap = array(
+                $priorityMap = [
                     0 => 3,
                     1 => 1,
                     2 => 1,
@@ -1847,10 +1862,9 @@ class Nag_Task
                     7 => 4,
                     8 => 5,
                     9 => 5,
-                );
-                $this->priority = isset($priorityMap[$priority])
-                    ? $priorityMap[$priority]
-                    : 3;
+                ];
+                $this->priority = $priorityMap[$priority]
+                    ?? 3;
             }
         } catch (Horde_Icalendar_Exception $e) {
         }
@@ -1898,11 +1912,11 @@ class Nag_Task
         // Catch attributes nag is not aware of
         try {
             foreach ($vTodo->getAllAttributes() as $attribute) {
-            // drop all known attributes
-            if (in_array($attribute['name'], $this->ourCaldavAttributes)) {
-                continue;
-            }
-            $this->otherCaldavAttributes[] = $attribute;
+                // drop all known attributes
+                if (in_array($attribute['name'], $this->ourCaldavAttributes)) {
+                    continue;
+                }
+                $this->otherCaldavAttributes[] = $attribute;
 
             }
         } catch (Horde_Icalendar_Exception $e) {
@@ -1923,7 +1937,7 @@ class Nag_Task
          * case that this is an edit. For edits, all current tags will be passed
          * from the client.
          */
-        $this->_tags = array();
+        $this->_tags = [];
 
         /* Notes and Title */
         if ($message->getProtocolVersion() >= Horde_ActiveSync::VERSION_TWELVE) {
@@ -1960,13 +1974,13 @@ class Nag_Task
             // we have no timezone information we have to assume it's the
             // same as $tz.
             $due = new Horde_Date(
-                array(
+                [
                     'year' => $due->year,
                     'month' => $due->month,
                     'mday' => $due->mday,
                     'hour' => $due->hour,
-                    'min' => $due->min
-                ),
+                    'min' => $due->min,
+                ],
                 $tz
             );
             $this->due = $due->timestamp();
@@ -1979,13 +1993,13 @@ class Nag_Task
         } elseif ($start = $message->startdate) {
             // See note above regarding utc vs local times.
             $start = new Horde_Date(
-                array(
+                [
                     'year' => $start->year,
                     'month' => $start->month,
                     'mday' => $start->mday,
                     'hour' => $start->hour,
-                    'min' => $start->min
-                ),
+                    'min' => $start->min,
+                ],
                 $tz
             );
             $this->start = $start->timestamp();
@@ -1993,17 +2007,17 @@ class Nag_Task
 
         /* Priority */
         switch ($message->getImportance()) {
-        case Horde_ActiveSync_Message_Task::IMPORTANCE_LOW:
-            $this->priority = 5;
-            break;
-        case Horde_ActiveSync_Message_Task::IMPORTANCE_NORMAL:
-            $this->priority = 3;
-            break;
-        case Horde_ActiveSync_Message_Task::IMPORTANCE_HIGH:
-            $this->priority = 1;
-            break;
-        default:
-            $this->priority = 3;
+            case Horde_ActiveSync_Message_Task::IMPORTANCE_LOW:
+                $this->priority = 5;
+                break;
+            case Horde_ActiveSync_Message_Task::IMPORTANCE_NORMAL:
+                $this->priority = 3;
+                break;
+            case Horde_ActiveSync_Message_Task::IMPORTANCE_HIGH:
+                $this->priority = 1;
+                break;
+            default:
+                $this->priority = 3;
         }
 
         if (($alarm = $message->getReminder()) && $this->due) {

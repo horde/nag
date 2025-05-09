@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Horde_Form for editing task lists.
  *
@@ -62,23 +63,32 @@ class Nag_Form_EditTaskList extends Horde_Form
         $this->addVariable(_("Color"), 'color', 'colorpicker', false);
         if ($GLOBALS['registry']->isAdmin()) {
             $this->addVariable(
-                _("System Task List"), 'system', 'boolean', false, false,
+                _("System Task List"),
+                'system',
+                'boolean',
+                false,
+                false,
                 _("System task lists don't have an owner. Only administrators can change the task list settings and permissions.")
             );
         }
-        $this->addVariable(_("Description"), 'description', 'longtext', false, false, null, array(4, 60));
+        $this->addVariable(_("Description"), 'description', 'longtext', false, false, null, [4, 60]);
 
         /* Display URL. */
         $url = Horde::url('list.php', true, -1)
             ->add('display_tasklist', $tasklist->getName());
         $this->addVariable(
-             _("Display URL"), '', 'link', false, false, null,
-             array(array(
-                 'url' => $url,
-                 'text' => $url,
-                 'title' => _("Click or copy this URL to display this task list"),
-                 'target' => '_blank')
-             )
+            _("Display URL"),
+            '',
+            'link',
+            false,
+            false,
+            null,
+            [[
+                'url' => $url,
+                'text' => $url,
+                'title' => _("Click or copy this URL to display this task list"),
+                'target' => '_blank'],
+            ]
         );
 
         /* Subscription URLs. */
@@ -86,81 +96,102 @@ class Nag_Form_EditTaskList extends Horde_Form
             $accountUrl = Nag::getUrl(Nag::DAV_ACCOUNT, $tasklist);
             $caldavUrl = Nag::getUrl(Nag::DAV_CALDAV, $tasklist);
             $this->addVariable(
-                 _("CalDAV Subscription URL"), '', 'link', false, false, null,
-                 array(array(
-                     'url' => $caldavUrl,
-                     'text' => $caldavUrl,
-                 'title' => _("Copy this URL to a CalDAV client to subscribe to this task list"),
-                     'target' => '_blank')
-                 )
+                _("CalDAV Subscription URL"),
+                '',
+                'link',
+                false,
+                false,
+                null,
+                [[
+                    'url' => $caldavUrl,
+                    'text' => $caldavUrl,
+                    'title' => _("Copy this URL to a CalDAV client to subscribe to this task list"),
+                    'target' => '_blank'],
+                ]
             );
             $this->addVariable(
-                 _("CalDAV Account URL"), '', 'link', false, false, null,
-                 array(array(
-                     'url' => $accountUrl,
-                     'text' => $accountUrl,
-                 'title' => _("Copy this URL to a CalDAV client to subscribe to all your task lists"),
-                     'target' => '_blank')
-                 )
+                _("CalDAV Account URL"),
+                '',
+                'link',
+                false,
+                false,
+                null,
+                [[
+                    'url' => $accountUrl,
+                    'text' => $accountUrl,
+                    'title' => _("Copy this URL to a CalDAV client to subscribe to all your task lists"),
+                    'target' => '_blank'],
+                ]
             );
         } catch (Horde_Exception $e) {
         }
         $webdavUrl = Nag::getUrl(Nag::DAV_WEBDAV, $tasklist);
         $this->addVariable(
-             _("WebDAV/ICS Subscription URL"), '', 'link', false, false, null,
-             array(array(
-                 'url' => $webdavUrl,
-                 'text' => $webdavUrl,
-                 'title' => _("Copy this URL to a WebDAV or ICS client to subscribe to this task list"),
-                 'target' => '_blank')
-             )
+            _("WebDAV/ICS Subscription URL"),
+            '',
+            'link',
+            false,
+            false,
+            null,
+            [[
+                'url' => $webdavUrl,
+                'text' => $webdavUrl,
+                'title' => _("Copy this URL to a WebDAV or ICS client to subscribe to this task list"),
+                'target' => '_blank'],
+            ]
         );
 
         /* Permissions link. */
         if (empty($GLOBALS['conf']['share']['no_sharing']) && $owner) {
             $url = Horde::url($GLOBALS['registry']->get('webroot', 'horde')
                               . '/services/shares/edit.php')
-                ->add(array('app' => 'nag', 'share' => $tasklist->getName()));
+                ->add(['app' => 'nag', 'share' => $tasklist->getName()]);
             $this->addVariable(
-                 '', '', 'link', false, false, null,
-                 array(array(
-                     'url' => $url,
-                     'text' => _("Change Permissions"),
-                     'onclick' => Horde::popupJs(
-                          $url,
-                          array('params' => array('urlencode' => true)))
-                          . 'return false;',
-                     'class' => 'horde-button',
-                     'target' => '_blank')
-                 )
+                '',
+                '',
+                'link',
+                false,
+                false,
+                null,
+                [[
+                    'url' => $url,
+                    'text' => _("Change Permissions"),
+                    'onclick' => Horde::popupJs(
+                        $url,
+                        ['params' => ['urlencode' => true]]
+                    )
+                         . 'return false;',
+                    'class' => 'horde-button',
+                    'target' => '_blank'],
+                ]
             );
         }
 
-        $this->setButtons(array(
+        $this->setButtons([
             _("Save"),
-            array('class' => 'horde-delete', 'value' => _("Delete")),
-            array('class' => 'horde-cancel', 'value' => _("Cancel"))
-        ));
+            ['class' => 'horde-delete', 'value' => _("Delete")],
+            ['class' => 'horde-cancel', 'value' => _("Cancel")],
+        ]);
     }
 
     public function execute()
     {
         switch ($this->_vars->submitbutton) {
-        case _("Save"):
-            $info = array();
-            foreach (array('name', 'color', 'description', 'system') as $key) {
-                $info[$key] = $this->_vars->get($key);
-            }
-            Nag::updateTasklist($this->_tasklist, $info);
-            break;
-        case _("Delete"):
-            Horde::url('tasklists/delete.php')
-                ->add('t', $this->_vars->t)
-                ->redirect();
-            break;
-        case _("Cancel"):
-            Horde::url('list.php', true)->redirect();
-            break;
+            case _("Save"):
+                $info = [];
+                foreach (['name', 'color', 'description', 'system'] as $key) {
+                    $info[$key] = $this->_vars->get($key);
+                }
+                Nag::updateTasklist($this->_tasklist, $info);
+                break;
+            case _("Delete"):
+                Horde::url('tasklists/delete.php')
+                    ->add('t', $this->_vars->t)
+                    ->redirect();
+                break;
+            case _("Cancel"):
+                Horde::url('list.php', true)->redirect();
+                break;
         }
     }
 }

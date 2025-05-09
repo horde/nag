@@ -1,4 +1,5 @@
 <?php
+
 class Nag_Factory_TagBrowser extends Horde_Core_Factory_Base
 {
     protected $_instance;
@@ -7,7 +8,8 @@ class Nag_Factory_TagBrowser extends Horde_Core_Factory_Base
     {
         if (empty($this->_instance)) {
             $this->_instance = new Nag_TagBrowser(
-                $GLOBALS['injector']->getInstance('Nag_Tagger'));
+                $GLOBALS['injector']->getInstance('Nag_Tagger')
+            );
         }
 
         return $this->_instance;

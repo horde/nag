@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Login tasks module that purges completed tasks.
  *
@@ -43,9 +44,10 @@ class Nag_LoginTasks_Task_PurgeCompleted extends Horde_LoginTasks_Task
         $del_time = new Horde_Date($_SERVER['REQUEST_TIME'] - ($prefs->getValue('purge_completed_keep') * 86400));
         $del_time = $del_time->timestamp();
         $tasklists = Nag::listTasklists(true, Horde_Perms::DELETE, false);
-        $tasks = Nag::listTasks(array(
-            'completed' => Nag::VIEW_COMPLETE,
-            'tasklists' => array_keys($tasklists))
+        $tasks = Nag::listTasks(
+            [
+                'completed' => Nag::VIEW_COMPLETE,
+                'tasklists' => array_keys($tasklists)]
         );
         $factory = $GLOBALS['injector']->getInstance('Nag_Factory_Driver');
         $count = 0;
@@ -63,7 +65,9 @@ class Nag_LoginTasks_Task_PurgeCompleted extends Horde_LoginTasks_Task
         }
 
         $GLOBALS['notification']->push(
-            sprintf(ngettext("Purged %d completed task.", "Purged %d completed tasks.", $count), $count), 'horde.message');
+            sprintf(ngettext("Purged %d completed task.", "Purged %d completed tasks.", $count), $count),
+            'horde.message'
+        );
 
         return true;
     }

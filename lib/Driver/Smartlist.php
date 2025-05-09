@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Nag storage driver for handling smart tasklists.
  *
@@ -37,7 +38,7 @@ class Nag_Driver_Smartlist extends Nag_Driver
      * @param string $tasklist  The tasklist to load.
      * @param array $params     A hash containing connection parameters.
      */
-    public function __construct($tasklist, $params = array())
+    public function __construct($tasklist, $params = [])
     {
         $this->_driver = $params['driver'];
         $this->_share = $GLOBALS['nag_shares']->getShare($tasklist);
@@ -53,39 +54,28 @@ class Nag_Driver_Smartlist extends Nag_Driver
     /**
      * Needed to satisfy the abstract parent class.
      */
-    protected function _add(array $task)
-    {
-    }
+    protected function _add(array $task) {}
 
     public function modify($taskId, array $task)
     {
         $this->_driver->modify($taskId, $task);
     }
 
-    public function _modify($taskId, array $task)
-    {
-    }
+    public function _modify($taskId, array $task) {}
 
     public function delete($taskId)
     {
         $this->_driver->delete($taskId);
     }
 
-    protected function _delete($taskId)
-    {
-    }
+    protected function _delete($taskId) {}
 
     /**
      * @TODO
      */
-    public function deleteAll()
-    {
+    public function deleteAll() {}
 
-    }
-
-    public function _deleteAll()
-    {
-    }
+    public function _deleteAll() {}
 
     /**
      * Return the list of tasks that match this smart list's search criteria.

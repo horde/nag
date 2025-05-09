@@ -1,11 +1,14 @@
 <?php
+
 class Nag_QuickParser
 {
     protected $_indentStack;
 
     public function __construct($stack = null)
     {
-        if ($stack === null) { $stack = new Horde_Support_Stack(); }
+        if ($stack === null) {
+            $stack = new Horde_Support_Stack();
+        }
         $this->_indentStack = $stack;
     }
 
@@ -14,11 +17,13 @@ class Nag_QuickParser
         $text = str_replace("\t", '    ', $text);
         $lines = preg_split('/[\r\n]+/', $text, -1, PREG_SPLIT_NO_EMPTY);
 
-        $parents = array();
-        $tasks = array();
+        $parents = [];
+        $tasks = [];
         foreach ($lines as $line) {
             $line = rtrim($line);
-            if (preg_match('/^\s*$/', $line)) { continue; }
+            if (preg_match('/^\s*$/', $line)) {
+                continue;
+            }
 
             $indented = preg_match('/^([-*\s]+)(.*)$/', $line, $matches);
             if (!$indented) {
@@ -29,20 +34,21 @@ class Nag_QuickParser
                 $indent = strlen($matches[1]);
                 if ($indent == $this->_indentStack->peek()) {
                     $parent = $parents[$this->_indentStack->peek(2)];
-                    $tasks[] = array($line, 'parent' => $parent);
+                    $tasks[] = [$line, 'parent' => $parent];
                 } elseif ($indent > $this->_indentStack->peek()) {
                     $parent = $parents[$this->_indentStack->peek()];
                     $this->_indentStack->push($indent);
-                    $tasks[] = array($line, 'parent' => $parent);
+                    $tasks[] = [$line, 'parent' => $parent];
                     $parents[$this->_indentStack->peek()] = count($tasks) - 1;
                 } else {
                     while ($this->_indentStack->pop() > $indent);
 
                     $parents[$indent] = $parents[$this->_indentStack->peek()];
-                    $this->_indentStack->pop(); $this->_indentStack->push($indent);
+                    $this->_indentStack->pop();
+                    $this->_indentStack->push($indent);
                     $parent = $parents[$this->_indentStack->peek()];
                     if ($parent !== null) {
-                        $tasks[] = array($line, 'parent' => $parent);
+                        $tasks[] = [$line, 'parent' => $parent];
                     } else {
                         $tasks[] = $line;
                     }
