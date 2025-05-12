@@ -77,3 +77,8 @@ dependencies:
       horde/db: ^3
       horde/openxchange: ^2
       horde/test: ^3
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Nag\: /src
