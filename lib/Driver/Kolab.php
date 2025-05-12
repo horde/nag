@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Nag driver classes for the Kolab IMAP server.
  *
@@ -34,7 +35,7 @@ class Nag_Driver_Kolab extends Nag_Driver
      * @param string $tasklist  The tasklist to load.
      * @param array $params     A hash containing connection parameters.
      */
-    public function __construct($tasklist, $params = array())
+    public function __construct($tasklist, $params = [])
     {
         $this->_tasklist = $tasklist;
         $this->_kolab = $params['kolab'];
@@ -106,8 +107,8 @@ class Nag_Driver_Kolab extends Nag_Driver
      */
     public function _isBase64EncodedUid($s)
     {
-         // Redo stuff possibly done by Horde_Url::uriB64Encode()
-        $data = str_replace(array('-', '_'), array('+', '/'), $s);
+        // Redo stuff possibly done by Horde_Url::uriB64Encode()
+        $data = str_replace(['-', '_'], ['+', '/'], $s);
         $mod4 = strlen($data) % 4;
         if ($mod4) {
             $data .= substr('====', $mod4);
@@ -116,7 +117,7 @@ class Nag_Driver_Kolab extends Nag_Driver
             return false;
         }
 
-         // Decode the string in strict mode and check the results
+        // Decode the string in strict mode and check the results
         $decoded = base64_decode($data, true);
         if ($decoded === false) {
             return false;
@@ -127,7 +128,7 @@ class Nag_Driver_Kolab extends Nag_Driver
             return false;
         }
 
-         // Encode the string again for a final sanity check.
+        // Encode the string again for a final sanity check.
         if (base64_encode($decoded) != $data) {
             return false;
         }
@@ -146,15 +147,15 @@ class Nag_Driver_Kolab extends Nag_Driver
      */
     protected function _buildTask($task)
     {
-         // This decoding of parent ID hashes is required because of a
-         // previous bug in Nag_Driver_Kolab.
-         // See Bug: 14197
+        // This decoding of parent ID hashes is required because of a
+        // previous bug in Nag_Driver_Kolab.
+        // See Bug: 14197
         $parent_uid = $task['parent'];
         if (!empty($parent_uid) && $this->_isBase64EncodedUid($parent_uid)) {
             $parent_uid = Horde_Url::uriB64Decode($parent_uid);
         }
 
-        $result = array(
+        $result = [
             'task_id' => Horde_Url::uriB64Encode($task['uid']),
             'uid' => $task['uid'],
             'name' => $task['summary'],
@@ -167,7 +168,7 @@ class Nag_Driver_Kolab extends Nag_Driver
             'completed_date' => $task['completed_date'],
             'private' => $task['sensitivity'] != 'public',
             'owner' => $GLOBALS['nag_shares']->getShare($this->_tasklist)->get('owner'),
-        );
+        ];
 
         if (isset($task['categories'])) {
             $result['internaltags'] = $task['categories'];
@@ -226,7 +227,7 @@ class Nag_Driver_Kolab extends Nag_Driver
             $tasklists = array_keys(Nag::listTasklists(false, Horde_Perms::READ, false));
         }
 
-        $results = array();
+        $results = [];
         foreach ($tasklists as $tasklist) {
             // Must clear the data if the tasklist changed.
             if ($tasklist != $this->_tasklist) {
@@ -390,13 +391,13 @@ class Nag_Driver_Kolab extends Nag_Driver
      */
     protected function _getObject($task)
     {
-        $object = array(
+        $object = [
             'summary' => $task['name'],
             'body' => $task['desc'],
             'priority' => $task['priority'],
             // Kolab's parent field is UID, Nag's parent is id.
             'parent' => Horde_Url::uriB64Decode($task['parent']),
-        );
+        ];
         if (!empty($task['start'])) {
             $object['start-date'] = new DateTime('@' . $task['start']);
         }
@@ -414,7 +415,7 @@ class Nag_Driver_Kolab extends Nag_Driver
             $object['status'] = 'not-started';
         }
         if ($task['alarm'] !== 0) {
-            $object['alarm'] = (int)$task['alarm'];
+            $object['alarm'] = (int) $task['alarm'];
         }
         if ($task['private']) {
             $object['sensitivity'] = 'private';
@@ -425,25 +426,25 @@ class Nag_Driver_Kolab extends Nag_Driver
             $object['completed_date'] = $task['completed_date'];
         }
         if ($task['estimate'] !== 0.0) {
-            $object['horde-estimate'] = number_format((float)$task['estimate'], 2);
+            $object['horde-estimate'] = number_format((float) $task['estimate'], 2);
         }
         if ($task['actual'] !== 0.0) {
-            $object['horde-actual'] = number_format((float)$task['actual'], 2);
+            $object['horde-actual'] = number_format((float) $task['actual'], 2);
         }
         if ($task['methods'] !== null) {
             $object['horde-alarm-methods'] = serialize($task['methods']);
         }
         if ($task['owner'] !== null) {
             //@todo: Display name
-            $object['creator'] = array(
+            $object['creator'] = [
                 'smtp-address' => $task['owner'],
-            );
+            ];
         }
         if ($task['assignee'] !== null) {
             //@todo: Display name
-            $object['organizer'] = array(
+            $object['organizer'] = [
                 'smtp-address' => $task['assignee'],
-            );
+            ];
         }
         if ($task['tags'] && !is_array($task['tags'])) {
             $object['categories'] = $GLOBALS['injector']->getInstance('Nag_Tagger')->split($task['tags']);
@@ -489,7 +490,7 @@ class Nag_Driver_Kolab extends Nag_Driver
         $this->synchronize();
         $this->retrieve();
         $this->tasks->reset();
-        $ids = array();
+        $ids = [];
         while ($task = $this->tasks->each()) {
             $ids[] = $task->id;
         }
@@ -506,7 +507,7 @@ class Nag_Driver_Kolab extends Nag_Driver
      */
     public function retrieve($completed = Nag::VIEW_ALL)
     {
-        $dict = array();
+        $dict = [];
         $this->tasks = new Nag_Task();
 
         $task_list = $this->_getData()->getObjects();
@@ -527,60 +528,60 @@ class Nag_Driver_Kolab extends Nag_Driver
             }
 
             switch ($completed) {
-            case Nag::VIEW_INCOMPLETE:
-                if ($complete) {
-                    continue 2;
-                }
-                if ($start && $t->recurs() &&
-                    ($completions = $t->recurrence->getCompletions())) {
-                    sort($completions);
-                    list($year, $month, $mday) = sscanf(
-                        end($completions),
-                        '%04d%02d%02d'
-                    );
-                    $lastCompletion = new Horde_Date($year, $month, $mday);
-                    $recurrence = clone $t->recurrence;
-                    $recurrence->start = new Horde_Date($start);
-                    $start = $recurrence
-                        ->nextRecurrence($lastCompletion)
-                        ->timestamp();
-                    if ($start > $_SERVER['REQUEST_TIME']) {
+                case Nag::VIEW_INCOMPLETE:
+                    if ($complete) {
                         continue 2;
                     }
-                }
-                break;
-            case Nag::VIEW_COMPLETE:
-                if (!$complete) {
-                    continue 2;
-                }
-                break;
-            case Nag::VIEW_FUTURE:
-                if ($complete || $start == 0) {
-                    continue 2;
-                }
-                if ($start && $t->recurs() &&
-                    ($completions = $t->recurrence->getCompletions())) {
-                    sort($completions);
-                    list($year, $month, $mday) = sscanf(
-                        end($completions),
-                        '%04d%02d%02d'
-                    );
-                    $lastCompletion = new Horde_Date($year, $month, $mday);
-                    $recurrence = clone $t->recurrence;
-                    $recurrence->start = new Horde_Date($start);
-                    $start = $recurrence
-                        ->nextRecurrence($lastCompletion)
-                        ->timestamp();
-                    if ($start < $_SERVER['REQUEST_TIME']) {
+                    if ($start && $t->recurs() &&
+                        ($completions = $t->recurrence->getCompletions())) {
+                        sort($completions);
+                        [$year, $month, $mday] = sscanf(
+                            end($completions),
+                            '%04d%02d%02d'
+                        );
+                        $lastCompletion = new Horde_Date($year, $month, $mday);
+                        $recurrence = clone $t->recurrence;
+                        $recurrence->start = new Horde_Date($start);
+                        $start = $recurrence
+                            ->nextRecurrence($lastCompletion)
+                            ->timestamp();
+                        if ($start > $_SERVER['REQUEST_TIME']) {
+                            continue 2;
+                        }
+                    }
+                    break;
+                case Nag::VIEW_COMPLETE:
+                    if (!$complete) {
                         continue 2;
                     }
-                }
-                break;
-            case Nag::VIEW_FUTURE_INCOMPLETE:
-                if ($complete) {
-                    continue 2;
-                }
-                break;
+                    break;
+                case Nag::VIEW_FUTURE:
+                    if ($complete || $start == 0) {
+                        continue 2;
+                    }
+                    if ($start && $t->recurs() &&
+                        ($completions = $t->recurrence->getCompletions())) {
+                        sort($completions);
+                        [$year, $month, $mday] = sscanf(
+                            end($completions),
+                            '%04d%02d%02d'
+                        );
+                        $lastCompletion = new Horde_Date($year, $month, $mday);
+                        $recurrence = clone $t->recurrence;
+                        $recurrence->start = new Horde_Date($start);
+                        $start = $recurrence
+                            ->nextRecurrence($lastCompletion)
+                            ->timestamp();
+                        if ($start < $_SERVER['REQUEST_TIME']) {
+                            continue 2;
+                        }
+                    }
+                    break;
+                case Nag::VIEW_FUTURE_INCOMPLETE:
+                    if ($complete) {
+                        continue 2;
+                    }
+                    break;
             }
 
             if (empty($t->parent_id)) {
@@ -614,10 +615,10 @@ class Nag_Driver_Kolab extends Nag_Driver
     {
         $task_list = $this->_getData()->getObjects();
         if (empty($task_list)) {
-            return array();
+            return [];
         }
 
-        $tasks = array();
+        $tasks = [];
         foreach ($task_list as $task) {
             $t = new Nag_Task($this, $this->_buildTask($task));
             if ($t->alarm && $t->due &&
@@ -644,10 +645,10 @@ class Nag_Driver_Kolab extends Nag_Driver
     {
         $task_list = $this->_getData()->getObjects();
         if (empty($task_list)) {
-            return array();
+            return [];
         }
 
-        $tasks = array();
+        $tasks = [];
 
         foreach ($task_list as $task) {
             if (Horde_Url::uriB64Encode($task['parent']) != $parentId) {

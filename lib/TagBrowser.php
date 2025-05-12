@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
  *
@@ -52,9 +53,7 @@ class Nag_TagBrowser extends Horde_Core_TagBrowser
      *
      * @return  Return information useful for building a tag trail.
      */
-    public function getTagTrail()
-    {
-    }
+    public function getTagTrail() {}
 
     /**
      * Fetch the matching resources that should appear on the current page
@@ -99,9 +98,10 @@ class Nag_TagBrowser extends Horde_Core_TagBrowser
         $search = new Nag_Search(
             null,
             Nag_Search::MASK_TAGS,
-            array(
+            [
                 'completed' => $this->_completed,
-                'tags' => $this->_tags));
+                'tags' => $this->_tags]
+        );
 
         $tasks = $search->getSlice();
         $tasks->reset();
@@ -110,7 +110,7 @@ class Nag_TagBrowser extends Horde_Core_TagBrowser
         $this->_tasks = $tasks;
 
         // Must return the UID array since the parent class requires them.
-        $ids = array();
+        $ids = [];
         while ($task = $tasks->each()) {
             $ids[] = $task->uid;
         }

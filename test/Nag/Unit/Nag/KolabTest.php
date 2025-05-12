@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Test the core Nag class with the Kolab backend.
  *
@@ -26,6 +27,7 @@
  * @author     Gunnar Wrobel <wrobel@pardus.de>
  * @link       http://www.horde.org/apps/nag
  * @license    http://www.horde.org/licenses/gpl GNU General Public License, version 2
+ * @coversNothing
  */
 class Nag_Unit_Nag_KolabTest extends Nag_Unit_Nag_Base
 {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Test the core Nag class with various backends.
  *
@@ -26,6 +27,7 @@
  * @author     Gunnar Wrobel <wrobel@pardus.de>
  * @link       http://www.horde.org/apps/nag
  * @license    http://www.horde.org/licenses/gpl GNU General Public License, version 2
+ * @coversNothing
  */
 class Nag_Unit_Nag_Base extends Nag_TestCase
 {
@@ -34,7 +36,7 @@ class Nag_Unit_Nag_Base extends Nag_TestCase
      *
      * @var Horde_Test_Setup
      */
-    static $setup;
+    public static $setup;
 
     /**
      * The default share name expected to be used.
@@ -101,7 +103,8 @@ class Nag_Unit_Nag_Base extends Nag_TestCase
         $default = array_pop($shares);
         $this->assertTrue(
             $default->hasPermission(
-                $GLOBALS['registry']->getAuth(), Horde_Perms::DELETE
+                $GLOBALS['registry']->getAuth(),
+                Horde_Perms::DELETE
             )
         );
     }

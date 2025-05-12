@@ -1,4 +1,5 @@
-<p><font size="4"><strong><a href="<?php $url = new Horde_Url($this->task->view_link); echo $url->remove(session_name()) ?>"><?php echo $this->h($this->task->name) ?></a></strong></font></p>
+<p><font size="4"><strong><a href="<?php $url = new Horde_Url($this->task->view_link);
+echo $url->remove(session_name()) ?>"><?php echo $this->h($this->task->name) ?></a></strong></font></p>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0"><tr>
   <td width="140" valign="top">
@@ -8,7 +9,9 @@
     <table width="100%" border="0" cellpadding="5" cellspacing="0">
       <?php $i = 0 ?>
 
-      <tr<?php if ($i++ % 2) echo ' bgcolor="#f1f1f1"' ?>>
+      <tr<?php if ($i++ % 2) {
+          echo ' bgcolor="#f1f1f1"';
+      } ?>>
         <td nowrap="nowrap" align="right">
           <font size="2"><strong><?php echo _("Date and time:") ?></strong></font>
         </td>
@@ -18,12 +21,14 @@
 
       <?php if (strlen($this->task->desc)): ?>
 
-      <tr<?php if ($i++ % 2) echo ' bgcolor="#f1f1f1"' ?>>
+      <tr<?php if ($i++ % 2) {
+          echo ' bgcolor="#f1f1f1"';
+      } ?>>
         <td nowrap="nowrap" align="right" valign="top">
           <font size="2"><strong><?php echo _("Description:") ?></strong></font>
         </td>
         <td width="5">&nbsp;</td>
-        <td width="100%"><font size="2"><strong><?php echo $GLOBALS['injector']->getInstance('Horde_Core_Factory_TextFilter')->filter($this->task->desc, 'text2html', array('parselevel' => Horde_Text_Filter_Text2html::MICRO, 'callback' => null)) ?></strong></font></td>
+        <td width="100%"><font size="2"><strong><?php echo $GLOBALS['injector']->getInstance('Horde_Core_Factory_TextFilter')->filter($this->task->desc, 'text2html', ['parselevel' => Horde_Text_Filter_Text2html::MICRO, 'callback' => null]) ?></strong></font></td>
       </tr>
       <?php endif ?>
 

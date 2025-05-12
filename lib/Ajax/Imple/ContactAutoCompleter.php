@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Attach the contact autocompleter to a HTML element.
  *
@@ -18,9 +19,9 @@ class Nag_Ajax_Imple_ContactAutoCompleter extends Horde_Core_Ajax_Imple_ContactA
      */
     protected function _getAddressbookSearchParams()
     {
-        $ob = new stdClass;
-        $ob->fields = array();
-        $ob->sources = array();
+        $ob = new stdClass();
+        $ob->fields = [];
+        $ob->sources = [];
 
         return $ob;
     }

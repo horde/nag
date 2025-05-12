@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Nag external API interface.
  *
@@ -14,9 +15,9 @@ class Nag_Api extends Horde_Registry_Api
      *
      * @var array
      */
-    protected $_links = array(
-        'show' => '%application%/view.php?tasklist=|tasklist|&task=|task|&uid=|uid|'
-    );
+    protected $_links = [
+        'show' => '%application%/view.php?tasklist=|tasklist|&task=|task|&uid=|uid|',
+    ];
 
     /**
      * Returns a number of defaults necessary for the ajax view.
@@ -25,17 +26,18 @@ class Nag_Api extends Horde_Registry_Api
      */
     public function ajaxDefaults()
     {
-        return array(
+        return [
             'URI_TASKLIST_EXPORT' => str_replace(
-                array('%23', '%2523', '%7B', '%257B', '%7D', '%257D'),
-                array('#', '#', '{', '{', '}', '}'),
-                strval($GLOBALS['registry']->downloadUrl('#{tasklist}.ics', array('actionID' => 'export', 'exportTasks' => 1, 'exportID' => Horde_Data::EXPORT_ICALENDAR, 'exportList' => '#{tasklist}'))->setRaw(true))),
+                ['%23', '%2523', '%7B', '%257B', '%7D', '%257D'],
+                ['#', '#', '{', '{', '}', '}'],
+                strval($GLOBALS['registry']->downloadUrl('#{tasklist}.ics', ['actionID' => 'export', 'exportTasks' => 1, 'exportID' => Horde_Data::EXPORT_ICALENDAR, 'exportList' => '#{tasklist}'])->setRaw(true))
+            ),
             'default_tasklist' => Nag::getDefaultTasklist(Horde_Perms::EDIT),
-            'default_due' => (bool)$GLOBALS['prefs']->getValue('default_due'),
-            'default_due_days' => (int)$GLOBALS['prefs']->getValue('default_due_days'),
+            'default_due' => (bool) $GLOBALS['prefs']->getValue('default_due'),
+            'default_due_days' => (int) $GLOBALS['prefs']->getValue('default_due_days'),
             'default_due_time' => $GLOBALS['prefs']->getValue('default_due_time'),
             'prefs_url' => strval($GLOBALS['registry']->getServiceLink('prefs', 'nag')->setRaw(true)),
-        );
+        ];
     }
 
     /**
@@ -60,16 +62,16 @@ class Nag_Api extends Horde_Registry_Api
      *
      * @return array  An array of the requested tasks.
      */
-    public function listTasks(array $options = array())
+    public function listTasks(array $options = [])
     {
         global $prefs;
 
-        $completedArray = array(
+        $completedArray = [
             'incomplete' => Nag::VIEW_INCOMPLETE,
             'all' => Nag::VIEW_ALL,
             'complete' => Nag::VIEW_COMPLETE,
             'future' => Nag::VIEW_FUTURE,
-            'future_incomplete' => Nag::VIEW_FUTURE_INCOMPLETE);
+            'future_incomplete' => Nag::VIEW_FUTURE_INCOMPLETE];
 
         // Prevent null tasklists value from obscuring the default value.
         if (array_key_exists('tasklists', $options) && empty($options['tasklists'])) {
@@ -81,21 +83,21 @@ class Nag_Api extends Horde_Registry_Api
             $options['completed'] = $completedArray[$options['completed']];
         }
         $options = array_merge(
-            array(
+            [
                 'sortby' => $prefs->getValue('sortby'),
                 'sortdir' => $prefs->getValue('sortdir'),
                 'altsortby' => $prefs->getValue('altsortby'),
                 'tasklists' => $GLOBALS['display_tasklists'],
                 'include_tags' => false,
                 'external' => false,
-                'json' => false
-            ),
+                'json' => false,
+            ],
             $options
         );
 
         $tasks = Nag::listTasks($options);
         $tasks->reset();
-        $list = array();
+        $list = [];
         while ($task = $tasks->each()) {
             $list[$task->id] = $options['json'] ? $task->toJson() : $task->toHash();
         }
@@ -152,9 +154,9 @@ class Nag_Api extends Horde_Registry_Api
      *
      * @return string  The new tasklist's id.
      */
-    public function addTasklist($name, $description = '', $color = '', array $params = array())
+    public function addTasklist($name, $description = '', $color = '', array $params = [])
     {
-        $tasklist = Nag::addTasklist(array('name' => $name, 'description' => $description, 'color' => $color));
+        $tasklist = Nag::addTasklist(['name' => $name, 'description' => $description, 'color' => $color]);
 
         $name = $tasklist->getName();
         if (!empty($params['synchronize'])) {
@@ -225,7 +227,7 @@ class Nag_Api extends Horde_Registry_Api
             throw new Nag_Exception($e->getMessage());
         }
         if (!is_array($atnames)) {
-            $atnames = array($atnames);
+            $atnames = [$atnames];
         }
 
         $atparms = $response->getAttribute('ATTENDEE', true);
@@ -243,7 +245,7 @@ class Nag_Api extends Horde_Registry_Api
                 $name = $addr_ob->personal;
             } else {
                 $attendee = str_ireplace('mailto:', '', $attendee);
-                $name = isset($atparms[$index]['CN']) ? $atparms[$index]['CN'] : null;
+                $name = $atparms[$index]['CN'] ?? null;
             }
             $identity = $GLOBALS['injector']->getInstance('Horde_Core_Factory_Identity')->create($task->assignee);
             $all_addrs = $identity->getAll('from_addr');
@@ -322,13 +324,13 @@ class Nag_Api extends Horde_Registry_Api
      *
      * @return array  The contents of $path
      */
-    public function browse($path = '', $properties = array())
+    public function browse($path = '', $properties = [])
     {
         global $injector, $nag_shares, $registry;
 
         // Default properties.
         if (!$properties) {
-            $properties = array('name', 'icon', 'browseable');
+            $properties = ['name', 'icon', 'browseable'];
         }
 
         if (substr($path, 0, 3) == 'nag') {
@@ -342,12 +344,12 @@ class Nag_Api extends Horde_Registry_Api
             // This request is for a list of all users who have tasklists
             // visible to the requesting user.
             $tasklists = Nag::listTasklists(false, Horde_Perms::READ);
-            $owners = array();
+            $owners = [];
             foreach ($tasklists as $tasklist) {
                 $owners[$tasklist->get('owner') ? $registry->convertUsername($tasklist->get('owner'), false) : '-system-'] = $tasklist->get('owner') ?: '-system-';
             }
 
-            $results = array();
+            $results = [];
             foreach ($owners as $externalOwner => $internalOwner) {
                 if (in_array('name', $properties)) {
                     $results['nag/' . $externalOwner]['name'] = $injector
@@ -372,10 +374,11 @@ class Nag_Api extends Horde_Registry_Api
             $owner = $parts[0] == '-system-' ? '' : $registry->convertUsername($parts[0], true);
             $tasklists = $nag_shares->listShares(
                 $currentUser,
-                array('perm' => Horde_Perms::SHOW,
-                      'attributes' => $owner));
+                ['perm' => Horde_Perms::SHOW,
+                    'attributes' => $owner]
+            );
 
-            $results = array();
+            $results = [];
             foreach ($tasklists as $tasklistId => $tasklist) {
                 if ($parts[0] == '-system-' && $tasklist->get('owner')) {
                     continue;
@@ -418,12 +421,12 @@ class Nag_Api extends Horde_Registry_Api
                 throw new Nag_Exception(_("Invalid task list file requested."), 404);
             }
             $ical_data = $this->exportTasklist($tasklist, 'text/calendar');
-            return array(
+            return [
                 'data'          => $ical_data,
                 'mimetype'      => 'text/calendar',
                 'contentlength' => strlen($ical_data),
-                'mtime'         => $_SERVER['REQUEST_TIME']
-            );
+                'mtime'         => $_SERVER['REQUEST_TIME'],
+            ];
 
         } elseif (count($parts) == 2) {
             //
@@ -444,13 +447,13 @@ class Nag_Api extends Horde_Registry_Api
             try {
                 $storage->retrieve();
             } catch (Nag_Exception $e) {
-                 throw new Nag_Exception($e->getMessage, 500);
+                throw new Nag_Exception($e->getMessage, 500);
             }
             $icon = Horde_Themes::img('nag.png');
             $owner = $tasklist->get('owner')
                 ? $registry->convertUsername($tasklist->get('owner'), false)
                 : '-system-';
-            $results = array();
+            $results = [];
             $storage->tasks->reset();
             $dav = $injector->getInstance('Horde_Dav_Storage');
             while ($task = $storage->tasks->each()) {
@@ -518,9 +521,9 @@ class Nag_Api extends Horde_Registry_Api
                 } catch (Nag_Exception $e) {
                     throw new Nag_Exception($e->getMessage(), 500);
                 }
-                $result = array(
+                $result = [
                     'data' => $this->export($task->uid, 'text/calendar'),
-                    'mimetype' => 'text/calendar');
+                    'mimetype' => 'text/calendar'];
                 $modified = $this->modified($task->uid, $parts[1]);
                 if (!empty($modified)) {
                     $result['mtime'] = $modified;
@@ -583,11 +586,11 @@ class Nag_Api extends Horde_Registry_Api
 
         // Store all currently existings UIDs. Use this info to delete UIDs not
         // present in $content after processing.
-        $ids = array();
+        $ids = [];
         if ($complete_list) {
             $uids_remove = array_flip($this->listUids($tasklist));
         } else {
-            $uids_remove = array();
+            $uids_remove = [];
         }
 
         $storage = $injector
@@ -595,116 +598,116 @@ class Nag_Api extends Horde_Registry_Api
             ->create($tasklist);
 
         switch ($content_type) {
-        case 'text/calendar':
-        case 'text/x-vcalendar':
-            $iCal = new Horde_Icalendar();
-            if (!($content instanceof Horde_Icalendar_Vtodo)) {
-                if (!$iCal->parsevCalendar($content)) {
-                    throw new Nag_Exception(
-                        _("There was an error importing the iCalendar data."),
-                        400
-                    );
-                }
-            } else {
-                $iCal->addComponent($content);
-            }
-
-            foreach ($iCal->getComponents() as $content) {
+            case 'text/calendar':
+            case 'text/x-vcalendar':
+                $iCal = new Horde_Icalendar();
                 if (!($content instanceof Horde_Icalendar_Vtodo)) {
-                    continue;
-                }
-                $task = new Nag_Task();
-                $task->fromiCalendar($content);
-                $task->tasklist = $tasklist;
-                $create = true;
-                if ($complete_list) {
-                    if (isset($task->uid)) {
-                        try {
-                            $existing = $storage->getByUID($task->uid, array($tasklist));
-                            $create = false;
-                        } catch (Horde_Exception_NotFound $e) {
-                        }
+                    if (!$iCal->parsevCalendar($content)) {
+                        throw new Nag_Exception(
+                            _("There was an error importing the iCalendar data."),
+                            400
+                        );
                     }
                 } else {
-                    try {
-                        $existing_id = $dav->getInternalObjectId($file, $tasklist)
-                            ?: $file;
-                    } catch (Horde_Dav_Exception $e) {
-                        $existing_id = $file;
+                    $iCal->addComponent($content);
+                }
+
+                foreach ($iCal->getComponents() as $content) {
+                    if (!($content instanceof Horde_Icalendar_Vtodo)) {
+                        continue;
                     }
-                    try {
-                        $existing = $storage->get($existing_id);
-                        $create = false;
-                    } catch (Horde_Exception_NotFound $e) {
+                    $task = new Nag_Task();
+                    $task->fromiCalendar($content);
+                    $task->tasklist = $tasklist;
+                    $create = true;
+                    if ($complete_list) {
                         if (isset($task->uid)) {
                             try {
-                                $existing = $storage->getByUID($task->uid, array($tasklist));
+                                $existing = $storage->getByUID($task->uid, [$tasklist]);
                                 $create = false;
                             } catch (Horde_Exception_NotFound $e) {
                             }
                         }
-                    }
-                }
-                if (!$create) {
-                    // Entry exists, remove from uids_remove list so we won't
-                    // delete in the end.
-                    unset($uids_remove[$task->uid]);
-                    if ($existing->private &&
-                        $existing->owner != $registry->getAuth()) {
-                        continue;
-                    }
-                    // Check if our task is newer then the existing - get the
-                    // task's history.
-                    $created = $modified = null;
-                    try {
-                        $log = $injector->getInstance('Horde_History')
-                            ->getHistory('nag:' . $tasklist . ':' . $task->uid);
-                        foreach ($log as $entry) {
-                            switch ($entry['action']) {
-                            case 'add':
-                                $created = $entry['ts'];
-                                break;
-
-                            case 'modify':
-                                $modified = $entry['ts'];
-                                break;
+                    } else {
+                        try {
+                            $existing_id = $dav->getInternalObjectId($file, $tasklist)
+                                ?: $file;
+                        } catch (Horde_Dav_Exception $e) {
+                            $existing_id = $file;
+                        }
+                        try {
+                            $existing = $storage->get($existing_id);
+                            $create = false;
+                        } catch (Horde_Exception_NotFound $e) {
+                            if (isset($task->uid)) {
+                                try {
+                                    $existing = $storage->getByUID($task->uid, [$tasklist]);
+                                    $create = false;
+                                } catch (Horde_Exception_NotFound $e) {
+                                }
                             }
                         }
-                    } catch (Exception $e) {
                     }
-                    if (empty($modified) && !empty($add)) {
-                        $modified = $add;
-                    }
-                    if (!empty($modified) &&
-                        $modified >= $content->getAttribute('LAST-MODIFIED')) {
+                    if (!$create) {
+                        // Entry exists, remove from uids_remove list so we won't
+                        // delete in the end.
+                        unset($uids_remove[$task->uid]);
+                        if ($existing->private &&
+                            $existing->owner != $registry->getAuth()) {
+                            continue;
+                        }
+                        // Check if our task is newer then the existing - get the
+                        // task's history.
+                        $created = $modified = null;
+                        try {
+                            $log = $injector->getInstance('Horde_History')
+                                ->getHistory('nag:' . $tasklist . ':' . $task->uid);
+                            foreach ($log as $entry) {
+                                switch ($entry['action']) {
+                                    case 'add':
+                                        $created = $entry['ts'];
+                                        break;
+
+                                    case 'modify':
+                                        $modified = $entry['ts'];
+                                        break;
+                                }
+                            }
+                        } catch (Exception $e) {
+                        }
+                        if (empty($modified) && !empty($add)) {
+                            $modified = $add;
+                        }
+                        if (!empty($modified) &&
+                            $modified >= $content->getAttribute('LAST-MODIFIED')) {
                             // LAST-MODIFIED timestamp of existing entry
                             // is newer: don't replace it.
                             continue;
-                    }
+                        }
 
-                    // Don't change creator/owner.
-                    $task->owner = $existing->owner;
-                    try {
-                        $storage->modify($existing->id, $task->toHash());
-                    } catch (Nag_Exception $e) {
-                        throw new Nag_Exception($e->getMessage(), 500);
+                        // Don't change creator/owner.
+                        $task->owner = $existing->owner;
+                        try {
+                            $storage->modify($existing->id, $task->toHash());
+                        } catch (Nag_Exception $e) {
+                            throw new Nag_Exception($e->getMessage(), 500);
+                        }
+                        $ids[] = $task->uid;
+                    } else {
+                        try {
+                            $newTask = $storage->add($task->toHash());
+                        } catch (Nag_Exception $e) {
+                            throw new Nag_Exception($e->getMessage(), 500);
+                        }
+                        $dav->addObjectMap($newTask[0], $file, $tasklist);
+                        // use UID rather than ID
+                        $ids[] = $newTask[1];
                     }
-                    $ids[] = $task->uid;
-                } else {
-                    try {
-                        $newTask = $storage->add($task->toHash());
-                    } catch (Nag_Exception $e) {
-                        throw new Nag_Exception($e->getMessage(), 500);
-                    }
-                    $dav->addObjectMap($newTask[0], $file, $tasklist);
-                    // use UID rather than ID
-                    $ids[] = $newTask[1];
                 }
-            }
-            break;
+                break;
 
-        default:
-            throw new Nag_Exception(sprintf(_("Unsupported Content-Type: %s"), $content_type), 400);
+            default:
+                throw new Nag_Exception(sprintf(_("Unsupported Content-Type: %s"), $content_type), 400);
         }
 
         if (Nag::hasPermission($tasklist, Horde_Perms::DELETE)) {
@@ -821,7 +824,7 @@ class Nag_Api extends Horde_Registry_Api
             $tasklists = Nag::getSyncLists();
         } else {
             if (!is_array($tasklists)) {
-                $tasklists = array($tasklists);
+                $tasklists = [$tasklists];
             }
             foreach ($tasklists as $list) {
                 if (!Nag::hasPermission($list, Horde_Perms::READ)) {
@@ -830,12 +833,13 @@ class Nag_Api extends Horde_Registry_Api
             }
         }
 
-        $tasks = Nag::listTasks(array(
-            'tasklists' => $tasklists,
-            'completed' => Nag::VIEW_ALL,
-            'include_history' => false)
+        $tasks = Nag::listTasks(
+            [
+                'tasklists' => $tasklists,
+                'completed' => Nag::VIEW_ALL,
+                'include_history' => false]
         );
-        $uids = array();
+        $uids = [];
         $tasks->reset();
         while ($task = $tasks->each()) {
             $uids[] = $task->uid;
@@ -865,16 +869,16 @@ class Nag_Api extends Horde_Registry_Api
     {
         if (empty($tasklist)) {
             $tasklist = Nag::getSyncLists();
-            $results = array();
+            $results = [];
             foreach ($tasklist as $list) {
                 $results = array_merge($results, $this->listBy($action, $timestamp, $list, $end, $isModSeq));
             }
             return $results;
         }
 
-        $filter = array(array('op' => '=', 'field' => 'action', 'value' => $action));
+        $filter = [['op' => '=', 'field' => 'action', 'value' => $action]];
         if (!empty($end) && !$isModSeq) {
-            $filter[] = array('op' => '<', 'field' => 'ts', 'value' => $end);
+            $filter[] = ['op' => '<', 'field' => 'ts', 'value' => $end];
         }
         if (!$isModSeq) {
             $histories = $GLOBALS['injector']
@@ -912,10 +916,10 @@ class Nag_Api extends Horde_Registry_Api
             ->create($tasklist)
             ->synchronize();
 
-        return array(
+        return [
             'add' => $this->listBy('add', $start, $tasklist, $end, $isModSeq),
             'modify' => $this->listBy('modify', $start, $tasklist, $end, $isModSeq),
-            'delete' => $this->listBy('delete', $start, $tasklist, $end, $isModSeq));
+            'delete' => $this->listBy('delete', $start, $tasklist, $end, $isModSeq)];
     }
 
     /**
@@ -1014,68 +1018,68 @@ class Nag_Api extends Horde_Registry_Api
         $storage = $GLOBALS['injector']->getInstance('Nag_Factory_Driver')->create($tasklist);
 
         switch ($contentType) {
-        case 'text/x-vcalendar':
-        case 'text/calendar':
-        case 'text/x-vtodo':
-            $iCal = new Horde_Icalendar();
-            if (!($content instanceof Horde_Icalendar_Vtodo)) {
-                if (!$iCal->parsevCalendar($content)) {
-                    throw new Nag_Exception(_("There was an error importing the iCalendar data."));
+            case 'text/x-vcalendar':
+            case 'text/calendar':
+            case 'text/x-vtodo':
+                $iCal = new Horde_Icalendar();
+                if (!($content instanceof Horde_Icalendar_Vtodo)) {
+                    if (!$iCal->parsevCalendar($content)) {
+                        throw new Nag_Exception(_("There was an error importing the iCalendar data."));
+                    }
+                } else {
+                    $iCal->addComponent($content);
                 }
-            } else {
-                $iCal->addComponent($content);
-            }
 
-            $components = $iCal->getComponents();
-            if (count($components) == 0) {
-                throw new Nag_Exception(_("No iCalendar data was found."));
-            }
+                $components = $iCal->getComponents();
+                if (count($components) == 0) {
+                    throw new Nag_Exception(_("No iCalendar data was found."));
+                }
 
-            $ids = array();
+                $ids = [];
 
-            foreach ($components as $content) {
-                if ($content instanceof Horde_Icalendar_Vtodo) {
-                    $task = new Nag_Task($storage);
-                    $task->fromiCalendar($content);
-                    if (isset($task->uid)) {
-                        try {
-                            $existing = $storage->getByUID($task->uid, null, false);
-                            $task->owner = $existing->owner;
-                            $storage->modify($existing->id, $task->toHash());
-                        } catch ( Horde_Exception_NotFound $e ) {
+                foreach ($components as $content) {
+                    if ($content instanceof Horde_Icalendar_Vtodo) {
+                        $task = new Nag_Task($storage);
+                        $task->fromiCalendar($content);
+                        if (isset($task->uid)) {
+                            try {
+                                $existing = $storage->getByUID($task->uid, null, false);
+                                $task->owner = $existing->owner;
+                                $storage->modify($existing->id, $task->toHash());
+                            } catch (Horde_Exception_NotFound $e) {
+                                $hash = $task->toHash();
+                                unset($hash['tasklist_id']);
+                                unset($hash['task_id']);
+                                unset($hash['parent']);
+                                $storage->add($hash);
+                            }
+                            $ids[] = $task->uid;
+                        } else {
                             $hash = $task->toHash();
-                            unset($hash['tasklist_id']);
-                            unset($hash['task_id']);
-                            unset($hash['parent']);
-                            $storage->add($hash);
+                            unset($hash['uid']);
+                            $newTask = $storage->add($hash);
+                            // use UID rather than ID
+                            $ids[] = $newTask[1];
                         }
-                        $ids[] = $task->uid;
-                    } else {
-                        $hash = $task->toHash();
-                        unset($hash['uid']);
-                        $newTask = $storage->add($hash);
-                        // use UID rather than ID
-                        $ids[] = $newTask[1];
                     }
                 }
-            }
 
-            if (count($ids) == 0) {
-                throw new Nag_Exception(_("No iCalendar data was found."));
-            } else if (count($ids) == 1) {
-                return $ids[0];
-            }
-            return $ids;
+                if (count($ids) == 0) {
+                    throw new Nag_Exception(_("No iCalendar data was found."));
+                } elseif (count($ids) == 1) {
+                    return $ids[0];
+                }
+                return $ids;
 
-        case 'activesync':
-            $task = new Nag_Task();
-            $task->fromASTask($content);
-            $hash = $task->toHash();
-            unset($hash['uid']);
-            $results = $storage->add($hash);
+            case 'activesync':
+                $task = new Nag_Task();
+                $task->fromASTask($content);
+                $hash = $task->toHash();
+                unset($hash['uid']);
+                $results = $storage->add($hash);
 
-            /* array index 0 is id, 1 is uid */
-            return $results[1];
+                /* array index 0 is id, 1 is uid */
+                return $results[1];
         }
 
         throw new Nag_Exception(sprintf(_("Unsupported Content-Type: %s"), $contentType));
@@ -1170,7 +1174,7 @@ class Nag_Api extends Horde_Registry_Api
      *
      * @return string  The requested data.
      */
-    public function export($uid, $contentType, array $options = array())
+    public function export($uid, $contentType, array $options = [])
     {
         $task = $GLOBALS['injector']
             ->getInstance('Nag_Factory_Driver')
@@ -1182,27 +1186,28 @@ class Nag_Api extends Horde_Registry_Api
 
         $version = '2.0';
         switch ($contentType) {
-        case 'text/x-vcalendar':
-            $version = '1.0';
-        case 'text/calendar':
-            // Create the new iCalendar container.
-            $iCal = new Horde_Icalendar($version);
-            $iCal->setAttribute('PRODID', '-//The Horde Project//Nag ' . $GLOBALS['registry']->getVersion() . '//EN');
-            $iCal->setAttribute('METHOD', 'PUBLISH');
+            case 'text/x-vcalendar':
+                $version = '1.0';
+                // no break
+            case 'text/calendar':
+                // Create the new iCalendar container.
+                $iCal = new Horde_Icalendar($version);
+                $iCal->setAttribute('PRODID', '-//The Horde Project//Nag ' . $GLOBALS['registry']->getVersion() . '//EN');
+                $iCal->setAttribute('METHOD', 'PUBLISH');
 
-            // Create new vTodo object.
-            $vTodo = $task->toiCalendar($iCal);
-            $vTodo->setAttribute('VERSION', $version);
+                // Create new vTodo object.
+                $vTodo = $task->toiCalendar($iCal);
+                $vTodo->setAttribute('VERSION', $version);
 
-            $iCal->addComponent($vTodo);
+                $iCal->addComponent($vTodo);
 
-            return $iCal->exportvCalendar();
-        case 'activesync':
-            return $task->toASTask($options);
-        case 'raw':
-            return $task;
-        default:
-            throw new Nag_Exception(sprintf(_("Unsupported Content-Type: %s"), $contentType));
+                return $iCal->exportvCalendar();
+            case 'activesync':
+                return $task->toASTask($options);
+            case 'raw':
+                return $task;
+            default:
+                throw new Nag_Exception(sprintf(_("Unsupported Content-Type: %s"), $contentType));
         }
     }
 
@@ -1244,28 +1249,29 @@ class Nag_Api extends Horde_Registry_Api
             throw new Horde_Exception_PermissionDenied();
         }
 
-        $tasks = Nag::listTasks(array(
-            'tasklists' => array($tasklist),
+        $tasks = Nag::listTasks([
+            'tasklists' => [$tasklist],
             'completed' => Nag::VIEW_ALL,
             'external' => false,
-            'include_tags' => true));
+            'include_tags' => true]);
 
         $version = '2.0';
         switch ($contentType) {
-        case 'text/x-vcalendar':
-            $version = '1.0';
-        case 'text/calendar':
-            $share = $GLOBALS['nag_shares']->getShare($tasklist);
+            case 'text/x-vcalendar':
+                $version = '1.0';
+                // no break
+            case 'text/calendar':
+                $share = $GLOBALS['nag_shares']->getShare($tasklist);
 
-            $iCal = new Horde_Icalendar($version);
-            $iCal->setAttribute('X-WR-CALNAME', $share->get('name'));
+                $iCal = new Horde_Icalendar($version);
+                $iCal->setAttribute('X-WR-CALNAME', $share->get('name'));
 
-            $tasks->reset();
-            while ($task = $tasks->each()) {
-                $iCal->addComponent($task->toiCalendar($iCal));
-            }
+                $tasks->reset();
+                while ($task = $tasks->each()) {
+                    $iCal->addComponent($task->toiCalendar($iCal));
+                }
 
-            return $iCal->exportvCalendar();
+                return $iCal->exportvCalendar();
         }
 
         throw new Nag_Exception(sprintf(_("Unsupported Content-Type: %s"), $contentType));
@@ -1297,7 +1303,7 @@ class Nag_Api extends Horde_Registry_Api
         if (!$GLOBALS['registry']->isAdmin() &&
             !Nag::hasPermission($task->tasklist, Horde_Perms::DELETE)) {
 
-             throw new Horde_Exception_PermissionDenied();
+            throw new Horde_Exception_PermissionDenied();
         }
 
         return $factory->create($task->tasklist)->delete($task->id);
@@ -1349,45 +1355,45 @@ class Nag_Api extends Horde_Registry_Api
         }
 
         switch ($contentType) {
-        case 'text/calendar':
-        case 'text/x-vcalendar':
-            if (!($content instanceof Horde_Icalendar_Vtodo)) {
-                $iCal = new Horde_Icalendar();
-                if (!$iCal->parsevCalendar($content)) {
-                    throw new Nag_Exception(_("There was an error importing the iCalendar data."));
-                }
-
-                $components = $iCal->getComponents();
-                $component = null;
-                foreach ($components as $content) {
-                    if ($content instanceof Horde_Icalendar_Vtodo) {
-                        if ($component !== null) {
-                            throw new Nag_Exception(_("Multiple iCalendar components found; only one vTodo is supported."));
-                        }
-                        $component = $content;
+            case 'text/calendar':
+            case 'text/x-vcalendar':
+                if (!($content instanceof Horde_Icalendar_Vtodo)) {
+                    $iCal = new Horde_Icalendar();
+                    if (!$iCal->parsevCalendar($content)) {
+                        throw new Nag_Exception(_("There was an error importing the iCalendar data."));
                     }
 
-                }
-                if ($component === null) {
-                    throw new Nag_Exception(_("No iCalendar data was found."));
-                }
-            }
+                    $components = $iCal->getComponents();
+                    $component = null;
+                    foreach ($components as $content) {
+                        if ($content instanceof Horde_Icalendar_Vtodo) {
+                            if ($component !== null) {
+                                throw new Nag_Exception(_("Multiple iCalendar components found; only one vTodo is supported."));
+                            }
+                            $component = $content;
+                        }
 
-            $task = new Nag_Task();
-            $task->fromiCalendar($content);
-            $task->owner = $owner;
-            $factory->create($existing->tasklist)->modify($taskId, $task->toHash());
-            break;
+                    }
+                    if ($component === null) {
+                        throw new Nag_Exception(_("No iCalendar data was found."));
+                    }
+                }
 
-        case 'activesync':
-            $task = new Nag_Task();
-            $task->fromASTask($content);
-            $task->owner = $owner;
-            $task->uid = $uid;
-            $factory->create($existing->tasklist)->modify($taskId, $task->toHash());
-            break;
-        default:
-            throw new Nag_Exception(sprintf(_("Unsupported Content-Type: %s"), $contentType));
+                $task = new Nag_Task();
+                $task->fromiCalendar($content);
+                $task->owner = $owner;
+                $factory->create($existing->tasklist)->modify($taskId, $task->toHash());
+                break;
+
+            case 'activesync':
+                $task = new Nag_Task();
+                $task->fromASTask($content);
+                $task->owner = $owner;
+                $task->uid = $uid;
+                $factory->create($existing->tasklist)->modify($taskId, $task->toHash());
+                break;
+            default:
+                throw new Nag_Exception(sprintf(_("Unsupported Content-Type: %s"), $contentType));
         }
     }
 
@@ -1421,11 +1427,12 @@ class Nag_Api extends Horde_Registry_Api
      */
     public function listCostObjects($criteria)
     {
-        $tasks = Nag::listTasks(array(
-            'completed' => Nag::VIEW_ALL,
-            'include_history' => false)
+        $tasks = Nag::listTasks(
+            [
+                'completed' => Nag::VIEW_ALL,
+                'include_history' => false]
         );
-        $result = array();
+        $result = [];
         $tasks->reset();
         $last_week = $_SERVER['REQUEST_TIME'] - 7 * 86400;
         while ($task = $tasks->each()) {
@@ -1433,11 +1440,11 @@ class Nag_Api extends Horde_Registry_Api
                 ($task->start && $task->start > $_SERVER['REQUEST_TIME'])) {
                 continue;
             }
-            $result[$task->id] = array(
+            $result[$task->id] = [
                 'id' => $task->id,
                 'active' => !$task->completed,
-                'name' => $task->name
-            );
+                'name' => $task->name,
+            ];
             for ($parent = $task->parent; $parent->parent; $parent = $parent->parent) {
                 $result[$task->id]['name'] = $parent->name . ': '
                     . $result[$task->id]['name'];
@@ -1448,10 +1455,10 @@ class Nag_Api extends Horde_Registry_Api
         }
 
         if (count($result) == 0) {
-            return array();
+            return [];
         } else {
-            return array(array('category' => _("Tasks"),
-                'objects'  => array_values($result)));
+            return [['category' => _("Tasks"),
+                'objects'  => array_values($result)]];
         }
     }
 
@@ -1470,16 +1477,16 @@ class Nag_Api extends Horde_Registry_Api
             !Nag::hasPermission($task->tasklist, Horde_Perms::EDIT)) {
             throw new Horde_Exception_PermissionDenied();
         }
-        $adjust = array('actual' => $task->actual += $data['hours']);
+        $adjust = ['actual' => $task->actual += $data['hours']];
         $this->updateTask($task->tasklist, $id, $adjust);
     }
 
     public function listTimeObjectCategories()
     {
-        $categories = array();
+        $categories = [];
         $tasklists = Nag::listTasklists(false, Horde_Perms::SHOW | Horde_Perms::READ);
         foreach ($tasklists as $tasklistId => $tasklist) {
-            $categories[$tasklistId] = array('title' => Nag::getLabel($tasklist), 'type' => 'share');
+            $categories[$tasklistId] = ['title' => Nag::getLabel($tasklist), 'type' => 'share'];
         }
         return $categories;
     }
@@ -1501,19 +1508,19 @@ class Nag_Api extends Horde_Registry_Api
             }
         }
 
-        $timeobjects = array();
+        $timeobjects = [];
         $start = new Horde_Date($start);
         $start_ts = $start->timestamp();
         $end = new Horde_Date($end);
         $end_ts = $end->timestamp();
 
         // List incomplete tasks.
-        $tasks = Nag::listTasks(array(
+        $tasks = Nag::listTasks([
             'completed' => Nag::VIEW_FUTURE_INCOMPLETE,
             'external' => false,
             'include_history' => false,
             'tasklists' => $categories,
-        ));
+        ]);
 
         $tasks->reset();
         while ($task = $tasks->each()) {
@@ -1528,16 +1535,16 @@ class Nag_Api extends Horde_Registry_Api
             $due_date = date('Y-m-d\TH:i:s', $task->due);
             $recurrence = null;
             if ($task->recurs()) {
-                $recurrence = array(
+                $recurrence = [
                     'type'        => $task->recurrence->getRecurType(),
                     'interval'    => $task->recurrence->getRecurInterval(),
                     'end'         => $task->recurrence->getRecurEnd(),
                     'count'       => $task->recurrence->getRecurCount(),
                     'days'        => $task->recurrence->getRecurOnDays(),
                     'exceptions'  => $task->recurrence->getExceptions(),
-                    'completions' => $task->recurrence->getCompletions());
+                    'completions' => $task->recurrence->getCompletions()];
             }
-            $timeobjects[$task->id] = array(
+            $timeobjects[$task->id] = [
                 'id' => $task->id,
                 'title' => $task->name,
                 'description' => $task->desc,
@@ -1548,15 +1555,15 @@ class Nag_Api extends Horde_Registry_Api
                 'owner' => $allowed_tasklists[$task->tasklist]->get('owner'),
                 'permissions' => $GLOBALS['nag_shares']->getPermissions($task->tasklist, $GLOBALS['registry']->getAuth()),
                 'variable_length' => false,
-                'params' => array(
+                'params' => [
                     'task' => $task->id,
                     'tasklist' => $task->tasklist,
-                ),
-                'link' => Horde::url('view.php', true)->add(array('tasklist' => $task->tasklist, 'task' => $task->id)),
-                'edit_link' => Horde::url('task.php', true)->add(array('tasklist' => $task->tasklist, 'task' => $task->id, 'actionID' => 'modify_task')),
-                'delete_link' => Horde::url('task.php', true)->add(array('tasklist' => $task->tasklist, 'task' => $task->id, 'actionID' => 'delete_task')),
-                'ajax_link' => 'task:' . $task->tasklist . ':' . $task->id
-            );
+                ],
+                'link' => Horde::url('view.php', true)->add(['tasklist' => $task->tasklist, 'task' => $task->id]),
+                'edit_link' => Horde::url('task.php', true)->add(['tasklist' => $task->tasklist, 'task' => $task->id, 'actionID' => 'modify_task']),
+                'delete_link' => Horde::url('task.php', true)->add(['tasklist' => $task->tasklist, 'task' => $task->id, 'actionID' => 'delete_task']),
+                'ajax_link' => 'task:' . $task->tasklist . ':' . $task->id,
+            ];
         }
 
         return $timeobjects;
@@ -1578,7 +1585,7 @@ class Nag_Api extends Horde_Registry_Api
         $storage = $GLOBALS['injector']
             ->getInstance('Nag_Factory_Driver')
             ->create($timeobject['params']['tasklist']);
-        $info = array();
+        $info = [];
         if (isset($timeobject['start'])) {
             $info['due'] = new Horde_Date($timeobject['start']);
             $info['due'] = $info['due']->timestamp();
@@ -1605,7 +1612,7 @@ class Nag_Api extends Horde_Registry_Api
      */
     public function sources($writeable = false, $sync_only = false)
     {
-        $out = array();
+        $out = [];
 
         foreach (Nag::listTasklists(false, $writeable ? Horde_Perms::EDIT : Horde_Perms::READ, false) as $key => $val) {
             $out[$key] = $val->get('name');
@@ -1669,10 +1676,13 @@ class Nag_Api extends Horde_Registry_Api
      * </pre>
      */
     public function searchTags(
-        $names, $max = 10, $from = 0, $resource_type = '', $user = null,
+        $names,
+        $max = 10,
+        $from = 0,
+        $resource_type = '',
+        $user = null,
         $raw = false
-    )
-    {
+    ) {
         // TODO: $max, $from, $resource_type not honored
         global $injector;
 
@@ -1680,26 +1690,27 @@ class Nag_Api extends Horde_Registry_Api
             ->getInstance('Nag_Tagger')
             ->search(
                 $names,
-                array('user' => $user));
+                ['user' => $user]
+            );
 
         // Check for error or if we requested the raw data array.
         if ($raw) {
             return $results;
         }
 
-        $return = array();
+        $return = [];
         $redirectUrl = Horde::url('view.php', true);
         foreach ($results as $task_id) {
             try {
                 $task = $injector->getInstance('Nag_Factory_Driver')
                     ->create(null)
                     ->getByUID($task_id);
-                $return[] = array(
+                $return[] = [
                     'title' => $task->name,
                     'desc' => $task->description,
                     'view_url' => $redirectUrl->add('uid', $task->uid),
-                    'app' => 'nag'
-                );
+                    'app' => 'nag',
+                ];
             } catch (Exception $e) {
             }
         }

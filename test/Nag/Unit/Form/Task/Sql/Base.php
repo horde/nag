@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Task form test base for the SQL driver.
  *
@@ -36,7 +37,7 @@ abstract class Nag_Unit_Form_Task_Sql_Base extends Nag_Unit_Form_Task_Base
         parent::setUpBeforeClass();
         static::getDb();
         self::createSqlShares(self::$setup);
-        list($share, $other_share) = self::_createDefaultShares();
+        [$share, $other_share] = self::_createDefaultShares();
     }
 
     /*abstract*/ protected static function getDb()

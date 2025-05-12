@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Test the Task form with the Kolab driver.
  *
@@ -26,6 +27,7 @@
  * @author     Gunnar Wrobel <wrobel@pardus.de>
  * @link       http://www.horde.org/apps/nag
  * @license    http://www.horde.org/licenses/gpl GNU General Public License, version 2
+ * @coversNothing
  */
 class Nag_Unit_Form_Task_KolabTest extends Nag_Unit_Form_Task_Base
 {
@@ -37,6 +39,6 @@ class Nag_Unit_Form_Task_KolabTest extends Nag_Unit_Form_Task_Base
 
         parent::setUpBeforeClass();
         self::createKolabShares(self::$setup);
-        list($share, $other_share) = self::_createDefaultShares();
+        [$share, $other_share] = self::_createDefaultShares();
     }
 }

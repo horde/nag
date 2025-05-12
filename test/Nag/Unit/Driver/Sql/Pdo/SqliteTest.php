@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Test the SQL driver with a sqlite DB.
  *
@@ -26,6 +27,7 @@
  * @author     Gunnar Wrobel <wrobel@pardus.de>
  * @link       http://www.horde.org/apps/nag
  * @license    http://www.horde.org/licenses/gpl GNU General Public License, version 2
+ * @coversNothing
  */
 class Nag_Unit_Driver_Sql_Pdo_SqliteTest extends Nag_Unit_Driver_Sql_Base
 {
@@ -33,7 +35,7 @@ class Nag_Unit_Driver_Sql_Pdo_SqliteTest extends Nag_Unit_Driver_Sql_Base
 
     public static function setUpBeforeClass()
     {
-        self::$callback = array(__CLASS__, 'getDb');
+        self::$callback = [__CLASS__, 'getDb'];
         parent::setUpBeforeClass();
     }
 

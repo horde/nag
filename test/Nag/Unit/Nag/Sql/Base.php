@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Test the core Nag class with a SQL backend.
  *

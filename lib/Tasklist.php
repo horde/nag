@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Nag_Tasklist is a light wrapper around a Nag tasklist.
  *
@@ -29,12 +30,13 @@ class Nag_Tasklist
      */
     public function toHash()
     {
-        $tasks = Nag::listTasks(array(
-            'tasklists' => $this->_share->getName(),
-            'include_history' => false)
+        $tasks = Nag::listTasks(
+            [
+                'tasklists' => $this->_share->getName(),
+                'include_history' => false]
         );
 
-        $hash = array(
+        $hash = [
             'name' => Nag::getLabel($this->_share),
             'desc' => $this->_share->get('desc'),
             'color' => $this->_share->get('color'),
@@ -42,7 +44,7 @@ class Nag_Tasklist
             'id' => $this->_share->getName(),
             'count' => $tasks->count(),
             'smart' => $this->_share->get('issmart') ? true : false,
-            'overdue' => $tasks->childrenOverdue());
+            'overdue' => $tasks->childrenOverdue()];
 
         return $hash;
     }

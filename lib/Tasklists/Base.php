@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The base functionality of the tasklists handler.
  *
@@ -79,7 +80,7 @@ abstract class Nag_Tasklists_Base
     {
         $shares = $this->_shares->listShares(
             $this->_user,
-            array('attributes' => $this->_user)
+            ['attributes' => $this->_user]
         );
         foreach ($shares as $id => $share) {
             if ($share->get('default')) {
@@ -93,9 +94,7 @@ abstract class Nag_Tasklists_Base
      *
      * @param string $share  The default share ID.
      */
-    public function setDefaultShare($share)
-    {
-    }
+    public function setDefaultShare($share) {}
 
     /**
      * Return the name of the default share.
@@ -109,8 +108,6 @@ abstract class Nag_Tasklists_Base
      *
      * @param Horde_Share_Object $share The new default share.
      */
-    protected function _prepareDefaultShare($share)
-    {
-    }
+    protected function _prepareDefaultShare($share) {}
 
 }

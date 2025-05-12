@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2001-2017 Horde LLC (http://www.horde.org/)
  *
@@ -28,10 +29,10 @@ class Nag_Search implements Serializable
     /**
      * Search bit masks
      */
-    const MASK_NAME      = 1;
-    const MASK_DESC      = 2;
-    const MASK_TAGS      = 4;
-    const MASK_ALL       = 7;
+    public const MASK_NAME      = 1;
+    public const MASK_DESC      = 2;
+    public const MASK_TAGS      = 4;
+    public const MASK_ALL       = 7;
 
     /**
      * Search criteria
@@ -95,15 +96,16 @@ class Nag_Search implements Serializable
      *
      * @return Nag_Search
      */
-    public function __construct($search, $mask, array $options = array())
+    public function __construct($search, $mask, array $options = [])
     {
         $options = array_merge(
-            array(
+            [
                 'completed' => 0,
-                'due' => array(),
-                'tags' => array(),
-                'tasklists' => $GLOBALS['display_tasklists']),
-            $options);
+                'due' => [],
+                'tags' => [],
+                'tasklists' => $GLOBALS['display_tasklists']],
+            $options
+        );
 
         $this->_search = $search;
         $this->_mask = $mask;
@@ -139,7 +141,7 @@ class Nag_Search implements Serializable
         global $injector, $prefs;
 
         if (!empty($this->_due)) {
-            $parser = Horde_Date_Parser::factory(array('locale' => $GLOBALS['prefs']->getValue('language')));
+            $parser = Horde_Date_Parser::factory(['locale' => $GLOBALS['prefs']->getValue('language')]);
             $date = $parser->parse($this->_due[1]);
             $date->mday += $this->_due[0];
             $date = $date->timestamp();
@@ -148,10 +150,11 @@ class Nag_Search implements Serializable
         }
 
         // Get the full, sorted task list.
-        $tasks = Nag::listTasks(array(
-            'tasklists' => $this->_tasklists,
-            'completed' => $this->_completed,
-            'include_history' => false)
+        $tasks = Nag::listTasks(
+            [
+                'tasklists' => $this->_tasklists,
+                'completed' => $this->_completed,
+                'include_history' => false]
         );
         if (!empty($this->_search)) {
             $pattern = '/' . preg_quote($this->_search, '/') . '/i';
@@ -160,7 +163,7 @@ class Nag_Search implements Serializable
         if (!empty($this->_tags)) {
             $tagged_tasks = $injector->getInstance('Nag_Tagger')->search(
                 $this->_tags,
-                array('list' => $GLOBALS['display_tasklists'])
+                ['list' => $GLOBALS['display_tasklists']]
             );
         }
         $tasks->reset();
@@ -206,7 +209,7 @@ class Nag_Search implements Serializable
             }
         }
 
-      // Now that we have filtered results, load all tags at once.
+        // Now that we have filtered results, load all tags at once.
         $processed_results->loadTags();
         $processed_results->process();
 
@@ -227,7 +230,7 @@ class Nag_Search implements Serializable
         $vars->set('due_within', $this->_due[0]);
         $vars->set('due_of', $this->_due[1]);
 
-        $mask = array();
+        $mask = [];
         if ($this->_mask & self::MASK_NAME) {
             $mask[] = 'search_name';
         }
@@ -246,12 +249,12 @@ class Nag_Search implements Serializable
      */
     public function serialize()
     {
-        return serialize(array(
+        return serialize([
             'search' => $this->_search,
             'mask' => $this->_mask,
             'completed' => $this->_completed,
             'due' => $this->_due,
-            'tags' => $this->_tags));
+            'tags' => $this->_tags]);
     }
 
     /**

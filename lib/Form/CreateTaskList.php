@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Horde_Form for creating task lists.
  *
@@ -25,18 +26,23 @@ class Nag_Form_CreateTaskList extends Horde_Form
         $v->setDefault(Nag::randomColor());
         if ($GLOBALS['registry']->isAdmin()) {
             $this->addVariable(
-                _("System Task List"), 'system', 'boolean', false, false,
-                _("System task lists don't have an owner. Only administrators can change the task list settings and permissions."));
+                _("System Task List"),
+                'system',
+                'boolean',
+                false,
+                false,
+                _("System task lists don't have an owner. Only administrators can change the task list settings and permissions.")
+            );
         }
-        $this->addVariable(_("Description"), 'description', 'longtext', false, false, null, array(4, 60));
+        $this->addVariable(_("Description"), 'description', 'longtext', false, false, null, [4, 60]);
 
-        $this->setButtons(array(_("Create")));
+        $this->setButtons([_("Create")]);
     }
 
     public function execute()
     {
-        $info = array();
-        foreach (array('name', 'color', 'description', 'system') as $key) {
+        $info = [];
+        foreach (['name', 'color', 'description', 'system'] as $key) {
             $info[$key] = $this->_vars->get($key);
         }
 

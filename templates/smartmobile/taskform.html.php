@@ -1,5 +1,5 @@
 <div data-role="page" id="nag-taskform-view">
-  <?php echo $this->smartmobileHeader(array('backlink' => true, 'logout' => true, 'title' => _("My Tasks"))) ?>
+  <?php echo $this->smartmobileHeader(['backlink' => true, 'logout' => true, 'title' => _("My Tasks")]) ?>
   <div data-role="content">
     <form id="nag-task-form">
       <input type="hidden" name="tasklist" id="tasklist" />

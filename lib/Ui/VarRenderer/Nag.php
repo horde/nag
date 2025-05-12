@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file contains all Horde_Core_Ui_VarRenderer extensions required for
  * editing tasks.
@@ -26,21 +27,21 @@ class Horde_Core_Ui_VarRenderer_Nag extends Horde_Core_Ui_VarRenderer_Html
         if (!is_array($value)) {
             if ($value) {
                 if ($value % 10080 == 0) {
-                    $value = array('value' => $value / 10080, 'unit' => 10080);
+                    $value = ['value' => $value / 10080, 'unit' => 10080];
                 } elseif ($value % 1440 == 0) {
-                    $value = array('value' => $value / 1440, 'unit' => 1440);
+                    $value = ['value' => $value / 1440, 'unit' => 1440];
                 } elseif ($value % 60 == 0) {
-                    $value = array('value' => $value / 60, 'unit' => 60);
+                    $value = ['value' => $value / 60, 'unit' => 60];
                 } else {
-                    $value = array('value' => $value, 'unit' => 1);
+                    $value = ['value' => $value, 'unit' => 1];
                 }
                 $value['on'] = true;
             } else {
-                $value = array('on' => false);
+                $value = ['on' => false];
             }
         }
-        $units = array(1 => _("Minute(s)"), 60 => _("Hour(s)"),
-                       1440 => _("Day(s)"), 10080 => _("Week(s)"));
+        $units = [1 => _("Minute(s)"), 60 => _("Hour(s)"),
+            1440 => _("Day(s)"), 10080 => _("Week(s)")];
         $options = '';
         foreach ($units as $unit => $label) {
             $options .= '<option value="' . $unit;
@@ -50,31 +51,39 @@ class Horde_Core_Ui_VarRenderer_Nag extends Horde_Core_Ui_VarRenderer_Html
             $options .= '">' . $label . '</option>';
         }
 
-        return sprintf('<input id="%soff" type="radio" class="radio" name="%s[on]" value="0"%s /><label for="%soff">&nbsp;%s</label><br />',
-                       $varname,
-                       $varname,
-                       $value['on'] ? '' : ' checked="checked"',
-                       $varname,
-                       _("None"))
-            . sprintf('<input id="%son" type="radio" class="radio" name="%s[on]" value="1"%s />',
-                      $varname,
-                      $varname,
-                      $value['on'] ? ' checked="checked"' : '')
-            . sprintf('<input type="text" size="2" name="%s[value]" id="%s_value" value="%s" />',
-                      $varname,
-                      $varname,
-                      $value['on'] ? htmlspecialchars($value['value']) : 15)
-            . sprintf(' <select name="%s[unit]" id="%s_unit">%s</select>',
-                      $varname,
-                      $varname,
-                      $options);
+        return sprintf(
+            '<input id="%soff" type="radio" class="radio" name="%s[on]" value="0"%s /><label for="%soff">&nbsp;%s</label><br />',
+            $varname,
+            $varname,
+            $value['on'] ? '' : ' checked="checked"',
+            $varname,
+            _("None")
+        )
+            . sprintf(
+                '<input id="%son" type="radio" class="radio" name="%s[on]" value="1"%s />',
+                $varname,
+                $varname,
+                $value['on'] ? ' checked="checked"' : ''
+            )
+            . sprintf(
+                '<input type="text" size="2" name="%s[value]" id="%s_value" value="%s" />',
+                $varname,
+                $varname,
+                $value['on'] ? htmlspecialchars($value['value']) : 15
+            )
+            . sprintf(
+                ' <select name="%s[unit]" id="%s_unit">%s</select>',
+                $varname,
+                $varname,
+                $options
+            );
     }
 
     protected function _renderVarInput_NagDue($form, $var, $vars)
     {
         $var->type->getInfo($vars, $var, $task_due);
         if ($task_due == 0) {
-            $date = '+' . (int)$GLOBALS['prefs']->getValue('default_due_days') . ' days';
+            $date = '+' . (int) $GLOBALS['prefs']->getValue('default_due_days') . ' days';
             $time = $GLOBALS['prefs']->getValue('default_due_time');
             if ($time == 'now') {
                 $time = '';
@@ -113,9 +122,9 @@ class Horde_Core_Ui_VarRenderer_Nag extends Horde_Core_Ui_VarRenderer_Html
         );
 
         if ($GLOBALS['browser']->hasFeature('javascript')) {
-            Horde_Core_Ui_JsCalendar::init(array(
-                'full_weekdays' => true
-            ));
+            Horde_Core_Ui_JsCalendar::init([
+                'full_weekdays' => true,
+            ]);
             $GLOBALS['page_output']->addScriptFile('calendar.js');
             $html .= ' <span id="due_wday"></span>' .
                 Horde::img('calendar.png', _("Calendar"), 'id="dueimg"');
@@ -162,7 +171,7 @@ class Horde_Core_Ui_VarRenderer_Nag extends Horde_Core_Ui_VarRenderer_Html
         if ($on) {
             Horde_Core_Prefs_Ui_Widgets::alarmInit();
             $html .= '<br />';
-            $params = array('pref' => 'task_alarms', 'label' => '');
+            $params = ['pref' => 'task_alarms', 'label' => ''];
             if ((!empty($varvalue) && !isset($varvalue['on'])) ||
                 $form->isSubmitted()) {
                 $params['value'] = $varvalue;
@@ -364,9 +373,9 @@ class Horde_Core_Ui_VarRenderer_Nag extends Horde_Core_Ui_VarRenderer_Html
         );
 
         if ($GLOBALS['browser']->hasFeature('javascript')) {
-            Horde_Core_Ui_JsCalendar::init(array(
-                'full_weekdays' => true
-            ));
+            Horde_Core_Ui_JsCalendar::init([
+                'full_weekdays' => true,
+            ]);
             $GLOBALS['page_output']->addScriptFile('calendar.js');
             $html .= ' <span id="recur_end_wday"></span>' .
                 Horde::img('calendar.png', _("Set recurrence end date"), 'id="recur_endimg"');
@@ -411,7 +420,8 @@ class Horde_Core_Ui_VarRenderer_Nag extends Horde_Core_Ui_VarRenderer_Html
             _("%s %s days of %s"),
             Horde::label('due_within', _("Is due within")),
             '<input id="due_within" name="due_within" type="number" size="2" value="' . $vars->get('due_within') . '" />',
-            '<input id="due_of" name="due_of" type="text" value="' . $vars->get('due_of') . '" />')
+            '<input id="due_of" name="due_of" type="text" value="' . $vars->get('due_of') . '" />'
+        )
             . '<div class="horde-form-field-description">' . _("E.g., Is due within 2 days of today") . '</div>';
 
         return $html;
@@ -444,9 +454,9 @@ class Horde_Core_Ui_VarRenderer_Nag extends Horde_Core_Ui_VarRenderer_Html
         );
 
         if ($GLOBALS['browser']->hasFeature('javascript')) {
-            Horde_Core_Ui_JsCalendar::init(array(
-                'full_weekdays' => true
-            ));
+            Horde_Core_Ui_JsCalendar::init([
+                'full_weekdays' => true,
+            ]);
             $GLOBALS['page_output']->addScriptFile('calendar.js');
             $html .= ' <span id="start_wday"></span>' .
                 Horde::img('calendar.png', _("Calendar"), 'id="startimg"');
@@ -464,11 +474,13 @@ class Horde_Core_Ui_VarRenderer_Nag extends Horde_Core_Ui_VarRenderer_Html
         $value = htmlspecialchars($var->getValue($vars));
 
         $html = sprintf('<input id="%s" type="text" name="%s" value="%s" />', $varname, $varname, $value);
-        $html .= sprintf('<span id="%s_loading_img" style="display:none;">%s</span>',
+        $html .= sprintf(
+            '<span id="%s_loading_img" style="display:none;">%s</span>',
             $varname,
-            Horde::img('loading.gif', _("Loading...")));
+            Horde::img('loading.gif', _("Loading..."))
+        );
 
-        $GLOBALS['injector']->getInstance('Horde_Core_Factory_Imple')->create('Nag_Ajax_Imple_TagAutoCompleter', array('id' => $varname));
+        $GLOBALS['injector']->getInstance('Horde_Core_Factory_Imple')->create('Nag_Ajax_Imple_TagAutoCompleter', ['id' => $varname]);
         return $html;
     }
 
@@ -478,13 +490,15 @@ class Horde_Core_Ui_VarRenderer_Nag extends Horde_Core_Ui_VarRenderer_Html
         $GLOBALS['injector']->getInstance('Horde_Core_Factory_Imple')
             ->create(
                 'Nag_Ajax_Imple_ContactAutoCompleter',
-                array('id' => $name)
+                ['id' => $name]
             );
-        return sprintf('<input type="text" name="%s" id="%s" value="%s" autocomplete="off"%s />',
-                       $name,
-                       $name,
-                       @htmlspecialchars($var->getValue($vars)),
-                       $this->_getActionScripts($form, $var))
+        return sprintf(
+            '<input type="text" name="%s" id="%s" value="%s" autocomplete="off"%s />',
+            $name,
+            $name,
+            @htmlspecialchars($var->getValue($vars)),
+            $this->_getActionScripts($form, $var)
+        )
             . '<span id="' . $name . '_loading_img" style="display:none;">'
             . Horde::img('loading.gif', _("Loading..."))
             . '</span>';

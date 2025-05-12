@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Interface to the Horde_Content tagger
  *
@@ -14,7 +15,7 @@
 class Nag_Tagger extends Horde_Core_Tagger
 {
     protected $_app = 'nag';
-    protected $_types = array('task');
+    protected $_types = ['task'];
 
     /**
      * Searches for resources that are tagged with all of the requested tags.
@@ -26,9 +27,9 @@ class Nag_Tagger extends Horde_Core_Tagger
      *
      * @return array  A hash of results.
      */
-    public function search($tags, $filter = array())
+    public function search($tags, $filter = [])
     {
-        $args = array();
+        $args = [];
 
         // These filters are mutually exclusive
         if (array_key_exists('user', $filter)) {
@@ -40,7 +41,7 @@ class Nag_Tagger extends Horde_Core_Tagger
                 // user can see?
                 $tasklists = $GLOBALS['injector']->getInstance('Nag_Shares')
                     ->listSystemShares();
-                $args['listId'] = array();
+                $args['listId'] = [];
                 foreach ($tasklists as $name => $share) {
                     if ($share->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::READ)) {
                         $args['listId'][] = $name;
@@ -53,7 +54,7 @@ class Nag_Tagger extends Horde_Core_Tagger
         } elseif (!empty($filter['list'])) {
             // Only events located in specific takslist(s)
             if (!is_array($filter['list'])) {
-                $filter['list'] = array($filter['list']);
+                $filter['list'] = [$filter['list']];
             }
             $args['listId'] = $filter['list'];
         }
@@ -63,7 +64,7 @@ class Nag_Tagger extends Horde_Core_Tagger
             ->getInstance('Content_Tagger')
             ->ensureTags($tags);
 
-        $results = array();
+        $results = [];
         $args['typeId'] = $this->_type_ids['task'];
 
         return array_values($GLOBALS['injector']->getInstance('Content_Tagger')->getObjects($args));

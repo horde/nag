@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Test the task form.
  *
@@ -26,6 +27,7 @@
  * @author     Gunnar Wrobel <wrobel@pardus.de>
  * @link       http://www.horde.org/apps/nag
  * @license    http://www.horde.org/licenses/gpl GNU General Public License, version 2
+ * @coversNothing
  */
 class Nag_Unit_Form_Task_Base extends Nag_TestCase
 {
@@ -34,7 +36,7 @@ class Nag_Unit_Form_Task_Base extends Nag_TestCase
      *
      * @var Horde_Test_Setup
      */
-    static $setup;
+    public static $setup;
 
     private $_old_errorreporting;
 
@@ -71,7 +73,7 @@ class Nag_Unit_Form_Task_Base extends Nag_TestCase
         $vars->set('tasklist_id', $share->getName());
         $form = new Nag_Form_Task($vars, _("New Task"));
         $this->assertEquals(
-            array('test@example.com' => 'test@example.com'),
+            ['test@example.com' => 'test@example.com'],
             $this->_getAssignees($form)
         );
     }
@@ -85,7 +87,7 @@ class Nag_Unit_Form_Task_Base extends Nag_TestCase
         $vars->set('tasklist_id', $share->getName());
         $form = new Nag_Form_Task($vars, _("New Task"));
         $this->assertEquals(
-            array('jane' => 'jane', 'test@example.com' => 'test@example.com'),
+            ['jane' => 'jane', 'test@example.com' => 'test@example.com'],
             $this->_getAssignees($form)
         );
     }

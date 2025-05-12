@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file contains all Horde_Form extensions required for searching.
  *
@@ -17,7 +18,6 @@
 
 class Nag_Form_Search extends Horde_Form
 {
-
     public function __construct(&$vars, $title = '')
     {
         parent::__construct($vars, $title);
@@ -34,12 +34,12 @@ class Nag_Form_Search extends Horde_Form
             false,
             false,
             false,
-            array('values' => array(
-                  'search_name' =>  _("Name"),
-                  'search_desc' => _("Description")
-            ))
+            ['values' => [
+                'search_name' =>  _("Name"),
+                'search_desc' => _("Description"),
+            ]]
         );
-        $v->setDefault(array('search_name', 'search_desc'));
+        $v->setDefault(['search_name', 'search_desc']);
 
         $this->addVariable(_("Tagged with:"), 'search_tags', 'Nag:NagTags', false);
         $v = $this->addVariable(
@@ -49,11 +49,11 @@ class Nag_Form_Search extends Horde_Form
             false,
             false,
             false,
-            array('values' => array(
-                  Nag::VIEW_ALL => _("All"),
-                  Nag::VIEW_COMPLETE => _("Completed"),
-                  Nag::VIEW_INCOMPLETE => _("Incomplete")
-            ))
+            ['values' => [
+                Nag::VIEW_ALL => _("All"),
+                Nag::VIEW_COMPLETE => _("Completed"),
+                Nag::VIEW_INCOMPLETE => _("Incomplete"),
+            ]]
         );
         $v->setDefault(Nag::VIEW_ALL);
 
@@ -63,27 +63,32 @@ class Nag_Form_Search extends Horde_Form
         if ($vars->get('smart_id')) {
             $this->addVariable(_("SmartList Name:"), 'smartlist_name', 'text', false);
             $this->setButtons(_("Save"), _("Reset"));
-            $this->appendButtons(array(array('value' => _("Delete Smart List"), 'name' => 'deletebutton', 'class' => 'horde-delete')));
+            $this->appendButtons([['value' => _("Delete Smart List"), 'name' => 'deletebutton', 'class' => 'horde-delete']]);
         } else {
             $this->addVariable(_("Save this search as a Smart List?"), 'save_smartlist', 'boolean', false);
             $sl_name = $this->addVariable(_("Smart List Name:"), 'smartlist_name', 'text', false);
-            $save_action = new Horde_Form_Action_ConditionalEnable(array('target' => 'save_smartlist', 'enabled' => true, 'values' => 'on'));
+            $save_action = new Horde_Form_Action_ConditionalEnable(['target' => 'save_smartlist', 'enabled' => true, 'values' => 'on']);
             $sl_name->setAction($save_action);
             $this->setButtons(_("Search"), _("Reset"));
         }
 
     }
 
-    public function renderActive($renderer = null, $vars = null, $action = '',
-                          $method = 'get', $enctype = null, $focus = true)
-    {
+    public function renderActive(
+        $renderer = null,
+        $vars = null,
+        $action = '',
+        $method = 'get',
+        $enctype = null,
+        $focus = true
+    ) {
         $url = Horde::url('list.php');
         if ($this->_vars->get('smart_id')) {
             // Editing an existing smartlist.
-            $url->add(array('actionID' => 'smart', 'list' => $this->_vars->get('smart_id'), 'tab_name' => $this->_vars->get('smart_id')));
+            $url->add(['actionID' => 'smart', 'list' => $this->_vars->get('smart_id'), 'tab_name' => $this->_vars->get('smart_id')]);
         }
         return parent::renderActive(
-            $this->getRenderer(array('varrenderer_driver' => array('nag', 'nag'))),
+            $this->getRenderer(['varrenderer_driver' => ['nag', 'nag']]),
             $this->_vars,
             $url->setRaw(true),
             'post',

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2017 Horde LLC (http://www.horde.org/)
  *
@@ -93,7 +94,7 @@ class Tasks implements Iterator
     {
         global $registry;
 
-        $pushed = $registry->pushApp('nag', array('check_perms' => false));
+        $pushed = $registry->pushApp('nag', ['check_perms' => false]);
         $this->_driver->retrieve(Nag::VIEW_ALL, false);
         if ($pushed === true) {
             $registry->popApp();

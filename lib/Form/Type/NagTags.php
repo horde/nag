@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Horde_Form_Type_NagTags:: class provides a form field for autocompleting
  * tags.

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Test the task form with a sqlite DB.
  *
@@ -26,6 +27,7 @@
  * @author     Gunnar Wrobel <wrobel@pardus.de>
  * @link       http://www.horde.org/apps/nag
  * @license    http://www.horde.org/licenses/gpl GNU General Public License, version 2
+ * @coversNothing
  */
 class Nag_Unit_Form_Task_Sql_Pdo_SqliteTest extends Nag_Unit_Form_Task_Sql_Base
 {

@@ -13,12 +13,14 @@
 
         <?php if (strlen($this->task->desc)): ?>
 
-        <tr<?php if ($i++ % 2) echo ' bgcolor="#f1f1f1"' ?>>
+        <tr<?php if ($i++ % 2) {
+            echo ' bgcolor="#f1f1f1"';
+        } ?>>
           <td nowrap="nowrap" align="right" valign="top">
             <font size="2"><strong><?php echo _("Description:") ?></strong></font>
           </td>
           <td width="5">&nbsp;</td>
-          <td width="100%"><font size="2"><strong><?php echo $GLOBALS['injector']->getInstance('Horde_Core_Factory_TextFilter')->filter($this->task->desc, 'text2html', array('parselevel' => Horde_Text_Filter_Text2html::MICRO, 'callback' => null)) ?></strong></font></td>
+          <td width="100%"><font size="2"><strong><?php echo $GLOBALS['injector']->getInstance('Horde_Core_Factory_TextFilter')->filter($this->task->desc, 'text2html', ['parselevel' => Horde_Text_Filter_Text2html::MICRO, 'callback' => null]) ?></strong></font></td>
         </tr>
         <?php endif ?>
 

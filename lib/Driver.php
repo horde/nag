@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Nag_Driver:: defines an API for implementing storage backends for Nag.
  *
@@ -30,7 +31,7 @@ abstract class Nag_Driver
      *
      * @var array
      */
-    protected $_params = array();
+    protected $_params = [];
 
     /**
      * An error message to throw when something is wrong.
@@ -48,7 +49,7 @@ abstract class Nag_Driver
      *
      * @return Nag_Driver
      */
-    public function __construct(array $params = array(), $errormsg = null)
+    public function __construct(array $params = [], $errormsg = null)
     {
         $this->tasks = new Nag_Task();
         $this->_params = $params;
@@ -71,7 +72,7 @@ abstract class Nag_Driver
         if (!$this->tasks->count()) {
             $result = $this->retrieve(0);
         }
-        $alarms = array();
+        $alarms = [];
         $this->tasks->reset();
         while ($task = $this->tasks->each()) {
             if ($task->alarm &&
@@ -124,7 +125,7 @@ abstract class Nag_Driver
     public function add(array $task)
     {
         $task = array_merge(
-            array(
+            [
                 'actual' => 0.0,
                 'alarm' => 0,
                 'assignee' => null,
@@ -143,8 +144,8 @@ abstract class Nag_Driver
                 'status' => null,
                 'tags' => '',
                 'uid' => strval(new Horde_Support_Guid()),
-                'other' => []
-            ),
+                'other' => [],
+            ],
             $task
         );
 
@@ -155,9 +156,11 @@ abstract class Nag_Driver
         /* Log the creation of this item in the history log. */
         $history = $GLOBALS['injector']->getInstance('Horde_History');
         try {
-            $history->log('nag:' . $this->_tasklist . ':' . $task->uid,
-                          array('action' => 'add'),
-                          true);
+            $history->log(
+                'nag:' . $this->_tasklist . ':' . $task->uid,
+                ['action' => 'add'],
+                true
+            );
         } catch (Exception $e) {
             Horde::log($e, 'ERR');
         }
@@ -165,9 +168,11 @@ abstract class Nag_Driver
         /* Log completion status changes. */
         if ($task->completed) {
             try {
-                $history->log('nag:' . $this->_tasklist . ':' . $task->uid,
-                              array('action' => 'complete'),
-                              true);
+                $history->log(
+                    'nag:' . $this->_tasklist . ':' . $task->uid,
+                    ['action' => 'complete'],
+                    true
+                );
             } catch (Exception $e) {
                 Horde::log($e, 'ERR');
             }
@@ -186,7 +191,7 @@ abstract class Nag_Driver
             }
         }
 
-        return array($taskId, $task->uid);
+        return [$taskId, $task->uid];
     }
 
     /**
@@ -227,7 +232,7 @@ abstract class Nag_Driver
                     $completions = $task->recurrence->completions;
                     $exceptions = $task->recurrence->exceptions;
                 } else {
-                    $completions = $exceptions = array();
+                    $completions = $exceptions = [];
                 }
                 $task->recurrence = $properties['recurrence'];
                 $task->recurrence->completions = $completions;
@@ -280,12 +285,12 @@ abstract class Nag_Driver
             if (!empty($task->uid)) {
                 $history = $GLOBALS['injector']->getInstance('Horde_History');
                 try {
-                    $history->log('nag:' . $task->tasklist . ':' . $task->uid, array('action' => 'delete'), true);
+                    $history->log('nag:' . $task->tasklist . ':' . $task->uid, ['action' => 'delete'], true);
                 } catch (Exception $e) {
                     Horde::log($e, 'ERR');
                 }
                 try {
-                    $history->log('nag:' . $properties['tasklist'] . ':' . $task->uid, array('action' => 'add'), true);
+                    $history->log('nag:' . $properties['tasklist'] . ':' . $task->uid, ['action' => 'add'], true);
                 } catch (Exception $e) {
                     Horde::log($e, 'ERR');
                 }
@@ -344,9 +349,11 @@ abstract class Nag_Driver
         if (!empty($task->uid)) {
             try {
                 $GLOBALS['injector']->getInstance('Horde_History')
-                  ->log('nag:' . $log_tasklist . ':' . $task->uid,
-                        array('action' => 'modify'),
-                        true);
+                  ->log(
+                      'nag:' . $log_tasklist . ':' . $task->uid,
+                      ['action' => 'modify'],
+                      true
+                  );
             } catch (Exception $e) {
                 Horde::log($e, 'ERR');
             }
@@ -354,15 +361,17 @@ abstract class Nag_Driver
 
         /* Log completion status changes. */
         if ($completed_changed) {
-            $attributes = array('action' => 'complete');
+            $attributes = ['action' => 'complete'];
             if (!$new_completed) {
                 $attributes['ts'] = 0;
             }
             try {
                 $GLOBALS['injector']->getInstance('Horde_History')
-                  ->log('nag:' . $log_tasklist . ':' . $task->uid,
-                        $attributes,
-                        true);
+                  ->log(
+                      'nag:' . $log_tasklist . ':' . $task->uid,
+                      $attributes,
+                      true
+                  );
             } catch (Exception $e) {
                 Horde::log($e, 'ERR');
             }
@@ -398,17 +407,17 @@ abstract class Nag_Driver
         $delete = $this->_delete($taskId);
 
         /* Remove tags */
-        $task->tags = array();
+        $task->tags = [];
         $this->_updateTags($task->toHash());
 
         /* Tell content we removed the object */
         $GLOBALS['injector']->getInstance('Content_Objects_Manager')
-            ->delete(array($task->uid), 'task');
+            ->delete([$task->uid], 'task');
 
         /* Log the deletion of this item in the history log. */
         if (!empty($task->uid)) {
             try {
-                $GLOBALS['injector']->getInstance('Horde_History')->log('nag:' . $this->_tasklist . ':' . $task->uid, array('action' => 'delete'), true);
+                $GLOBALS['injector']->getInstance('Horde_History')->log('nag:' . $this->_tasklist . ':' . $task->uid, ['action' => 'delete'], true);
             } catch (Exception $e) {
                 Horde::log($e, 'ERR');
             }
@@ -455,15 +464,16 @@ abstract class Nag_Driver
             foreach ($ids as $uid) {
                 $history->log(
                     'nag:' . $this->_tasklist . ':' . $uid,
-                    array('action' => 'delete'),
-                    true);
+                    ['action' => 'delete'],
+                    true
+                );
 
                 $GLOBALS['injector']->getInstance('Nag_Tagger')
-                    ->replaceTags($uid, array(), $GLOBALS['registry']->getAuth(), 'task');
+                    ->replaceTags($uid, [], $GLOBALS['registry']->getAuth(), 'task');
 
                 /* Tell content we removed the object */
                 $GLOBALS['injector']->getInstance('Content_Objects_Manager')
-                    ->delete(array($uid), 'task');
+                    ->delete([$uid], 'task');
             }
         } catch (Exception $e) {
             Horde::log($e, 'ERR');
@@ -531,9 +541,7 @@ abstract class Nag_Driver
      * @param mixed  $token  A value indicating the last synchronization point,
      *                       if available.
      */
-    public function synchronize($token = false)
-    {
-    }
+    public function synchronize($token = false) {}
 
     /**
      * Helper function to update an existing event's tags to tagger storage.

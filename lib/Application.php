@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Nag application API.
  *
@@ -37,10 +38,10 @@ class Nag_Application extends Horde_Registry_Application
 {
     /**
      */
-    public $features = array(
+    public $features = [
         'smartmobileView' => true,
         'modseq' => true,
-    );
+    ];
 
     /**
      */
@@ -60,7 +61,8 @@ class Nag_Application extends Horde_Registry_Application
          * the fileroot entry. */
         $GLOBALS['injector']->getInstance('Horde_Autoloader')
             ->addClassPathMapper(
-                new Horde_Autoloader_ClassPathMapper_Prefix('/^Content_/', $GLOBALS['registry']->get('fileroot', 'content') . '/lib/'));
+                new Horde_Autoloader_ClassPathMapper_Prefix('/^Content_/', $GLOBALS['registry']->get('fileroot', 'content') . '/lib/')
+            );
 
         // Create a share instance.
         $GLOBALS['nag_shares'] = $GLOBALS['injector']->getInstance('Horde_Core_Factory_Share')->create();
@@ -72,12 +74,12 @@ class Nag_Application extends Horde_Registry_Application
      */
     public function perms()
     {
-        return array(
-            'max_tasks' => array(
+        return [
+            'max_tasks' => [
                 'title' => _("Maximum Number of Tasks"),
-                'type' => 'int'
-            )
-        );
+                'type' => 'int',
+            ],
+        ];
     }
 
     /**
@@ -116,7 +118,8 @@ class Nag_Application extends Horde_Registry_Application
              $perms->hasAppPermission('max_tasks') > Nag::countTasks())) {
             $sidebar->addNewButton(
                 _("_New Task"),
-                Horde::url('task.php')->add('actionID', 'add_task'));
+                Horde::url('task.php')->add('actionID', 'add_task')
+            );
 
             if ($GLOBALS['browser']->hasFeature('dom')) {
                 $page_output->addScriptFile('scriptaculous/effects.js', 'horde');
@@ -124,7 +127,7 @@ class Nag_Application extends Horde_Registry_Application
                 $blank = new Horde_Url();
                 $sidebar->newExtra = $blank->link(
                     array_merge(
-                        array('onclick' => 'RedBox.showInline(\'quickAddInfoPanel\'); $(\'quickText\').focus(); return false;'),
+                        ['onclick' => 'RedBox.showInline(\'quickAddInfoPanel\'); $(\'quickText\').focus(); return false;'],
                         Horde::getAccessKeyAndTitle(_("_Quick Add"), false, true)
                     )
                 );
@@ -136,54 +139,54 @@ class Nag_Application extends Horde_Registry_Application
         $edit = Horde::url('tasklists/edit.php');
         $user = $GLOBALS['registry']->getAuth();
 
-        $sidebar->containers['my'] = array(
-            'header' => array(
+        $sidebar->containers['my'] = [
+            'header' => [
                 'id' => 'nag-toggle-my',
                 'label' => _("My Task Lists"),
                 'collapsed' => false,
-            ),
-        );
+            ],
+        ];
         if (!$GLOBALS['prefs']->isLocked('default_tasklist')) {
-            $sidebar->containers['my']['header']['add'] = array(
+            $sidebar->containers['my']['header']['add'] = [
                 'url' => Horde::url('tasklists/create.php'),
                 'label' => _("Create a new Task List"),
-            );
+            ];
         }
         if ($GLOBALS['registry']->isAdmin()) {
-            $sidebar->containers['system'] = array(
-                'header' => array(
+            $sidebar->containers['system'] = [
+                'header' => [
                     'id' => 'nag-toggle-system',
                     'label' => _("System Task Lists"),
                     'collapsed' => true,
-                ),
-            );
-            $sidebar->containers['system']['header']['add'] = array(
+                ],
+            ];
+            $sidebar->containers['system']['header']['add'] = [
                 'url' => Horde::url('tasklists/create.php')->add('system', 1),
                 'label' => _("Create a new System Task List"),
-            );
+            ];
         }
-        $sidebar->containers['shared'] = array(
-            'header' => array(
+        $sidebar->containers['shared'] = [
+            'header' => [
                 'id' => 'nag-toggle-shared',
                 'label' => _("Shared Task Lists"),
                 'collapsed' => true,
-            ),
-        );
+            ],
+        ];
         foreach (Nag::listTasklists(false, Horde_Perms::SHOW, false) as $name => $tasklist) {
-            $url = $list->add(array(
+            $url = $list->add([
                 'display_tasklist' => $name,
                 'actionID' => in_array($name, $display_tasklists)
                     ? 'remove_displaylist'
-                    : 'add_displaylist'
-            ));
-            $row = array(
+                    : 'add_displaylist',
+            ]);
+            $row = [
                 'selected' => in_array($name, $display_tasklists),
                 'url' => $url,
                 'label' => Nag::getLabel($tasklist),
                 'color' => $tasklist->get('color') ?: '#dddddd',
                 'edit' => $edit->add('t', $tasklist->getName()),
                 'type' => 'checkbox',
-            );
+            ];
             if ($GLOBALS['registry']->isAdmin() &&
                 is_null($tasklist->get('owner'))) {
                 $sidebar->addRow($row, 'system');
@@ -197,13 +200,13 @@ class Nag_Application extends Horde_Registry_Application
 
     /**
      */
-    public function hasPermission($permission, $allowed, $opts = array())
+    public function hasPermission($permission, $allowed, $opts = [])
     {
         if (is_array($allowed)) {
             switch ($permission) {
-            case 'max_tasks':
-                $allowed = max($allowed);
-                break;
+                case 'max_tasks':
+                    $allowed = max($allowed);
+                    break;
             }
         }
         return $allowed;
@@ -219,7 +222,7 @@ class Nag_Application extends Horde_Registry_Application
     {
         try {
             $shares = $GLOBALS['nag_shares']
-                ->listShares($user, array('attributes' => $user));
+                ->listShares($user, ['attributes' => $user]);
         } catch (Horde_Share_Exception $e) {
             Horde::log($e, 'ERR');
             throw new Nag_Exception($e);
@@ -241,7 +244,7 @@ class Nag_Application extends Horde_Registry_Application
         try {
             $shares = $GLOBALS['nag_shares']->listShares($user);
             foreach ($shares as $share) {
-               $share->removeUser($user);
+                $share->removeUser($user);
             }
         } catch (Horde_Share_Exception $e) {
             Horde::log($e, 'NOTICE');
@@ -266,7 +269,7 @@ class Nag_Application extends Horde_Registry_Application
         }
 
         $group = $GLOBALS['injector']->getInstance('Horde_Group');
-        $alarm_list = array();
+        $alarm_list = [];
         $tasklists = is_null($user) ?
             array_keys($GLOBALS['nag_shares']->listAllShares()) :
             $GLOBALS['display_tasklists'];
@@ -286,13 +289,13 @@ class Nag_Application extends Horde_Registry_Application
                 }
                 $users = array_unique($users);
             } else {
-                $users = array($user);
+                $users = [$user];
             }
             foreach ($users as $alarm_user) {
-                $prefs = $GLOBALS['injector']->getInstance('Horde_Core_Factory_Prefs')->create('nag', array(
+                $prefs = $GLOBALS['injector']->getInstance('Horde_Core_Factory_Prefs')->create('nag', [
                     'cache' => false,
-                    'user' => $alarm_user
-                ));
+                    'user' => $alarm_user,
+                ]);
                 $GLOBALS['registry']->setLanguageEnvironment($prefs->getValue('language'));
                 $alarm_list[] = $alarm->toAlarm($alarm_user, $prefs);
             }
@@ -306,54 +309,56 @@ class Nag_Application extends Horde_Registry_Application
 
     /**
      */
-    public function topbarCreate(Horde_Tree_Renderer_Base $tree, $parent = null,
-                                 array $params = array())
-    {
+    public function topbarCreate(
+        Horde_Tree_Renderer_Base $tree,
+        $parent = null,
+        array $params = []
+    ) {
         global $registry;
 
         switch ($params['id']) {
-        case 'menu':
-            $add = Horde::url('task.php', true)->add('actionID', 'add_task');
+            case 'menu':
+                $add = Horde::url('task.php', true)->add('actionID', 'add_task');
 
-            $tree->addNode(array(
-                'id' => $parent . '__new',
-                'parent' => $parent,
-                'label' => _("New Task"),
-                'expanded' => false,
-                'params' => array(
-                    'icon' => Horde_Themes::img('add.png'),
-                    'url' => $add
-                )
-            ));
-
-            $user = $registry->getAuth();
-            foreach (Nag::listTasklists(false, Horde_Perms::SHOW, false) as $name => $tasklist) {
-                if (!$tasklist->hasPermission($user, Horde_Perms::EDIT)) {
-                    continue;
-                }
-                $tree->addNode(array(
-                    'id' => $parent . $name . '__new',
-                    'parent' => $parent . '__new',
-                    'label' => sprintf(_("in %s"), Nag::getLabel($tasklist)),
+                $tree->addNode([
+                    'id' => $parent . '__new',
+                    'parent' => $parent,
+                    'label' => _("New Task"),
                     'expanded' => false,
-                    'params' => array(
+                    'params' => [
                         'icon' => Horde_Themes::img('add.png'),
-                        'url' => $add->copy()->add('tasklist_id', $name)
-                    )
-                ));
-            }
+                        'url' => $add,
+                    ],
+                ]);
 
-            $tree->addNode(array(
-                'id' => $parent . '__search',
-                'parent' => $parent,
-                'label' => _("Search"),
-                'expanded' => false,
-                'params' => array(
-                    'icon' => Horde_Themes::img('search.png'),
-                    'url' => Horde::url('search.php')
-                )
-            ));
-            break;
+                $user = $registry->getAuth();
+                foreach (Nag::listTasklists(false, Horde_Perms::SHOW, false) as $name => $tasklist) {
+                    if (!$tasklist->hasPermission($user, Horde_Perms::EDIT)) {
+                        continue;
+                    }
+                    $tree->addNode([
+                        'id' => $parent . $name . '__new',
+                        'parent' => $parent . '__new',
+                        'label' => sprintf(_("in %s"), Nag::getLabel($tasklist)),
+                        'expanded' => false,
+                        'params' => [
+                            'icon' => Horde_Themes::img('add.png'),
+                            'url' => $add->copy()->add('tasklist_id', $name),
+                        ],
+                    ]);
+                }
+
+                $tree->addNode([
+                    'id' => $parent . '__search',
+                    'parent' => $parent,
+                    'label' => _("Search"),
+                    'expanded' => false,
+                    'params' => [
+                        'icon' => Horde_Themes::img('search.png'),
+                        'url' => Horde::url('search.php'),
+                    ],
+                ]);
+                break;
         }
     }
 
@@ -361,7 +366,7 @@ class Nag_Application extends Horde_Registry_Application
 
     /**
      */
-    public function backup(array $users = array())
+    public function backup(array $users = [])
     {
         global $injector, $nag_shares;
 
@@ -374,15 +379,15 @@ class Nag_Application extends Horde_Registry_Application
             $users = array_keys($users);
         }
 
-        $getUser = function($user) use ($factory, $nag_shares)
-        {
+        $getUser = function ($user) use ($factory, $nag_shares) {
             global $registry;
 
             $backup = new Backup\User($user);
             $this->_backupPrefs($backup, 'nag');
 
             $shares = $nag_shares->listShares(
-                $user, array('attributes' => $user)
+                $user,
+                ['attributes' => $user]
             );
             if (!$shares) {
                 return $backup;
@@ -390,8 +395,8 @@ class Nag_Application extends Horde_Registry_Application
 
             // Need to pushApp() here because this method is called delayed,
             // but we need Nag's $conf.
-            $pushed = $registry->pushApp('nag', array('check_perms' => false));
-            $tasklists = array();
+            $pushed = $registry->pushApp('nag', ['check_perms' => false]);
+            $tasklists = [];
             foreach ($shares as $share) {
                 $tasklists[$share->getId()] = $share->toHash();
                 $backup->collections[] = new Backup\Collection(
@@ -423,46 +428,46 @@ class Nag_Application extends Horde_Registry_Application
 
         $count = 0;
         switch ($data->getType()) {
-        case 'preferences':
+            case 'preferences':
                 $count = $this->_restorePrefs($data, 'nag');
                 break;
 
-        case 'tasklists':
-            foreach ($data as $tasklist) {
-                $tasklist['owner'] = $data->getUser();
-                $tasklist['attributes'] = array_intersect_key(
-                    $tasklist['attributes'],
-                    array(
-                        'name'    => true,
-                        'desc'    => true,
-                        'color'   => true,
-                        'issmart' => true,
-                        'search'  => true)
-                );
-                $nag_shares->fromHash($tasklist);
-                $count++;
-            }
-            break;
-
-        case 'tasks':
-            $factory = $injector->getInstance('Nag_Factory_Driver');
-            $map = array();
-            foreach ($data as $task) {
-                if (!empty($task['recurrence'])) {
-                    $task['recurrence'] = Horde_Date_Recurrence::fromHash(
-                        $task['recurrence']
+            case 'tasklists':
+                foreach ($data as $tasklist) {
+                    $tasklist['owner'] = $data->getUser();
+                    $tasklist['attributes'] = array_intersect_key(
+                        $tasklist['attributes'],
+                        [
+                            'name'    => true,
+                            'desc'    => true,
+                            'color'   => true,
+                            'issmart' => true,
+                            'search'  => true]
                     );
+                    $nag_shares->fromHash($tasklist);
+                    $count++;
                 }
-                if (!empty($task['parent']) &&
-                    isset($map[$task['parent']])) {
-                    $task['parent'] = $map[$task['parent']];
+                break;
+
+            case 'tasks':
+                $factory = $injector->getInstance('Nag_Factory_Driver');
+                $map = [];
+                foreach ($data as $task) {
+                    if (!empty($task['recurrence'])) {
+                        $task['recurrence'] = Horde_Date_Recurrence::fromHash(
+                            $task['recurrence']
+                        );
+                    }
+                    if (!empty($task['parent']) &&
+                        isset($map[$task['parent']])) {
+                        $task['parent'] = $map[$task['parent']];
+                    }
+                    $driver = $factory->create($task['tasklist_id']);
+                    $ids = $driver->add($task);
+                    $map[$task['task_id']] = $ids[0];
+                    $count++;
                 }
-                $driver = $factory->create($task['tasklist_id']);
-                $ids = $driver->add($task);
-                $map[$task['task_id']] = $ids[0];
-                $count++;
-            }
-            break;
+                break;
         }
 
         return $count;
@@ -472,7 +477,7 @@ class Nag_Application extends Horde_Registry_Application
      */
     public function restoreDependencies()
     {
-        return array('tasks' => array('tasklists'));
+        return ['tasks' => ['tasklists']];
     }
 
     /* Download data. */
@@ -485,71 +490,73 @@ class Nag_Application extends Horde_Registry_Application
         global $display_tasklists, $injector, $registry;
 
         switch ($vars->actionID) {
-        case 'export':
-            $allowed = array_keys(
-                Nag::listTasklists(false, Horde_Perms::READ, false)
-            );
-            $tasklists = $vars->get('exportList', $allowed);
-            if (!is_array($tasklists)) {
-                $tasklists = array($tasklists);
-            }
-            $tasklists = array_intersect($tasklists, $allowed);
-
-            /* Get the full, sorted task list. */
-            $tasks = Nag::listTasks(array(
-                'tasklists' => $tasklists,
-                'completed' => $vars->exportTasks,
-                'include_tags' => true,
-                'include_history' => false)
-            );
-
-            $tasks->reset();
-            switch ($vars->exportID) {
-            case Horde_Data::EXPORT_CSV:
-                $data = array();
-
-                while ($task = $tasks->each()) {
-                    $task = $task->toHash();
-                    $task['desc'] = str_replace(',', '', $task['desc']);
-                    $task['tags'] = implode(',', $task['tags']);
-                    unset(
-                        $task['complete_link'],
-                        $task['delete_link'],
-                        $task['edit_link'],
-                        $task['parent'],
-                        $task['task_id'],
-                        $task['tasklist_id'],
-                        $task['view_link'],
-                        $task['recurrence'],
-                        $task['methods']
-                    );
-                    foreach (array('start', 'due', 'completed_date') as $field) {
-                        if (!empty($task[$field])) {
-                            $date = new Horde_Date($task[$field]);
-                            $task[$field] = $date->format('c');
-                        }
-                    }
-                    $data[] = $task;
-                }
-
-                $injector->getInstance('Horde_Core_Factory_Data')->create('Csv', array('cleanup' => array($this, 'cleanupData')))->exportFile(_("tasks.csv"), $data, true);
-                exit;
-
-            case Horde_Data::EXPORT_ICALENDAR:
-                $iCal = new Horde_Icalendar();
-                $iCal->setAttribute(
-                    'PRODID',
-                    '-//The Horde Project//Nag ' . $registry->getVersion() . '//EN');
-                while ($task = $tasks->each()) {
-                    $iCal->addComponent($task->toiCalendar($iCal));
-                }
-
-                return array(
-                    'data' => $iCal->exportvCalendar(),
-                    'name' => _("tasks.ics"),
-                    'type' => 'text/calendar'
+            case 'export':
+                $allowed = array_keys(
+                    Nag::listTasklists(false, Horde_Perms::READ, false)
                 );
-            }
+                $tasklists = $vars->get('exportList', $allowed);
+                if (!is_array($tasklists)) {
+                    $tasklists = [$tasklists];
+                }
+                $tasklists = array_intersect($tasklists, $allowed);
+
+                /* Get the full, sorted task list. */
+                $tasks = Nag::listTasks(
+                    [
+                        'tasklists' => $tasklists,
+                        'completed' => $vars->exportTasks,
+                        'include_tags' => true,
+                        'include_history' => false]
+                );
+
+                $tasks->reset();
+                switch ($vars->exportID) {
+                    case Horde_Data::EXPORT_CSV:
+                        $data = [];
+
+                        while ($task = $tasks->each()) {
+                            $task = $task->toHash();
+                            $task['desc'] = str_replace(',', '', $task['desc']);
+                            $task['tags'] = implode(',', $task['tags']);
+                            unset(
+                                $task['complete_link'],
+                                $task['delete_link'],
+                                $task['edit_link'],
+                                $task['parent'],
+                                $task['task_id'],
+                                $task['tasklist_id'],
+                                $task['view_link'],
+                                $task['recurrence'],
+                                $task['methods']
+                            );
+                            foreach (['start', 'due', 'completed_date'] as $field) {
+                                if (!empty($task[$field])) {
+                                    $date = new Horde_Date($task[$field]);
+                                    $task[$field] = $date->format('c');
+                                }
+                            }
+                            $data[] = $task;
+                        }
+
+                        $injector->getInstance('Horde_Core_Factory_Data')->create('Csv', ['cleanup' => [$this, 'cleanupData']])->exportFile(_("tasks.csv"), $data, true);
+                        exit;
+
+                    case Horde_Data::EXPORT_ICALENDAR:
+                        $iCal = new Horde_Icalendar();
+                        $iCal->setAttribute(
+                            'PRODID',
+                            '-//The Horde Project//Nag ' . $registry->getVersion() . '//EN'
+                        );
+                        while ($task = $tasks->each()) {
+                            $iCal->addComponent($task->toiCalendar($iCal));
+                        }
+
+                        return [
+                            'data' => $iCal->exportvCalendar(),
+                            'name' => _("tasks.ics"),
+                            'type' => 'text/calendar',
+                        ];
+                }
         }
     }
 
@@ -572,7 +579,7 @@ class Nag_Application extends Horde_Registry_Application
         $hordeUser = $registry->convertUsername($user, true);
         $shares = $nag_shares->listShares($hordeUser);
         $dav = $injector->getInstance('Horde_Dav_Storage');
-        $tasklists = array();
+        $tasklists = [];
         foreach ($shares as $id => $share) {
             if ($user == '-system-' && $share->get('owner')) {
                 continue;
@@ -581,7 +588,7 @@ class Nag_Application extends Horde_Registry_Application
                 $id = $dav->getExternalCollectionId($id, 'tasks') ?: $id;
             } catch (Horde_Dav_Exception $e) {
             }
-            $tasklists[] = array(
+            $tasklists[] = [
                 'id' => $id,
                 'uri' => $id,
                 '{' . CalDAV\Plugin::NS_CALENDARSERVER . '}shared-url' =>
@@ -589,7 +596,8 @@ class Nag_Application extends Horde_Registry_Application
                 'principaluri' => 'principals/' . $user,
                 '{http://sabredav.org/ns}owner-principal' =>
                     'principals/'
-                        . ($share->get('owner')
+                        . (
+                            $share->get('owner')
                            ? $registry->convertUsername($share->get('owner'), false)
                            : '-system-'
                         ),
@@ -598,9 +606,9 @@ class Nag_Application extends Horde_Registry_Application
                     $share->get('desc'),
                 '{http://apple.com/ns/ical/}calendar-color' =>
                     $share->get('color'),
-                '{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set' => new Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet(array('VTODO')),
+                '{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set' => new Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet(['VTODO']),
                 '{http://sabredav.org/ns}read-only' => !$share->hasPermission($hordeUser, Horde_Perms::EDIT),
-            );
+            ];
         }
         return $tasklists;
     }
@@ -624,7 +632,7 @@ class Nag_Application extends Horde_Registry_Application
         $storage->retrieve();
         $storage->tasks->reset();
 
-        $tasks = array();
+        $tasks = [];
         while ($task = $storage->tasks->each()) {
             $id = $task->id;
             $modified = $this->_modified($internal, $task->uid);
@@ -632,13 +640,13 @@ class Nag_Application extends Horde_Registry_Application
                 $id = $dav->getExternalObjectId($id, $internal) ?: $id . '.ics';
             } catch (Horde_Dav_Exception $e) {
             }
-            $tasks[] = array(
+            $tasks[] = [
                 'id' => $id,
                 'uri' => $id,
                 'lastmodified' => $modified,
                 'etag' => '"' . md5($task->id . '|' . $modified) . '"',
                 'calendarid' => $collection,
-            );
+            ];
         }
 
         return $tasks;
@@ -674,7 +682,7 @@ class Nag_Application extends Horde_Registry_Application
         $ical->addComponent($task->toiCalendar($ical));
         $data = $ical->exportvCalendar();
 
-        return array(
+        return [
             'id' => $id,
             'calendardata' => $data,
             'uri' => $id,
@@ -682,7 +690,7 @@ class Nag_Application extends Horde_Registry_Application
             'etag' => '"' . md5($task->id . '|' . $modified) . '"',
             'calendarid' => $collection,
             'size' => strlen($data),
-        );
+        ];
     }
 
     /**

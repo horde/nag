@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The factory for the tasklists handler.
  *
@@ -15,7 +16,7 @@ class Nag_Factory_Tasklists
      *
      * @var array
      */
-    private $_instances = array();
+    private $_instances = [];
 
     /**
      * The injector.
@@ -49,14 +50,14 @@ class Nag_Factory_Tasklists
         if (empty($this->_instances[$driver])) {
             $class = 'Nag_Tasklists_' . $driver;
             if (class_exists($class)) {
-                $params = array();
+                $params = [];
                 if (!empty($GLOBALS['conf']['share']['auto_create'])) {
                     $params['auto_create'] = true;
                 }
                 switch ($driver) {
-                case 'Default':
-                    $params['identity'] = $this->_injector->getInstance('Horde_Core_Factory_Identity')->create();
-                    break;
+                    case 'Default':
+                        $params['identity'] = $this->_injector->getInstance('Horde_Core_Factory_Identity')->create();
+                        break;
                 }
                 $this->_instances[$driver] = new $class(
                     $GLOBALS['nag_shares'],

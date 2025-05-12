@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Horde_Form_Type_NagRecurrence class provides a form field for editing
  * task recurrences.
@@ -29,93 +30,102 @@ class Nag_Form_Type_NagRecurrence extends Horde_Form_Type
 
         $recurrence->setRecurType($recur);
         switch ($recur) {
-        case Horde_Date_Recurrence::RECUR_DAILY:
-            $recurrence->setRecurInterval($vars->get('recur_daily_interval', 1));
-            break;
+            case Horde_Date_Recurrence::RECUR_DAILY:
+                $recurrence->setRecurInterval($vars->get('recur_daily_interval', 1));
+                break;
 
-        case Horde_Date_Recurrence::RECUR_WEEKLY:
-            $weekly = $vars->weekly;
-            $weekdays = 0;
-            if (is_array($weekly)) {
-                foreach ($weekly as $day) {
-                    $weekdays |= $day;
+            case Horde_Date_Recurrence::RECUR_WEEKLY:
+                $weekly = $vars->weekly;
+                $weekdays = 0;
+                if (is_array($weekly)) {
+                    foreach ($weekly as $day) {
+                        $weekdays |= $day;
+                    }
                 }
-            }
 
-            if ($weekdays == 0) {
-                // Sunday starts at 0.
-                switch ($recurrence->start->dayOfWeek()) {
-                case 0: $weekdays |= Horde_Date::MASK_SUNDAY; break;
-                case 1: $weekdays |= Horde_Date::MASK_MONDAY; break;
-                case 2: $weekdays |= Horde_Date::MASK_TUESDAY; break;
-                case 3: $weekdays |= Horde_Date::MASK_WEDNESDAY; break;
-                case 4: $weekdays |= Horde_Date::MASK_THURSDAY; break;
-                case 5: $weekdays |= Horde_Date::MASK_FRIDAY; break;
-                case 6: $weekdays |= Horde_Date::MASK_SATURDAY; break;
+                if ($weekdays == 0) {
+                    // Sunday starts at 0.
+                    switch ($recurrence->start->dayOfWeek()) {
+                        case 0: $weekdays |= Horde_Date::MASK_SUNDAY;
+                            break;
+                        case 1: $weekdays |= Horde_Date::MASK_MONDAY;
+                            break;
+                        case 2: $weekdays |= Horde_Date::MASK_TUESDAY;
+                            break;
+                        case 3: $weekdays |= Horde_Date::MASK_WEDNESDAY;
+                            break;
+                        case 4: $weekdays |= Horde_Date::MASK_THURSDAY;
+                            break;
+                        case 5: $weekdays |= Horde_Date::MASK_FRIDAY;
+                            break;
+                        case 6: $weekdays |= Horde_Date::MASK_SATURDAY;
+                            break;
+                    }
                 }
-            }
 
-            $recurrence->setRecurInterval($vars->get('recur_weekly_interval', 1));
-            $recurrence->setRecurOnDay($weekdays);
-            break;
+                $recurrence->setRecurInterval($vars->get('recur_weekly_interval', 1));
+                $recurrence->setRecurOnDay($weekdays);
+                break;
 
-        case Horde_Date_Recurrence::RECUR_MONTHLY_DATE:
-            switch ($vars->recur_monthly_scheme) {
-            case Horde_Date_Recurrence::RECUR_MONTHLY_WEEKDAY:
-            case Horde_Date_Recurrence::RECUR_MONTHLY_LAST_WEEKDAY:
-                $recurrence->setRecurType($vars->recur_monthly_scheme);
             case Horde_Date_Recurrence::RECUR_MONTHLY_DATE:
-                $recurrence->setRecurInterval(
-                    $vars->recur_monthly
-                        ? 1
-                        : $vars->get('recur_monthly_interval', 1)
-                );
+                switch ($vars->recur_monthly_scheme) {
+                    case Horde_Date_Recurrence::RECUR_MONTHLY_WEEKDAY:
+                    case Horde_Date_Recurrence::RECUR_MONTHLY_LAST_WEEKDAY:
+                        $recurrence->setRecurType($vars->recur_monthly_scheme);
+                        // no break
+                    case Horde_Date_Recurrence::RECUR_MONTHLY_DATE:
+                        $recurrence->setRecurInterval(
+                            $vars->recur_monthly
+                                ? 1
+                                : $vars->get('recur_monthly_interval', 1)
+                        );
+                        break;
+                    default:
+                        $recurrence->setRecurInterval($vars->get('recur_day_of_month_interval', 1));
+                        break;
+                }
                 break;
-            default:
-                $recurrence->setRecurInterval($vars->get('recur_day_of_month_interval', 1));
+
+            case Horde_Date_Recurrence::RECUR_MONTHLY_WEEKDAY:
+                $recurrence->setRecurInterval($vars->get('recur_week_of_month_interval', 1));
                 break;
-            }
-            break;
 
-        case Horde_Date_Recurrence::RECUR_MONTHLY_WEEKDAY:
-            $recurrence->setRecurInterval($vars->get('recur_week_of_month_interval', 1));
-            break;
+            case Horde_Date_Recurrence::RECUR_MONTHLY_LAST_WEEKDAY:
+                $recurrence->setRecurInterval($vars->get('recur_last_week_of_month_interval', 1));
+                break;
 
-        case Horde_Date_Recurrence::RECUR_MONTHLY_LAST_WEEKDAY:
-            $recurrence->setRecurInterval($vars->get('recur_last_week_of_month_interval', 1));
-            break;
-
-        case Horde_Date_Recurrence::RECUR_YEARLY_DATE:
-            switch ($vars->recur_yearly_scheme) {
-            case Horde_Date_Recurrence::RECUR_YEARLY_WEEKDAY:
-            case Horde_Date_Recurrence::RECUR_YEARLY_DAY:
-                $recurrence->setRecurType($vars->recur_yearly_scheme);
             case Horde_Date_Recurrence::RECUR_YEARLY_DATE:
-                $recurrence->setRecurInterval(
-                    $vars->recur_yearly
-                        ? 1
-                        : $vars->get('recur_yearly_interval', 1)
-                );
+                switch ($vars->recur_yearly_scheme) {
+                    case Horde_Date_Recurrence::RECUR_YEARLY_WEEKDAY:
+                    case Horde_Date_Recurrence::RECUR_YEARLY_DAY:
+                        $recurrence->setRecurType($vars->recur_yearly_scheme);
+                        // no break
+                    case Horde_Date_Recurrence::RECUR_YEARLY_DATE:
+                        $recurrence->setRecurInterval(
+                            $vars->recur_yearly
+                                ? 1
+                                : $vars->get('recur_yearly_interval', 1)
+                        );
+                        break;
+                    default:
+                        $recurrence->setRecurInterval($vars->get('recur_yearly_interval', 1));
+                        break;
+                }
                 break;
-            default:
-                $recurrence->setRecurInterval($vars->get('recur_yearly_interval', 1));
+
+            case Horde_Date_Recurrence::RECUR_YEARLY_DAY:
+                $recurrence->setRecurInterval($vars->get('recur_yearly_day_interval', $yearly_interval));
                 break;
-            }
-            break;
 
-        case Horde_Date_Recurrence::RECUR_YEARLY_DAY:
-            $recurrence->setRecurInterval($vars->get('recur_yearly_day_interval', $yearly_interval));
-            break;
-
-        case Horde_Date_Recurrence::RECUR_YEARLY_WEEKDAY:
-            $recurrence->setRecurInterval($vars->get('recur_yearly_weekday_interval', $yearly_interval));
-            break;
+            case Horde_Date_Recurrence::RECUR_YEARLY_WEEKDAY:
+                $recurrence->setRecurInterval($vars->get('recur_yearly_weekday_interval', $yearly_interval));
+                break;
         }
 
-        foreach (array('exceptions', 'completions') as $what) {
+        foreach (['exceptions', 'completions'] as $what) {
             if ($vars->$what) {
                 foreach ($vars->$what as $date) {
-                    list($year, $month, $mday) = sscanf($date, '%04d%02d%02d');
+                    [$year, $month, $mday] = sscanf($date, '%04d%02d%02d');
                     if ($what == 'exceptions') {
                         $recurrence->addException($year, $month, $mday);
                     } else {

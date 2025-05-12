@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Basic Nag test case.
  *
@@ -26,9 +27,9 @@
  * @author     Gunnar Wrobel <wrobel@pardus.de>
  * @link       http://www.horde.org/apps/nag
  * @license    http://www.horde.org/licenses/gpl GNU General Public License, version 2
+ * @coversNothing
  */
-class Nag_TestCase
-extends PHPUnit_Framework_TestCase
+class Nag_TestCase extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
@@ -45,42 +46,42 @@ extends PHPUnit_Framework_TestCase
         return;
 
         $setup->setup(
-            array(
-                'Horde_Db_Adapter' => array(
+            [
+                'Horde_Db_Adapter' => [
                     'factory' => 'Db',
-                    'params' => array(
-                        'migrations' => array(
+                    'params' => [
+                        'migrations' => [
                             'migrationsPath' => __DIR__ . '/../../migration',
-                            'schemaTableName' => 'nag_test_schema'
-                        )
-                    )
-                ),
-            )
+                            'schemaTableName' => 'nag_test_schema',
+                        ],
+                    ],
+                ],
+            ]
         );
     }
 
     protected static function createBasicNagSetup(Horde_Test_Setup $setup)
     {
         $setup->setup(
-            array(
-                '_PARAMS' => array(
+            [
+                '_PARAMS' => [
                     'user' => 'test@example.com',
-                    'app' => 'nag'
-                ),
+                    'app' => 'nag',
+                ],
                 'Horde_Alarm' => 'Alarm',
                 'Horde_Prefs' => 'Prefs',
                 'Horde_Perms' => 'Perms',
                 'Horde_Group' => 'Group',
                 'Horde_History' => 'History',
                 'Horde_Registry' => 'Registry',
-            )
+            ]
         );
         $setup->makeGlobal(
-            array(
+            [
                 'prefs' => 'Horde_Prefs',
                 'registry' => 'Horde_Registry',
                 'injector' => 'Horde_Injector',
-            )
+            ]
         );
 
         $GLOBALS['conf']['prefs']['driver'] = 'Null';
@@ -97,14 +98,14 @@ extends PHPUnit_Framework_TestCase
             )
         );
         $setup->setup(
-            array(
+            [
                 'Horde_Share_Base' => 'Share',
-            )
+            ]
         );
         $setup->makeGlobal(
-            array(
+            [
                 'nag_shares' => 'Horde_Share_Base',
-            )
+            ]
         );
         $GLOBALS['conf']['storage']['driver'] = 'sql';
         $GLOBALS['conf']['tasklists']['driver'] = 'default';
@@ -113,23 +114,23 @@ extends PHPUnit_Framework_TestCase
     protected static function createKolabShares(Horde_Test_Setup $setup)
     {
         $setup->setup(
-            array(
-                'Horde_Kolab_Storage' => array(
+            [
+                'Horde_Kolab_Storage' => [
                     'factory' => 'KolabStorage',
-                    'params' => array(
+                    'params' => [
                         'imapuser' => 'test',
-                    )
-                ),
-                'Horde_Share_Base' => array(
+                    ],
+                ],
+                'Horde_Share_Base' => [
                     'factory' => 'Share',
                     'method' => 'Kolab',
-                ),
-            )
+                ],
+            ]
         );
         $setup->makeGlobal(
-            array(
+            [
                 'nag_shares' => 'Horde_Share_Base',
-            )
+            ]
         );
         $GLOBALS['conf']['storage']['driver'] = 'kolab';
         $GLOBALS['conf']['tasklists']['driver'] = 'kolab';
@@ -141,25 +142,29 @@ extends PHPUnit_Framework_TestCase
         self::createBasicNagSetup($setup);
         self::createKolabShares($setup);
         self::_createDefaultShares();
-       
+
         return $setup;
     }
 
     protected static function _createDefaultShares()
     {
         $share = self::_createShare(
-            'Tasklist of Tester', 'test@example.com'
+            'Tasklist of Tester',
+            'test@example.com'
         );
         $other_share = self::_createShare(
-            'Other tasklist of Tester', 'test@example.com'
+            'Other tasklist of Tester',
+            'test@example.com'
         );
-        return array($share, $other_share);
+        return [$share, $other_share];
     }
 
     private static function _createShare($name, $owner)
     {
         $share = $GLOBALS['nag_shares']->newShare(
-            $owner, strval(new Horde_Support_Randomid()), $name
+            $owner,
+            strval(new Horde_Support_Randomid()),
+            $name
         );
         $GLOBALS['nag_shares']->addShare($share);
         return $share;

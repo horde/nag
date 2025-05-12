@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Test the tasklists factory.
  *
@@ -26,6 +27,7 @@
  * @author     Gunnar Wrobel <wrobel@pardus.de>
  * @link       http://www.horde.org/apps/nag
  * @license    http://www.horde.org/licenses/gpl GNU General Public License, version 2
+ * @coversNothing
  */
 class Nag_Unit_Factory_TasklistsTest extends Nag_TestCase
 {
@@ -75,7 +77,8 @@ class Nag_Unit_Factory_TasklistsTest extends Nag_TestCase
         $factory = new Nag_Factory_Tasklists($this->getInjector());
         $initial = $factory->create();
         $this->assertSame(
-            $initial, $factory->create()
+            $initial,
+            $factory->create()
         );
     }
 }

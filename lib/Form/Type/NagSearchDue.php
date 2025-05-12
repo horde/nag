@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Horde_Form_Type_NagSearchDue:: class provides a form field for combining
  * the due_within and due_of form fields for task searching.
@@ -15,11 +16,11 @@ class Nag_Form_Type_NagSearchDue extends Horde_Form_Type
         $due_within = $vars->get('due_within');
         $due_of = $vars->get('due_of');
         if (!empty($due_within) && !empty($due_of)) {
-            $info = array(
+            $info = [
                 $vars->get('due_within'),
-                $vars->get('due_of'));
+                $vars->get('due_of')];
         } else {
-            $info = array();
+            $info = [];
         }
     }
 

@@ -15,15 +15,15 @@
 
 <?php echo _("To accept the event:") ?>
 
-<?php //echo $this->linkAccept ?>
+<?php //echo $this->linkAccept?>
 
 
-<?php //echo _("To accept the event tentatively:") ?>
+<?php //echo _("To accept the event tentatively:")?>
 
-<?php //echo $this->linkTentative ?>
+<?php //echo $this->linkTentative?>
 
 
-<?php //echo _("To decline the event:") ?>
+<?php //echo _("To decline the event:")?>
 
-<?php //echo $this->linkDecline ?>
+<?php //echo $this->linkDecline?>
 

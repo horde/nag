@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Driver test base.
  *
@@ -26,6 +27,7 @@
  * @author     Gunnar Wrobel <wrobel@pardus.de>
  * @link       http://www.horde.org/apps/nag
  * @license    http://www.horde.org/licenses/gpl GNU General Public License, version 2
+ * @coversNothing
  */
 class Nag_Unit_Driver_Base extends Nag_TestCase
 {
@@ -34,17 +36,17 @@ class Nag_Unit_Driver_Base extends Nag_TestCase
      *
      * @var Horde_Test_Setup
      */
-    static $setup;
+    public static $setup;
 
     /**
      * @static Nag_Driver
      */
-    static $driver;
+    public static $driver;
 
     /**
      * List of tasks added during the test.
      */
-    private $_added = array();
+    private $_added = [];
 
     public static function setUpBeforeClass()
     {
@@ -88,17 +90,17 @@ class Nag_Unit_Driver_Base extends Nag_TestCase
 
     public function testListTasks()
     {
-        $this->_add(array('name' => 'TEST', 'desc' => 'Some test task.'));
+        $this->_add(['name' => 'TEST', 'desc' => 'Some test task.']);
         self::$driver->retrieve();
         $this->assertEquals(1, self::$driver->tasks->count());
     }
 
     public function testListSubTasks()
     {
-        $id = $this->_add(array('name' => 'TEST', 'desc' => 'Some test task.'));
-        $this->_add(array('name' => 'SUB',
-                          'desc' => 'Some sub task.',
-                          'parent' => $id[0]));
+        $id = $this->_add(['name' => 'TEST', 'desc' => 'Some test task.']);
+        $this->_add(['name' => 'SUB',
+            'desc' => 'Some sub task.',
+            'parent' => $id[0]]);
         self::$driver->retrieve();
         $this->assertEquals(2, self::$driver->tasks->count());
     }
@@ -106,9 +108,9 @@ class Nag_Unit_Driver_Base extends Nag_TestCase
     public function testDueTasks()
     {
         $due = time() + 20;
-        $id = $this->_add(array('name' => 'TEST',
-                                'desc' => 'Some test task.',
-                                'due' => $due));
+        $id = $this->_add(['name' => 'TEST',
+            'desc' => 'Some test task.',
+            'due' => $due]);
         $result = self::$driver->get($id[0]);
         $this->assertEquals($due, $result->due);
     }
@@ -116,9 +118,9 @@ class Nag_Unit_Driver_Base extends Nag_TestCase
     public function testStartTasks()
     {
         $start = time() + 20;
-        $id = $this->_add(array('name' => 'TEST',
-                                'desc' => 'Some test task.',
-                                'start' => $start));
+        $id = $this->_add(['name' => 'TEST',
+            'desc' => 'Some test task.',
+            'start' => $start]);
         $result = self::$driver->get($id[0]);
         $this->assertEquals($start, $result->start);
     }
@@ -128,10 +130,10 @@ class Nag_Unit_Driver_Base extends Nag_TestCase
         $due = time() - 1;
         $recurrence = new Horde_Date_Recurrence($due);
         $recurrence->setRecurType(Horde_Date_Recurrence::RECUR_DAILY);
-        $id = $this->_add(array('name' => 'TEST',
-                                'desc' => 'Some test task.',
-                                'due' => $due,
-                                'recurrence' => $recurrence));
+        $id = $this->_add(['name' => 'TEST',
+            'desc' => 'Some test task.',
+            'due' => $due,
+            'recurrence' => $recurrence]);
         $due = new Horde_Date($due);
         $result = self::$driver->get($id[0]);
         $next = $result->getNextDue();
@@ -160,8 +162,8 @@ class Nag_Unit_Driver_Base extends Nag_TestCase
 
     public function testModify()
     {
-        $id = $this->_add(array('name' => 'TEST', 'desc' => 'Some test task.'));
-        self::$driver->modify($id[0], array('desc' => 'Modified'));
+        $id = $this->_add(['name' => 'TEST', 'desc' => 'Some test task.']);
+        self::$driver->modify($id[0], ['desc' => 'Modified']);
         $result = self::$driver->get($id[0]);
         $this->assertEquals('Modified', $result->desc);
         $result->name = 'MODIFIED';
@@ -172,8 +174,8 @@ class Nag_Unit_Driver_Base extends Nag_TestCase
 
     public function testDelete()
     {
-        $this->_add(array('name' => 'TEST', 'desc' => 'Some test task.'));
-        $id = $this->_add(array('name' => 'TEST', 'desc' => 'Some test task.'));
+        $this->_add(['name' => 'TEST', 'desc' => 'Some test task.']);
+        $id = $this->_add(['name' => 'TEST', 'desc' => 'Some test task.']);
         self::$driver->delete($id[0]);
         self::$driver->retrieve();
         $this->assertEquals(1, self::$driver->tasks->count());
@@ -181,8 +183,8 @@ class Nag_Unit_Driver_Base extends Nag_TestCase
 
     public function testDeleteAll()
     {
-        $this->_add(array('name' => 'TEST', 'desc' => 'Some test task.'));
-        $this->_add(array('name' => 'TEST', 'desc' => 'Some test task.'));
+        $this->_add(['name' => 'TEST', 'desc' => 'Some test task.']);
+        $this->_add(['name' => 'TEST', 'desc' => 'Some test task.']);
         self::$driver->retrieve();
         $this->assertEquals(2, self::$driver->tasks->count());
         self::$driver->deleteAll();

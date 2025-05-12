@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Defines AJAX calls used exclusively in the smartmobile view.
  *
@@ -25,13 +26,13 @@ class Nag_Ajax_Application_Handler_Smartmobile extends Horde_Core_Ajax_Applicati
      */
     public function smartmobileToggle()
     {
-        $out = new stdClass;
+        $out = new stdClass();
 
         if (!isset($this->vars->task) || !isset($this->vars->tasklist)) {
             $out->error = 'missing parameters';
         } else {
             $nag_task = new Nag_CompleteTask();
-            $out = (object)$nag_task->result($this->vars->task, $this->vars->tasklist);
+            $out = (object) $nag_task->result($this->vars->task, $this->vars->tasklist);
         }
 
         return $out;
@@ -40,12 +41,12 @@ class Nag_Ajax_Application_Handler_Smartmobile extends Horde_Core_Ajax_Applicati
     public function getTaskLists()
     {
         $lists = Nag::listTasklists();
-        $results = array();
+        $results = [];
         foreach ($lists as $name => $list) {
             $tasklist  = new Nag_Tasklist($list);
             $results[$name] = $tasklist->toHash();
         }
-        $return = new stdClass;
+        $return = new stdClass();
         $return->tasklists = $results;
 
         return $return;
@@ -58,18 +59,18 @@ class Nag_Ajax_Application_Handler_Smartmobile extends Horde_Core_Ajax_Applicati
      */
     public function listTasks()
     {
-        $options = array('include_history' => false);
+        $options = ['include_history' => false];
         if ($this->vars->tasklist) {
-            $options['tasklists'] = array($this->vars->tasklist);
+            $options['tasklists'] = [$this->vars->tasklist];
         }
 
         $tasks = Nag::listTasks($options);
-        $list = array();
+        $list = [];
         $tasks->reset();
         while ($task = $tasks->each()) {
             $list[] = $task->toJson(true);
         }
-        $results = new stdClass;
+        $results = new stdClass();
         $results->tasks = $list;
 
         return $results;
@@ -121,13 +122,13 @@ class Nag_Ajax_Application_Handler_Smartmobile extends Horde_Core_Ajax_Applicati
     public function saveTask()
     {
         $results = new stdClass();
-        $task = array(
+        $task = [
             'name' => $this->vars->task_title,
             'desc' => $this->vars->task_desc,
             'assignee' => $this->vars->task_assignee,
             'priority' => $this->vars->task_priority,
-            'owner' => $GLOBALS['registry']->getAuth()
-        );
+            'owner' => $GLOBALS['registry']->getAuth(),
+        ];
 
         if ($this->vars->task_private) {
             $task['private'] = true;
@@ -195,7 +196,7 @@ class Nag_Ajax_Application_Handler_Smartmobile extends Horde_Core_Ajax_Applicati
 
     public function getTask()
     {
-        $out = new StdClass;
+        $out = new StdClass();
         if (!isset($this->vars->task) || !isset($this->vars->tasklist)) {
             $out->error = 'Missing Parameters';
         } else {

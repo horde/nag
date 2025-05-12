@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Kolab specific tasklists handler.
  *
@@ -17,18 +18,19 @@ class Nag_Tasklists_Kolab extends Nag_Tasklists_Base
      */
     public function setDefaultShare($share)
     {
-           $tasklists = $this->_shares
-               ->listShares(
-                   $this->_user,
-                   array('perm' => Horde_Perms::SHOW,
-                         'attributes' => $this->_user));
-           foreach ($tasklists as $id => $tasklist) {
-               if ($id == $share) {
-                   $tasklist->set('default', true);
-                   $tasklist->save();
-                   break;
-               }
-           }
+        $tasklists = $this->_shares
+            ->listShares(
+                $this->_user,
+                ['perm' => Horde_Perms::SHOW,
+                    'attributes' => $this->_user]
+            );
+        foreach ($tasklists as $id => $tasklist) {
+            if ($id == $share) {
+                $tasklist->set('default', true);
+                $tasklist->save();
+                break;
+            }
+        }
     }
 
     /**

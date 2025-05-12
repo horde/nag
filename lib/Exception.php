@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Base exception class for Nag.
  *
@@ -9,6 +10,4 @@
  *
  * @package Nag
  */
-class Nag_Exception extends Horde_Exception_Wrapped
-{
-}
+class Nag_Exception extends Horde_Exception_Wrapped {}

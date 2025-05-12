@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Base class for smartmobile view pages.
  *
@@ -32,9 +33,9 @@ class Nag_Smartmobile
 
         $this->vars = $vars;
 
-        $this->view = new Horde_View(array(
-            'templatePath' => NAG_TEMPLATES . '/smartmobile'
-        ));
+        $this->view = new Horde_View([
+            'templatePath' => NAG_TEMPLATES . '/smartmobile',
+        ]);
         $this->view->addHelper('Horde_Core_Smartmobile_View_Helper');
         $this->view->addHelper('Text');
 
@@ -51,7 +52,7 @@ class Nag_Smartmobile
 
         $page_output->addScriptFile('smartmobile.js');
 
-        $notification->notify(array('listeners' => 'status'));
+        $notification->notify(['listeners' => 'status']);
     }
 
     /**
@@ -65,9 +66,7 @@ class Nag_Smartmobile
 
     /**
      */
-    protected function _initPages()
-    {
-    }
+    protected function _initPages() {}
 
     /**
      * Add base javascript variables to the page.
@@ -78,55 +77,55 @@ class Nag_Smartmobile
 
         // Nag::VIEW_* constant
         switch ($prefs->getValue('show_completed')) {
-        case Nag::VIEW_INCOMPLETE:
-            $show_completed = 'incomplete';
-            break;
+            case Nag::VIEW_INCOMPLETE:
+                $show_completed = 'incomplete';
+                break;
 
-        case Nag::VIEW_ALL:
-            $show_completed = 'all';
-            break;
+            case Nag::VIEW_ALL:
+                $show_completed = 'all';
+                break;
 
-        case Nag::VIEW_COMPLETE:
-            $show_completed = 'complete';
-            break;
+            case Nag::VIEW_COMPLETE:
+                $show_completed = 'complete';
+                break;
 
-        case Nag::VIEW_FUTURE:
-            $show_completed = 'future';
-            break;
+            case Nag::VIEW_FUTURE:
+                $show_completed = 'future';
+                break;
 
-        case Nag::VIEW_FUTURE_INCOMPLETE:
-            $show_completed = 'future-incomplete';
-            break;
+            case Nag::VIEW_FUTURE_INCOMPLETE:
+                $show_completed = 'future-incomplete';
+                break;
         }
 
         // Tasklists. Needed in case we deep link to an existing list.
         $lists = Nag::listTasklists();
-        $tasklists = array();
+        $tasklists = [];
         foreach ($lists as $name => $list) {
             $task = new Nag_Tasklist($list);
             $tasklists[$name] = $task->toHash();
         }
 
-        $code = array(
-            'conf' => array(
+        $code = [
+            'conf' => [
                 'showCompleted' => $show_completed,
-                'icons' => array(
+                'icons' => [
                     'completed' => strval(Horde_Themes::img('checked.png')),
                     'uncompleted' => strval(Horde_Themes::img('unchecked.png')),
                     'smartlist' => strval(Horde_Themes::img('smart.png')),
-                    'tasklist' => strval(Horde_Themes::img('tasklists.png'))
-                )
-            ),
-            'strings' => array(
+                    'tasklist' => strval(Horde_Themes::img('tasklists.png')),
+                ],
+            ],
+            'strings' => [
                 'all' => _("All Tasks"),
-                'newTask' => _("New Task")
-            ),
-            'tasklists' => $tasklists
-        );
+                'newTask' => _("New Task"),
+            ],
+            'tasklists' => $tasklists,
+        ];
 
-        $page_output->addInlineJsVars(array(
-            'var Nag' => $code
-        ), array('top' => true));
+        $page_output->addInlineJsVars([
+            'var Nag' => $code,
+        ], ['top' => true]);
     }
 
 }

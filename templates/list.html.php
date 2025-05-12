@@ -54,21 +54,23 @@ function doPrefsUpdate(column, sortDown)
                     $owner = $task->tasklist;
                 }
             }
-            $locals = array(
-              'style' => $style,
-              'have_read' => $share->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::READ),
-              'have_edit' => $share->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::EDIT),
-              'owner' => $owner,
-              'task' => $task,
-              'due' => $due,
-              'columns' => $this->columns,
-              'dynamic_sort' => $this->dynamic_sort &= !$task->hasSubTasks(),
-              'dateFormat' => $GLOBALS['prefs']->getValue('date_format')); ?>
-            <?php echo $this->renderPartial('list/task', array('locals' => $locals)) ?>
+            $locals = [
+                'style' => $style,
+                'have_read' => $share->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::READ),
+                'have_edit' => $share->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::EDIT),
+                'owner' => $owner,
+                'task' => $task,
+                'due' => $due,
+                'columns' => $this->columns,
+                'dynamic_sort' => $this->dynamic_sort &= !$task->hasSubTasks(),
+                'dateFormat' => $GLOBALS['prefs']->getValue('date_format')]; ?>
+            <?php echo $this->renderPartial('list/task', ['locals' => $locals]) ?>
         <?php endwhile; ?>
       </tbody>
     </table>
-    <?php if ($this->dynamic_sort) $GLOBALS['page_output']->addScriptFile('tables.js', 'horde') ?>
+    <?php if ($this->dynamic_sort) {
+        $GLOBALS['page_output']->addScriptFile('tables.js', 'horde');
+    } ?>
 
   <?php endif; ?>
 

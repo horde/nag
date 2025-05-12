@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Test base for the SQL driver.
  *
@@ -29,7 +30,7 @@
  */
 class Nag_Unit_Driver_Sql_Base extends Nag_Unit_Driver_Base
 {
-    static $callback;
+    public static $callback;
 
     public static function setUpBeforeClass()
     {
@@ -38,14 +39,15 @@ class Nag_Unit_Driver_Sql_Base extends Nag_Unit_Driver_Base
         parent::setUpBeforeClass();
         self::getDb();
         self::createSqlShares(self::$setup);
-        list($share, $other_share) = self::_createDefaultShares();
+        [$share, $other_share] = self::_createDefaultShares();
         self::$driver = new Nag_Driver_Sql(
-            $share->getName(), array('charset' => 'UTF-8')
+            $share->getName(),
+            ['charset' => 'UTF-8']
         );
     }
 
     protected static function getDb()
     {
-        call_user_func_array(self::$callback, array());
+        call_user_func_array(self::$callback, []);
     }
 }
