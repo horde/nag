@@ -132,10 +132,12 @@ class Nag_Form_Task extends Horde_Form
             if (count($groups)) {
                 $horde_group = $injector->getInstance('Horde_Group');
                 foreach ($groups as $group) {
-                    $users = array_merge(
-                        $users,
-                        $horde_group->listUsers($group)
-                    );
+                    if ($horde_group->exists($group)) {
+                        $users = array_merge(
+                          $users,
+                          $horde_group->listUsers($group)
+		        );
+                    }
                 }
             }
             if (empty($GLOBALS['conf']['assignees']['allow_external'])) {
