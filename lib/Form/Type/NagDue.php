@@ -9,7 +9,7 @@
  */
 class Nag_Form_Type_NagDue extends Horde_Form_Type
 {
-    public function getInfo(&$vars, &$var, &$info)
+    public function getInfo($vars, $var, $info)
     {
         $due_type = $vars->get('due_type');
         $due = $vars->get('due');
@@ -23,7 +23,7 @@ class Nag_Form_Type_NagDue extends Horde_Form_Type
         $info = strcasecmp($due_type, 'none') ? $due : 0;
     }
 
-    public function isValid(&$var, &$vars, $value, &$message)
+    public function isValid($var, $vars, $value, $message)
     {
         return true;
     }

@@ -18,7 +18,7 @@
 
 class Nag_Form_Search extends Horde_Form
 {
-    public function __construct(&$vars, $title = '')
+    public function __construct($vars, $title = '')
     {
         parent::__construct($vars, $title);
 

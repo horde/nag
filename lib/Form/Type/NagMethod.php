@@ -9,7 +9,7 @@
  */
 class Nag_Form_Type_NagMethod extends Horde_Form_Type
 {
-    public function getInfo(&$vars, &$var, &$info)
+    public function getInfo($vars, $var, $info)
     {
         $info = $var->getValue($vars);
         if (empty($info['on'])) {
@@ -36,7 +36,7 @@ class Nag_Form_Type_NagMethod extends Horde_Form_Type
         }
     }
 
-    public function isValid(&$var, &$vars, $value, &$message)
+    public function isValid($var, $vars, $value, $message)
     {
         $alarm = $vars->get('alarm');
         if ($value['on'] && !$alarm['on']) {

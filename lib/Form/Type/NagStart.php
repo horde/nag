@@ -9,7 +9,7 @@
  */
 class Nag_Form_Type_NagStart extends Horde_Form_Type
 {
-    public function getInfo(&$vars, &$var, &$info)
+    public function getInfo($vars, $var, $info)
     {
         $start_type = $vars->get('start_date');
         $start = $vars->get('start');
@@ -25,7 +25,7 @@ class Nag_Form_Type_NagStart extends Horde_Form_Type
         $info = strcasecmp($start_type, 'none') ? $start : 0;
     }
 
-    public function isValid(&$var, &$vars, $value, &$message)
+    public function isValid($var, $vars, $value, $message)
     {
         return true;
     }

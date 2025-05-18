@@ -5,7 +5,7 @@
  */
 class Nag_Form_Type_NagContact extends Horde_Form_Type
 {
-    public function isValid(&$var, &$vars, $value, &$message)
+    public function isValid($var, $vars, $value, $message)
     {
         if (empty($value)) {
             return true;
@@ -19,7 +19,7 @@ class Nag_Form_Type_NagContact extends Horde_Form_Type
         return 'NagContact';
     }
 
-    public function getInfo(&$vars, &$var, &$info)
+    public function getInfo($vars, $var, $info)
     {
         $value = $vars->get($var->getVarName());
         $info = str_replace(',', '', $value);
