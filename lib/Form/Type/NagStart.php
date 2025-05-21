@@ -23,6 +23,7 @@ class Nag_Form_Type_NagStart extends Horde_Form_Type
         }
 
         $info = strcasecmp($start_type, 'none') ? $start : 0;
+        return $info;
     }
 
     public function isValid($var, $vars, $value, $message)

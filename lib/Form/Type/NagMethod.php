@@ -14,7 +14,7 @@ class Nag_Form_Type_NagMethod extends Horde_Form_Type
         $info = $var->getValue($vars);
         if (empty($info['on'])) {
             $info = [];
-            return;
+            return $info;
         }
 
         $types = $vars->get('task_alarms');
@@ -34,6 +34,7 @@ class Nag_Form_Type_NagMethod extends Horde_Form_Type
                 }
             }
         }
+        return $info;
     }
 
     public function isValid($var, $vars, $value, $message)

@@ -13,7 +13,7 @@ class Nag_Form_Type_NagRecurrence extends Horde_Form_Type
     {
         $recur = $vars->recurrence;
         if (!$recur) {
-            return;
+            return $info;
         }
         $recurrence = new Horde_Date_Recurrence($this->_getDue($var, $vars));
         if ($vars->recur_end_type == 'date') {
@@ -136,6 +136,7 @@ class Nag_Form_Type_NagRecurrence extends Horde_Form_Type
         }
 
         $info = $recurrence;
+        return $info;
     }
 
     public function isValid($var, $vars, $value, $message)
@@ -152,7 +153,7 @@ class Nag_Form_Type_NagRecurrence extends Horde_Form_Type
         $variables = $var->form->getVariables();
         foreach ($variables as $variable) {
             if ($variable->getVarName() == 'due') {
-                $variable->getInfo($vars, $info);
+                $info = $variable->getInfo($vars, $info);
                 return $info;
             }
         }

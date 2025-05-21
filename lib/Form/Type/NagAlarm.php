@@ -13,6 +13,7 @@ class Nag_Form_Type_NagAlarm extends Horde_Form_Type
     {
         $info = $var->getValue($vars);
         if (!$info['on']) {
+            // Dubious! This should probably be $info['on'] = 0 or $info = []
             $info = 0;
         } else {
             $value = $info['value'];
@@ -22,6 +23,7 @@ class Nag_Form_Type_NagAlarm extends Horde_Form_Type
             }
             $info = $value * $unit;
         }
+        return $info;
     }
 
     public function isValid($var, $vars, $value, $message)

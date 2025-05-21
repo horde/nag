@@ -23,5 +23,6 @@ class Nag_Form_Type_NagContact extends Horde_Form_Type
     {
         $value = $vars->get($var->getVarName());
         $info = str_replace(',', '', $value);
+        return $info;
     }
 }

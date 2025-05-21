@@ -21,6 +21,8 @@ class Nag_Form_Type_NagDue extends Horde_Form_Type
         }
 
         $info = strcasecmp($due_type, 'none') ? $due : 0;
+        // Dubious!
+        return $info;
     }
 
     public function isValid($var, $vars, $value, $message)

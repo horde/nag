@@ -22,6 +22,7 @@ class Nag_Form_Type_NagSearchDue extends Horde_Form_Type
         } else {
             $info = [];
         }
+        return $info;
     }
 
     public function isValid($var, $vars, $value, $message)
