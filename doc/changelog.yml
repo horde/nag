@@ -1,4 +1,17 @@
 ---
+5.0.0-alpha10:
+  api: 5.0.0-alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2025-05-29
+  license:
+    identifier: GPL-2.0-only
+    uri: http://www.horde.org/licenses/gpl
+  notes: |
+    ci: Add php-cs-fixer rule for nullables
+    chore: Update minimum PHP to 8.1
+    fix: Save new task (detailed mode) works again.
 5.0.0-alpha9:
   api: 5.0.0-alpha1
   state:
