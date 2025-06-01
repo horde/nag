@@ -471,7 +471,7 @@ class Horde_Core_Ui_VarRenderer_Nag extends Horde_Core_Ui_VarRenderer_Html
     protected function _renderVarInput_NagTags($form, $var, $vars)
     {
         $varname = htmlspecialchars($var->getVarName());
-        $value = htmlspecialchars($var->getValue($vars));
+        $value = htmlspecialchars((string)$var->getValue($vars));
 
         $html = sprintf('<input id="%s" type="text" name="%s" value="%s" />', $varname, $varname, $value);
         $html .= sprintf(
