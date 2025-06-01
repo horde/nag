@@ -1,4 +1,4 @@
-<tr class="<?php echo $style ?>" style="background-color:<?php echo $task->backgroundColor() ?>;color:<?php echo $task->foregroundColor() ?>">
+<?php use function PHP81_BC\strftime; ?><tr class="<?php echo $style ?>" style="background-color:<?php echo $task->backgroundColor() ?>;color:<?php echo $task->foregroundColor() ?>">
   <td>
     <?php
     if ($have_edit) {
@@ -70,7 +70,7 @@ Horde::img('alarm.png', _("Task Alarm")) : '&nbsp;' ?>
   </td>
 <?php if (in_array('due', $columns)): ?>
   <td class="nowrap" sortval="<?php echo $due ? $due->timestamp() : PHP_INT_MAX ?>">
-    <?php use function PHP81_BC\strftime; echo $due ? $due->strftime($dateFormat) : '&nbsp;' ?>
+    <?php echo $due ? $due->strftime($dateFormat) : '&nbsp;' ?>
   </td>
 <?php endif;
 if (in_array('start', $columns)): ?>
