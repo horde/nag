@@ -4,7 +4,7 @@
 <?php echo $this->task->name ?>
 
 
-<?php echo _("Date:") ?> <?php echo $this->due->strftime($this->dateFormat) ?>
+<?php echo _("Date:") ?> <?php use function PHP81_BC\strftime; echo $this->due->strftime($this->dateFormat) ?>
 
 <?php echo _("Time:") ?> <?php echo $this->due->format($this->timeFormat) ?>
 

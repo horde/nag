@@ -1,5 +1,5 @@
 <?php
-
+use function PHP81_BC\strftime;
 /**
  * Nag_Task handles as single task as well as a list of tasks and implements a
  * recursive iterator to handle a (hierarchical) list of tasks.

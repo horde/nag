@@ -1,5 +1,5 @@
 <?php
-
+use function PHP81_BC\strftime;
 /**
  */
 class Nag_Block_Summary extends Horde_Core_Block

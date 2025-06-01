@@ -1,5 +1,5 @@
 <?php
-
+use function PHP81_BC\strftime;
 /**
  * This file contains all Horde_Core_Ui_VarRenderer extensions required for
  * editing tasks.
