@@ -179,8 +179,8 @@ class Nag_Search implements Serializable
 
             // If we have a search string and it doesn't match name|desc continue
             if (!empty($this->_search) &&
-                !($this->_mask & self::MASK_NAME && preg_match($pattern, $task->name)) &&
-                !($this->_mask & self::MASK_DESC && preg_match($pattern, $task->desc))) {
+                !($this->_mask & self::MASK_NAME && preg_match($pattern, (string)$task->name)) &&
+                !($this->_mask & self::MASK_DESC && preg_match($pattern, (string)$task->desc))) {
 
                 continue;
             }

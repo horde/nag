@@ -55,7 +55,7 @@ if ($have_read) {
     if ($this->smartShare) {
         $params['list'] = $this->smartShare->getName();
     }
-    echo Horde::linkTooltip($task->view_link->add($params), '', '', '', '', $task->desc, '', ['style' => 'color:' . $task->foregroundColor()])
+    echo Horde::linkTooltip($task->view_link->add($params), '', '', '', '', (string)$task->desc, '', ['style' => 'color:' . $task->foregroundColor()])
         . $task_name . '</a>';
 } else {
     echo $task_name;
