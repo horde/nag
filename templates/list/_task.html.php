@@ -47,7 +47,7 @@ if (in_array('tasklist', $columns)): ?>
   <td>
     <?php
 echo $task->treeIcons();
-$task_name = strlen($task->name)
+$task_name = strlen((string)$task->name)
     ? htmlspecialchars($task->name)
     : _("[none]");
 if ($have_read) {
@@ -64,7 +64,7 @@ if ($have_read) {
      <?php foreach ($task->tags as $t): ?><li><?php echo $this->h($t) ?></li><?php endforeach;?>
     </ul>
   </td>
-  <td><?php echo strlen($task->desc) ? Horde::img('note.png', _("Task Note")) : '&nbsp;' ?></td>
+  <td><?php echo strlen((string)$task->desc) ? Horde::img('note.png', _("Task Note")) : '&nbsp;' ?></td>
   <td><?php echo ($task->alarm && $due) ?
 Horde::img('alarm.png', _("Task Alarm")) : '&nbsp;' ?>
   </td>
