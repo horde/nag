@@ -1,4 +1,17 @@
 ---
+5.0.0-alpha11:
+  api: 5.0.0-alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2025-06-04
+  license:
+    identifier: GPL-2.0-only
+    uri: http://www.horde.org/licenses/gpl
+  notes: |
+    fix: Add conditional to hook class template to prevent double declaration issues
+    fix: Use compat library for strftime calls
+    fix: Log spam on task with null description
 5.0.0-alpha10:
   api: 5.0.0-alpha1
   state:
