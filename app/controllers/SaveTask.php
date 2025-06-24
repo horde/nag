@@ -16,7 +16,7 @@ class Nag_SaveTask_Controller extends Horde_Controller_Base
             require NAG_BASE . '/task.php';
             exit;
         }
-        $info = $form->getInfo($vars, $info);
+        $info = $form->getInfo($vars);
 
         // Check if we are here due to a search_return push.
         if ($vars->search_return) {

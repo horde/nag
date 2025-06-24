@@ -153,7 +153,7 @@ class Nag_Form_Type_NagRecurrence extends Horde_Form_Type
         $variables = $var->form->getVariables();
         foreach ($variables as $variable) {
             if ($variable->getVarName() == 'due') {
-                $info = $variable->getInfo($vars, $info);
+                $info = $variable->getInfo($vars, []);
                 return $info;
             }
         }
