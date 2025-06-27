@@ -81,7 +81,7 @@ class Horde_Core_Ui_VarRenderer_Nag extends Horde_Core_Ui_VarRenderer_Html
 
     protected function _renderVarInput_NagDue($form, $var, $vars)
     {
-        $task_due = $var->type->getInfo($vars, $var, []);
+        $task_due = $var->getInfo($vars, []);
         if ($task_due == 0) {
             $date = '+' . (int) $GLOBALS['prefs']->getValue('default_due_days') . ' days';
             $time = $GLOBALS['prefs']->getValue('default_due_time');
@@ -190,7 +190,7 @@ class Horde_Core_Ui_VarRenderer_Nag extends Horde_Core_Ui_VarRenderer_Html
         if ($vars->recurrence instanceof Horde_Date_Recurrence) {
             $recur = $var->getValue($vars);
         } else {
-            $recur = $var->type->getInfo($vars, $var, []);
+            $recur = $var->getInfo($vars, []);
         }
 
         /* No recurrence. */
@@ -429,7 +429,7 @@ class Horde_Core_Ui_VarRenderer_Nag extends Horde_Core_Ui_VarRenderer_Html
 
     protected function _renderVarInput_NagStart($form, $var, $vars)
     {
-        $task_start = $var->type->getInfo($vars, $var, []);
+        $task_start = $var->getInfo($vars, []);
         $start_dt = ($task_start == 0)
             // About a week from now
             ? $_SERVER['REQUEST_TIME'] + 604800

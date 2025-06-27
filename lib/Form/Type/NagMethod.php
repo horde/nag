@@ -41,7 +41,7 @@ class Nag_Form_Type_NagMethod extends Horde_Form_Type
     {
         $alarm = $vars->get('alarm');
         if ($value['on'] && !$alarm['on']) {
-            $message = _("An alarm must be set to specify a notification method");
+            $this->message = _("An alarm must be set to specify a notification method");
             return false;
         }
         return true;
