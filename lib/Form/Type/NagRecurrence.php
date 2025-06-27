@@ -144,7 +144,7 @@ class Nag_Form_Type_NagRecurrence extends Horde_Form_Type
         if (!$vars->recurrence || $this->_getDue($var, $vars)) {
             return true;
         }
-        $message = _("A due date is necessary to enable recurrences.");
+        $this->message = _("A due date is necessary to enable recurrences.");
         return false;
     }
 

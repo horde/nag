@@ -30,7 +30,7 @@ class Nag_Form_Type_NagAlarm extends Horde_Form_Type
     {
         if ($value['on']) {
             if ($vars->get('due_type') == 'none') {
-                $message = _("A due date must be set to enable alarms.");
+                $this->message = _("A due date must be set to enable alarms.");
                 return false;
             }
         }
