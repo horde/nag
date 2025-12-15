@@ -215,7 +215,7 @@ class Nag_Form_Task extends Horde_Form
         global $conf;
 
         return parent::renderActive(
-            $this->getRenderer(['varrenderer_driver' => ['nag', 'nag']]),
+            $this->getRenderer(['varrenderer_driver' => ['nag', 'html']]),
             $this->_vars,
             Horde::url(
                 $conf['urls']['pretty'] == 'rewrite'
