@@ -88,7 +88,7 @@ class Nag_Form_Search extends Horde_Form
             $url->add(['actionID' => 'smart', 'list' => $this->_vars->get('smart_id'), 'tab_name' => $this->_vars->get('smart_id')]);
         }
         return parent::renderActive(
-            $this->getRenderer(['varrenderer_driver' => ['nag', 'nag']]),
+            $this->getRenderer(['varrenderer_driver' => ['nag', 'html']]),
             $this->_vars,
             $url->setRaw(true),
             'post',

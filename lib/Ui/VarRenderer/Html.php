@@ -11,14 +11,14 @@ use function PHP81_BC\strftime;
  */
 
 /**
- * The Horde_Core_Ui_VarRenderer_Nag class provides additional methods for
+ * The Nag_Ui_VarRenderer_Html class provides additional methods for
  * rendering Nag specific fields.
  *
  * @todo    Clean this hack up with Horde_Form/H4
  * @author  Jan Schneider <jan@horde.org>
  * @package Nag
  */
-class Horde_Core_Ui_VarRenderer_Nag extends Horde_Core_Ui_VarRenderer_Html
+class Nag_Ui_VarRenderer_Html extends Horde_Core_Ui_VarRenderer_Html
 {
     protected function _renderVarInput_NagAlarm($form, $var, $vars)
     {
