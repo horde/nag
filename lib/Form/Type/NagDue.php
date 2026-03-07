@@ -20,7 +20,8 @@ class Nag_Form_Type_NagDue extends Horde_Form_Type
             $due = $due_dt->timestamp();
         }
 
-        $info = strcasecmp($due_type, 'none') ? $due : 0;
+        // Handle null $due_type for PHP 8.1+ compatibility
+        $info = strcasecmp((string)$due_type, 'none') ? $due : 0;
         // Dubious!
         return $info;
     }
