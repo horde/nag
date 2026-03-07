@@ -28,6 +28,28 @@ class Nag_Form_Task extends Horde_Form
     protected $_task;
 
     /**
+     * Reference to the "Completed?" form variable.
+     *
+     * This property stores a reference to the Horde_Form_Variable object for
+     * the "completed" field. It's used elsewhere in the form logic to access
+     * or manipulate the completion status field.
+     *
+     * @var Horde_Form_Variable|null
+     *
+     * @deprecated This property was added to fix PHP 8.2+ dynamic property
+     *             deprecation warnings. The design should be refactored to avoid
+     *             storing form variable references as class properties. Consider
+     *             using a more structured approach (e.g., array of variable
+     *             references or getter methods) in future versions.
+     *
+     * @todo REFACTOR: Found via runtime debugging. This dynamic property
+     *       assignment pattern should be redesigned to use explicit property
+     *       declarations or a variables registry pattern instead of ad-hoc
+     *       property creation.
+     */
+    protected $_completedVar;
+
+    /**
      * Const'r
      *
      * @param Horde_Form_Variables $vars  The form variables.
