@@ -39,7 +39,7 @@ class Nag_Application extends Horde_Registry_Application
     /**
      */
     public $features = [
-        'smartmobileView' => true,
+        'smartmobileView' => true,  // Redirect to responsive UI
         'modseq' => true,
     ];
 
