@@ -1,4 +1,17 @@
 ---
+5.0.0-beta1:
+  api: 5.0.0-beta1
+  state:
+    release: beta
+    api: beta
+  date: 2026-03-17
+  license:
+    identifier: GPL-2.0-only
+    uri: https://spdx.org/licenses/GPL-2.0-only.html
+  notes: |-
+    refactor(routes): migrate responsive routes to builder pattern
+    Merge pull request #6 from horde/feat/nag-responsive
+    feat: Nag Responsive UI
 5.0.0-alpha12:
   api: 5.0.0-alpha12
   state:
