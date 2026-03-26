@@ -343,7 +343,7 @@ class Nag_Task
      * @param Nag_Driver $storage  A storage driver.
      * @param array $task          A task hash.
      */
-    public function __construct(Nag_Driver $storage = null, array $task = null)
+    public function __construct(?Nag_Driver $storage = null, ?array $task = null)
     {
         if ($storage) {
             $this->_storage = $storage;
