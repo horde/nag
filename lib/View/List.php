@@ -11,6 +11,9 @@
  * @author  Michael J Rubinsky <mrubinsk@horde.org>
  * @package Nag
  */
+
+use Horde\Util\Variables;
+
 class Nag_View_List
 {
     /**
@@ -69,7 +72,7 @@ class Nag_View_List
      *
      * @return Nag_View_List
      */
-    public function __construct($vars)
+    public function __construct(Variables|\Horde_Variables $vars)
     {
         $this->_vars = $vars;
         $this->_title = _("My Tasks");

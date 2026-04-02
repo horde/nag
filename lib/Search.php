@@ -11,6 +11,9 @@
  * @license  http://www.horde.org/licenses/gpl GPL
  * @package Nag
  */
+
+use Horde\Util\Variables;
+
 /**
  * Nag_Search:: Interface for performing task searches.
  *
@@ -222,7 +225,7 @@ class Nag_Search implements Serializable
      *
      * @param Horde_Variables $vars  The Horde_Variables object.
      */
-    public function getVars(Horde_Variables &$vars)
+    public function getVars(Variables|\Horde_Variables &$vars)
     {
         $vars->set('search_pattern', $this->_search);
         $vars->set('search_tags', implode(',', $this->_tags));
