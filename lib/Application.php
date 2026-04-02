@@ -13,6 +13,7 @@
  */
 
 use Horde\Backup;
+use Horde\Util\Variables;
 use Sabre\CalDAV;
 
 /* Determine the base directories. */
@@ -485,7 +486,7 @@ class Nag_Application extends Horde_Registry_Application
     /**
      * @throws Nag_Exception
      */
-    public function download(Horde_Variables $vars)
+    public function download(Variables|\Horde_Variables $vars)
     {
         global $display_tasklists, $injector, $registry;
 
