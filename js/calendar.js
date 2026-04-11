@@ -17,7 +17,7 @@ var NagCalendar =
     {
         var prefix, radio;
 
-        switch (e.element().identify()) {
+        switch (e.target.id) {
         case 'dueimg':
             prefix = 'due';
             radio = 'due_type_specified';
@@ -37,8 +37,8 @@ var NagCalendar =
             return;
         }
 
-        $(prefix + '_date').setValue(e.memo.toString(Nag.conf.date_format));
-        $(radio).setValue(1);
+        document.getElementById(prefix + '_date').value = e.detail.toString(Nag.conf.date_format);
+        document.getElementById(radio).value = 1;
 
         this.updateWday(prefix);
     },
@@ -47,50 +47,50 @@ var NagCalendar =
     {
         var d = this.getFormDate(p);
         if (d) {
-            $(p + '_wday').update('(' + Horde_Calendar.fullweekdays[d.getDay()] + ')');
+            document.getElementById(p + '_wday').textContent = '(' + Horde_Calendar.fullweekdays[d.getDay()] + ')';
         }
     },
 
     getFormDate: function(p)
     {
-        return Date.parseExact($F(p + '_date'), Nag.conf.date_format);
+        return Date.parseExact(document.getElementById(p + '_date').value, Nag.conf.date_format);
     },
 
     clickHandler: function(e)
     {
-        if (e.isRightClick()) {
+        if (e.button === 2) {
             return;
         }
 
-        var elt = e.element(),
-            id = elt.readAttribute('id');
+        var elt = e.target,
+            id = elt.id;
 
         switch (id) {
         case 'dueimg':
         case 'startimg':
         case 'recur_endimg':
             Horde_Calendar.open(elt, this.getFormDate(id.slice(0, -3)));
-            e.stop();
+            e.preventDefault();
             break;
 
         case 'due_am_pm_am':
         case 'due_am_pm_am_label':
         case 'due_am_pm_pm':
         case 'due_am_pm_pm_label':
-            $('due_type_specified').setValue(1);
+            document.getElementById('due_type_specified').value = 1;
             break;
         }
     },
 
     changeHandler: function(e)
     {
-        switch (e.element().readAttribute('id')) {
+        switch (e.target.id) {
         case 'due_date':
             this.updateWday('due');
             // Fall-through
 
         case 'due_time':
-            $('due_type_specified').setValue(1);
+            document.getElementById('due_type_specified').value = 1;
             break;
 
         case 'start_date':
@@ -98,12 +98,12 @@ var NagCalendar =
             // Fall-through
 
         case 'start_time':
-            $('start_date_specified').setValue(1);
+            document.getElementById('start_date_specified').value = 1;
             break;
 
         case 'alarm_unit':
         case 'alarm_value':
-            $('alarmon').setValue(1);
+            document.getElementById('alarmon').value = 1;
             break;
         }
     },
@@ -114,10 +114,11 @@ var NagCalendar =
         this.updateWday('start');
         this.updateWday('recur_end');
 
-        $('nag_form_task_active').observe('click', this.clickHandler.bindAsEventListener(this));
-        $('nag_form_task_active').observe('change', this.changeHandler.bindAsEventListener(this));
+        var form = document.getElementById('nag_form_task_active');
+        form.addEventListener('click', this.clickHandler.bind(this));
+        form.addEventListener('change', this.changeHandler.bind(this));
     }
 };
 
-document.observe('dom:loaded', NagCalendar.onDomLoad.bind(NagCalendar));
-document.observe('Horde_Calendar:select', NagCalendar.calendarSelect.bindAsEventListener(NagCalendar));
+document.addEventListener('DOMContentLoaded', NagCalendar.onDomLoad.bind(NagCalendar));
+document.addEventListener('Horde_Calendar:select', NagCalendar.calendarSelect.bind(NagCalendar));
