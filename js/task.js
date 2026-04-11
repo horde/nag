@@ -20,12 +20,12 @@ var NagTasks = {
             d.add(30).minutes();
         } while (d.getHours() !== 0 || d.getMinutes() !== 0);
 
-        field = $(field);
+        field = document.getElementById(field);
         opts = {
             list: list,
             onChoose: function(value) {
                 if (value) {
-                    field.setValue(value);
+                    field.value = value;
                 }
             }.bind(this)
         };
@@ -40,24 +40,24 @@ var NagTasks = {
      */
     timeSelectKeyHandler: function(e)
     {
-        switch(e.keyCode) {
-        case Event.KEY_UP:
-        case Event.KEY_DOWN:
-        case Event.KEY_RIGHT:
-        case Event.KEY_LEFT:
+        switch(e.key) {
+        case 'ArrowUp':
+        case 'ArrowDown':
+        case 'ArrowRight':
+        case 'ArrowLeft':
             return;
         default:
-            var dt = $('due_time');
-            if ($F(dt) !== this.knl[dt.identify()].getCurrentEntry()) {
-                this.knl[dt.identify()].markSelected(null);
+            var dt = document.getElementById('due_time');
+            if (dt.value !== this.knl[dt.id].getCurrentEntry()) {
+                this.knl[dt.id].markSelected(null);
             }
         }
     }
-}
+};
 
-document.observe('dom:loaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     var dropDown = NagTasks.attachTimeDropDown('due_time', Nag.conf.time_format);
-    var dt = $('due_time');
-    dt.observe('click', function() { dropDown.show(); });
-    dt.observe('keyup', NagTasks.timeSelectKeyHandler.bind(NagTasks));
+    var dt = document.getElementById('due_time');
+    dt.addEventListener('click', function() { dropDown.show(); }); // eslint-disable-line horde/no-prototype-methods -- KeyNavList.show()
+    dt.addEventListener('keyup', NagTasks.timeSelectKeyHandler.bind(NagTasks));
 });
