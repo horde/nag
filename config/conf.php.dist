@@ -14,48 +14,38 @@
  * Integers should be given literally (without quotes).
  * Boolean values may be true or false (never quotes).
  *
- * Generated from conf.xml on 2026-04-04
+ * Generated from conf.xml on 2026-04-13
  */
-
 // ----------------------------------------------------------------------
 // Storage System Settings
 // ----------------------------------------------------------------------
-
-// What storage driver should we use?
-// Options:
-//   'sql' - SQL
+// What storage driver should we use? ('sql' = SQL)
 $conf['storage']['driver'] = 'sql';
-
-// Database configuration
-// Configure your database connection parameters
-$conf['storage']['params']['ssl'] = false;
+// Database connection: 'horde' uses the global Horde DB, 'custom' uses settings below
+// $conf['storage']['params']['driverconfig'] = 'custom';
+// $conf['storage']['params']['phptype'] = 'mysqli';
+// $conf['storage']['params']['hostspec'] = 'localhost';
+// $conf['storage']['params']['username'] = '';
+// $conf['storage']['params']['password'] = '';
+// $conf['storage']['params']['database'] = '';
+// $conf['storage']['params']['charset'] = 'utf8mb4';
+// $conf['storage']['params']['ssl'] = false;
 $conf['storage']['params']['driverconfig'] = 'horde';
-
-
 
 // ----------------------------------------------------------------------
 // Tasklist Handler Settings
 // ----------------------------------------------------------------------
-
-// What type of tasklist handler should we use?
-// Options:
-//   'default' - Default
+// What type of tasklist handler should we use? ('default' = Default)
 $conf['tasklists']['driver'] = 'default';
-
 
 // ----------------------------------------------------------------------
 // Assignee Handling
 // ----------------------------------------------------------------------
-
-// Should we allow assingment of tasks   to external users? This enables sending vTodo/iTip messages for task   assignments. Turning this off will restrict assignees to Horde users that have   read access to the parent tasklist.
+// Should we allow assingment of tasks to external users? This enables sending vTodo/iTip messages for task assignments....
 $conf['assignees']['allow_external'] = false;
-
 
 // ----------------------------------------------------------------------
 // Menu settings
 // ----------------------------------------------------------------------
-
-// Should we display an Import/Export   link in the Horde application menus?
+// Should we display an Import/Export link in the Horde application menus?
 $conf['menu']['import_export'] = true;
-
-
