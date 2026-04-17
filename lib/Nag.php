@@ -178,7 +178,7 @@ class Nag
             $format .= ' '
                 . ($GLOBALS['prefs']->getValue('twentyFour') ? '%H:%M' : '%I:%M %p');
         }
-        $old_locale = setlocale(LC_TIME, 0);
+        $old_locale = setlocale(LC_TIME, '0');
         setlocale(LC_TIME, 'C');
 
         // Try exact format match first.
