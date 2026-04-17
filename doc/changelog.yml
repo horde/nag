@@ -1,4 +1,23 @@
 ---
+5.0.0-beta4:
+  api: 5.0.0-beta4
+  state:
+    release: beta
+    api: beta
+  date: 2026-04-17
+  license:
+    identifier: GPL-2.0-only
+    uri: https://spdx.org/licenses/GPL-2.0-only.html
+  notes: |-
+    fix: This is fatal in php 8.5
+    docs: create/update conf.php.dist
+    docs: Provide config example
+    refactor: Remove most reliance on prototype.js
+    fix: More defensive code when trying to drop tables
+    fix: Accept both types of Horde Variable in turba
+    feat(kolab)!: Remove Kolab backends
+    feat(kolab)!: Remove Kolab options from config xml
+    chore: It was good while it lasted
 5.0.0-beta3:
   api: 5.0.0-beta3
   state:
