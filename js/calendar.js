@@ -110,11 +110,16 @@ var NagCalendar =
 
     onDomLoad: function()
     {
+        var form = document.getElementById('nag_form_task_1_active')
+            || document.getElementById('nag_form_task_active');
+        if (!form) {
+            return;
+        }
+
         this.updateWday('due');
         this.updateWday('start');
         this.updateWday('recur_end');
 
-        var form = document.getElementById('nag_form_task_active');
         form.addEventListener('click', this.clickHandler.bind(this));
         form.addEventListener('change', this.changeHandler.bind(this));
     }
