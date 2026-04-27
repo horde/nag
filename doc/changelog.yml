@@ -1,4 +1,16 @@
 ---
+5.0.0-beta5:
+  api: 5.0.0-beta5
+  state:
+    release: beta
+    api: beta
+  date: 2026-04-27
+  license:
+    identifier: GPL-2.0-only
+    uri: https://spdx.org/licenses/GPL-2.0-only.html
+  notes: |-
+    fix: Wrong level for urlencode
+    fix(js): guard against missing form element and fix auto-generated form ID
 5.0.0-beta4:
   api: 5.0.0-beta4
   state:
