@@ -223,7 +223,7 @@ class Nag_Search implements Serializable
      * Populate a Horde_Variables instance with the search values for this
      * search.
      *
-     * @param Horde_Variables $vars  The Horde_Variables object.
+     * @param Horde_Variables|Variables $vars  The Horde_Variables object.
      */
     public function getVars(Variables|\Horde_Variables &$vars)
     {
