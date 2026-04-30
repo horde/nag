@@ -17,6 +17,7 @@
     background-image: url("graphics/search.png");
     background-repeat: no-repeat;
     background-position: 2px center;
+    background-size: 16px 16px;
     padding: 1px 0 1px 20px;
 }
 #quicksearch a {
@@ -113,28 +114,35 @@
 /* Icons. */
 .nag-list {
     background-image: url("graphics/nag.png");
+    background-size: 16px 16px;
 }
 .nag-search {
     background-image: url("graphics/search.png");
+    background-size: 16px 16px;
 }
 .horde-new-extra {
     background: none;
 }
 .horde-new-extra a {
     background: url("graphics/add.png") no-repeat;
+    background-size: 16px 16px;
 }
 
 .nag-complete {
     background-image: url("graphics/complete.png");
+    background-size: 16px 16px;
 }
 .nag-edit {
     background-image: url("graphics/edit.png");
+    background-size: 16px 16px;
 }
 .nag-delete {
     background-image: url("graphics/delete.png");
+    background-size: 16px 16px;
 }
 .nag-new {
     background-image: url("graphics/add.png");
+    background-size: 16px 16px;
 }
 .nag-status-1 {
     padding-left: 20px !important;
