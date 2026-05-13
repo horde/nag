@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Adds recurrency columns to the tasks table.
  *
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -19,7 +20,7 @@ class NagUpgradeRecurrence extends Horde_Db_Migration_Base
      */
     public function up()
     {
-        $this->addColumn('nag_tasks', 'task_recurtype', 'integer', array('default' => 0));
+        $this->addColumn('nag_tasks', 'task_recurtype', 'integer', ['default' => 0]);
         $this->addColumn('nag_tasks', 'task_recurinterval', 'integer');
         $this->addColumn('nag_tasks', 'task_recurdays', 'integer');
         $this->addColumn('nag_tasks', 'task_recurenddate', 'datetime');

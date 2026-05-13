@@ -1,5 +1,7 @@
 <?php
+
 use function PHP81_BC\strftime;
+
 /**
  */
 class Nag_Block_Summary extends Horde_Core_Block
@@ -112,9 +114,9 @@ class Nag_Block_Summary extends Horde_Core_Block
                     'task' => $task->id,
                     'tasklist' => $task->tasklist,
                 ]);
-                $link = $viewurl->link() .
-                    (!empty($task->name) ? htmlspecialchars($task->name) : _("[none]")) .
-                    '</a>';
+                $link = $viewurl->link()
+                    . (!empty($task->name) ? htmlspecialchars($task->name) : _("[none]"))
+                    . '</a>';
                 if ($differential >= -60 && $differential < 60) {
                     $messages[$key] = sprintf(_("%s is due now."), $link);
                 } elseif ($differential >= 60) {
@@ -128,7 +130,12 @@ class Nag_Block_Summary extends Horde_Core_Block
 
             ksort($messages);
             foreach ($messages as $message) {
-                $html .= '<tr><td class="control">'
+                /**
+                 * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+                 * @deprecated Use Horde_Themes_Image::tag() instead
+                 * @see Horde_Deprecated::img()
+                 */
+$html .= '<tr><td class="control">'
                     . Horde::img('alarm_small.png') . '&nbsp;&nbsp;<strong>'
                     . $message . '</strong></td></tr>';
             }
@@ -158,8 +165,8 @@ class Nag_Block_Summary extends Horde_Core_Block
             $due = $task->due ? $task->getNextDue() : null;
 
             // Only print tasks due in the past if the show_overdue flag is on.
-            if ($due && $due->before($_SERVER['REQUEST_TIME']) &&
-                empty($this->_params['show_overdue'])) {
+            if ($due && $due->before($_SERVER['REQUEST_TIME'])
+                && empty($this->_params['show_overdue'])) {
                 continue;
             }
 
@@ -182,16 +189,31 @@ class Nag_Block_Summary extends Horde_Core_Block
                     'url' => Horde::signUrl(Horde::selfUrl(true)),
                 ]);
                 $label = sprintf(_("Edit \"%s\""), $task->name);
-                $html .= '<td width="1%"' . $style . '>'
+                /**
+                 * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+                 * @deprecated Use Horde_Themes_Image::tag() instead
+                 * @see Horde_Deprecated::img()
+                 */
+$html .= '<td width="1%"' . $style . '>'
                     . $taskurl->copy()->add('actionID', 'modify_task')->link()
                     . Horde::img('edit-sidebar-' . substr($task->foregroundColor(), 1) . '.png', $label)
                     . '</a></td>';
                 if ($task->completed) {
-                    $html .= '<td width="1%"' . $style . '>'
+                    /**
+                     * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+                     * @deprecated Use Horde_Themes_Image::tag() instead
+                     * @see Horde_Deprecated::img()
+                     */
+$html .= '<td width="1%"' . $style . '>'
                         . Horde::img('checked.png', _("Completed")) . '</td>';
                 } else {
                     $label = sprintf(_("Complete \"%s\""), $task->name);
-                    $html .= '<td width="1%"' . $style . '>'
+                    /**
+                     * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+                     * @deprecated Use Horde_Themes_Image::tag() instead
+                     * @see Horde_Deprecated::img()
+                     */
+$html .= '<td width="1%"' . $style . '>'
                         . Horde::url(
                             $conf['urls']['pretty'] == 'rewrite'
                                 ? 't/complete'
@@ -228,8 +250,8 @@ class Nag_Block_Summary extends Horde_Core_Block
                    ? htmlspecialchars($task->name) : _("[none]"))
                 . '</a>';
 
-            if ($due && empty($task->completed) &&
-                !empty($this->_params['show_due'])) {
+            if ($due && empty($task->completed)
+                && !empty($this->_params['show_due'])) {
                 $html .= ' ('
                     . $due->strftime($prefs->getValue('date_format'))
                     . ')';

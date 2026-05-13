@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Nag Responsive Template View
  *
@@ -55,8 +56,8 @@ class ResponsiveTemplateView
         extract($this->data, EXTR_SKIP);
 
         // Helper function for escaping
-        $escape = function($value) {
-            return htmlspecialchars((string)$value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $escape = function ($value) {
+            return htmlspecialchars((string) $value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
         };
 
         // Start output buffering

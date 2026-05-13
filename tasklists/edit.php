@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2002-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2002-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -21,10 +22,10 @@ try {
     $notification->push($e);
     Horde::url('list.php', true)->redirect();
 }
-$owner = $tasklist->get('owner') == $GLOBALS['registry']->getAuth() ||
-    (is_null($tasklist->get('owner')) && $GLOBALS['registry']->isAdmin());
-if (!$owner &&
-    !$tasklist->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::READ)) {
+$owner = $tasklist->get('owner') == $GLOBALS['registry']->getAuth()
+    || (is_null($tasklist->get('owner')) && $GLOBALS['registry']->isAdmin());
+if (!$owner
+    && !$tasklist->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::READ)) {
     $notification->push(_("You are not allowed to see this task list."), 'horde.error');
     Horde::url('list.php', true)->redirect();
 }
@@ -51,13 +52,17 @@ $vars->set('color', $tasklist->get('color'));
 $vars->set('system', is_null($tasklist->get('owner')));
 $vars->set('description', $tasklist->get('desc'));
 
-$page_output->header(array(
-    'title' => $form->getTitle()
-));
+$page_output->header([
+    'title' => $form->getTitle(),
+]);
 Nag::status();
 if ($owner) {
-    echo $form->renderActive($form->getRenderer(), $vars,
-                             Horde::url('tasklists/edit.php'), 'post');
+    echo $form->renderActive(
+        $form->getRenderer(),
+        $vars,
+        Horde::url('tasklists/edit.php'),
+        'post'
+    );
 } else {
     echo $form->renderInactive($form->getRenderer(), $vars);
 }

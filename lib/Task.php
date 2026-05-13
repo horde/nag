@@ -1,5 +1,7 @@
 <?php
+
 use function PHP81_BC\strftime;
+
 /**
  * Nag_Task handles as single task as well as a list of tasks and implements a
  * recursive iterator to handle a (hierarchical) list of tasks.
@@ -533,9 +535,9 @@ class Nag_Task
      */
     public function get($key)
     {
-        return isset($this->_dict[$key]) ?
-            $this->children[$this->_dict[$key]] :
-            null;
+        return isset($this->_dict[$key])
+            ? $this->children[$this->_dict[$key]]
+            : null;
     }
 
     /**
@@ -650,8 +652,8 @@ class Nag_Task
      */
     public function recurs()
     {
-        return isset($this->recurrence) &&
-            !$this->recurrence->hasRecurType(Horde_Date_Recurrence::RECUR_NONE);
+        return isset($this->recurrence)
+            && !$this->recurrence->hasRecurType(Horde_Date_Recurrence::RECUR_NONE);
     }
 
     /**
@@ -728,8 +730,8 @@ class Nag_Task
             return null;
         }
 
-        if (!$this->recurs() ||
-            !($completions = $this->recurrence->getCompletions())) {
+        if (!$this->recurs()
+            || !($completions = $this->recurrence->getCompletions())) {
             return new Horde_Date($this->start);
         }
 
@@ -781,7 +783,12 @@ class Nag_Task
                 ['parselevel' => Horde_Text_Filter_Text2html::MICRO]
             );
         try {
-            return Horde::callHook('format_description', [$desc], 'nag');
+            /**
+             * ARCHITECTURE VIOLATION: Using deprecated Horde::callHook()
+             * @deprecated Use $GLOBALS['injector']->getInstance('Horde_Core_Hooks')->callHook() instead
+             * @see Horde_Deprecated::callHook()
+             */
+return Horde::callHook('format_description', [$desc], 'nag');
         } catch (Horde_Exception_HookNotSet $e) {
             return $desc;
         }
@@ -999,17 +1006,37 @@ class Nag_Task
         $parent = $this->parent;
         for ($i = 1; $i < $this->indent; ++$i) {
             if ($parent && $parent->lastChild) {
-                $html = Horde::img('tree/blank' . $foreground . '.png') . $html;
+                /**
+                 * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+                 * @deprecated Use Horde_Themes_Image::tag() instead
+                 * @see Horde_Deprecated::img()
+                 */
+$html = Horde::img('tree/blank' . $foreground . '.png') . $html;
             } else {
-                $html = Horde::img('tree/line' . $foreground . '.png', '|') . $html;
+                /**
+                 * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+                 * @deprecated Use Horde_Themes_Image::tag() instead
+                 * @see Horde_Deprecated::img()
+                 */
+$html = Horde::img('tree/line' . $foreground . '.png', '|') . $html;
             }
             $parent = $parent->parent;
         }
         if ($this->indent) {
             if ($this->lastChild) {
-                $html .= Horde::img($GLOBALS['registry']->nlsconfig->curr_rtl ? 'tree/rev-joinbottom' . $foreground . '.png' : 'tree/joinbottom' . $foreground . '.png', '\\');
+                /**
+                 * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+                 * @deprecated Use Horde_Themes_Image::tag() instead
+                 * @see Horde_Deprecated::img()
+                 */
+$html .= Horde::img($GLOBALS['registry']->nlsconfig->curr_rtl ? 'tree/rev-joinbottom' . $foreground . '.png' : 'tree/joinbottom' . $foreground . '.png', '\\');
             } else {
-                $html .= Horde::img($GLOBALS['registry']->nlsconfig->curr_rtl ? 'tree/rev-join' . $foreground . '.png' : 'tree/join' . $foreground . '.png', '+');
+                /**
+                 * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+                 * @deprecated Use Horde_Themes_Image::tag() instead
+                 * @see Horde_Deprecated::img()
+                 */
+$html .= Horde::img($GLOBALS['registry']->nlsconfig->curr_rtl ? 'tree/rev-join' . $foreground . '.png' : 'tree/join' . $foreground . '.png', '+');
             }
         }
 
@@ -1400,8 +1427,8 @@ class Nag_Task
                     $vTodo->addComponent($vAlarm);
                 }
                 $hordeAlarm = $GLOBALS['injector']->getInstance('Horde_Alarm');
-                if ($hordeAlarm->exists($this->uid, $GLOBALS['registry']->getAuth()) &&
-                    $hordeAlarm->isSnoozed($this->uid, $GLOBALS['registry']->getAuth())) {
+                if ($hordeAlarm->exists($this->uid, $GLOBALS['registry']->getAuth())
+                    && $hordeAlarm->isSnoozed($this->uid, $GLOBALS['registry']->getAuth())) {
                     $vTodo->setAttribute('X-MOZ-LASTACK', new Horde_Date($_SERVER['REQUEST_TIME']));
                     $alarm = $hordeAlarm->get($this->uid, $GLOBALS['registry']->getAuth());
                     if (!empty($alarm['snooze'])) {
@@ -1690,8 +1717,8 @@ class Nag_Task
             }
             $params = $vTodo->getAttribute('RELATED-TO', true);
             foreach ($relations as $id => $relation) {
-                if (empty($params[$id]['RELTYPE']) ||
-                    Horde_String::upper($params[$id]['RELTYPE']) == 'PARENT') {
+                if (empty($params[$id]['RELTYPE'])
+                    || Horde_String::upper($params[$id]['RELTYPE']) == 'PARENT') {
                     try {
                         // Shouldn't this rather be [this->tasklist]?
                         $parent = $this->_storage->getByUID($relation, $this->tasklist);
@@ -1792,10 +1819,10 @@ class Nag_Task
             }
             $haveTrigger = false;
             foreach ($triggerParams as $tp) {
-                if (isset($tp['VALUE']) &&
-                    $tp['VALUE'] == 'DATE-TIME') {
-                    if (isset($tp['RELATED']) &&
-                        $tp['RELATED'] == 'END') {
+                if (isset($tp['VALUE'])
+                    && $tp['VALUE'] == 'DATE-TIME') {
+                    if (isset($tp['RELATED'])
+                        && $tp['RELATED'] == 'END') {
                         if ($this->due) {
                             $this->alarm = intval(($this->due - $trigger) / 60);
                             $haveTrigger = true;
@@ -1808,8 +1835,8 @@ class Nag_Task
                             break;
                         }
                     }
-                } elseif (isset($tp['RELATED']) && $tp['RELATED'] == 'END' &&
-                          $this->due && $this->start) {
+                } elseif (isset($tp['RELATED']) && $tp['RELATED'] == 'END'
+                          && $this->due && $this->start) {
                     $this->alarm = -intval($trigger / 60);
                     $this->alarm -= ($this->due - $this->start);
                     $haveTrigger = true;
@@ -2038,8 +2065,8 @@ class Nag_Task
         // series. So, if deadoccur is set, we have to ignore the recurrence
         // properties. Otherwise, editing the "dead" occurance will recreate
         // a completely new recurring series on the client.
-        if (!($message->recurrence && $message->recurrence->deadoccur) &&
-            !$message->deadoccur) {
+        if (!($message->recurrence && $message->recurrence->deadoccur)
+            && !$message->deadoccur) {
 
             if ($rrule = $message->getRecurrence()) {
                 $this->recurrence = $rrule;

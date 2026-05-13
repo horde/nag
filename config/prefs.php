@@ -1,4 +1,5 @@
 <?php
+
 /**
  * See horde/config/prefs.php for documentation on the structure of this file.
  *
@@ -8,75 +9,75 @@
  * use prefs-servername.php.
  */
 
-$prefGroups['display'] = array(
+$prefGroups['display'] = [
     'column' => _("General Preferences"),
     'label' => _("Display Preferences"),
     'desc' => _("Change your task sorting and display preferences."),
-    'members' => array('tasklist_columns', 'sortby', 'altsortby', 'sortdir'),
-);
+    'members' => ['tasklist_columns', 'sortby', 'altsortby', 'sortdir'],
+];
 
-$prefGroups['deletion'] = array(
+$prefGroups['deletion'] = [
     'column' => _("General Preferences"),
     'label' => _("Deleting Tasks"),
     'desc' => _("Delete behaviour"),
-    'members' => array('delete_opt', 'purge_completed_interval', 'purge_completed_keep'),
-);
+    'members' => ['delete_opt', 'purge_completed_interval', 'purge_completed_keep'],
+];
 
-$prefGroups['tasks'] = array(
+$prefGroups['tasks'] = [
     'column' => _("General Preferences"),
     'label' => _("Task Defaults"),
     'desc' => _("Defaults for new tasks"),
-    'members' => array('default_due', 'default_due_days', 'default_due_time'),
-);
+    'members' => ['default_due', 'default_due_days', 'default_due_time'],
+];
 
-$prefGroups['share'] = array(
+$prefGroups['share'] = [
     'column' => _("Task List and Share Preferences"),
     'label' => _("Default Task List"),
     'desc' => _("Choose your default task list."),
-    'members' => array('default_tasklist'),
-);
+    'members' => ['default_tasklist'],
+];
 
-$prefGroups['sync'] = array(
+$prefGroups['sync'] = [
     'column' => _("Task List and Share Preferences"),
     'label' => _("Synchronization Preferences"),
     'desc' => _("Choose the task lists to use for synchronization with external devices."),
-    'members' => array('sync_lists', 'activesync_no_multiplex'),
-);
+    'members' => ['sync_lists', 'activesync_no_multiplex'],
+];
 
-$prefGroups['notification'] = array(
+$prefGroups['notification'] = [
     'column' => _("Task List and Share Preferences"),
     'label' => _("Notifications"),
     'desc' => _("Choose if you want to be notified of task changes and task alarms."),
-    'members' => array('task_notification', 'task_notification_exclude_self', 'task_alarms_select'),
-);
+    'members' => ['task_notification', 'task_notification_exclude_self', 'task_alarms_select'],
+];
 
-$prefGroups['external'] = array(
+$prefGroups['external'] = [
     'column'  => _("Task List and Share Preferences"),
     'label'   => _("External Data"),
     'desc'    => _("Show data from other applications or sources."),
-    'members' => array('show_external'),
-);
+    'members' => ['show_external'],
+];
 
 // columns in the list view
-$_prefs['tasklist_columns'] = array(
+$_prefs['tasklist_columns'] = [
     'value' => 'a:2:{i:0;s:8:"priority";i:1;s:3:"due";}',
     'type' => 'multienum',
-    'enum' => array(
+    'enum' => [
         'tasklist' => _("Task List"),
         'priority' => _("Priority"),
         'assignee' => _("Assignee"),
         'due' => _("Due Date"),
         'start' => _("Start Date"),
-        'estimate' => _("Estimated Time")
-    ),
-    'desc' => _("Select the columns that should be shown in the list view:")
-);
+        'estimate' => _("Estimated Time"),
+    ],
+    'desc' => _("Select the columns that should be shown in the list view:"),
+];
 
 // user preferred sorting column
-$_prefs['sortby'] = array(
+$_prefs['sortby'] = [
     'value' => Nag::SORT_PRIORITY,
     'type' => 'enum',
-    'enum' => array(
+    'enum' => [
         Nag::SORT_PRIORITY => _("Priority"),
         Nag::SORT_NAME => _("Task Name"),
         Nag::SORT_DUE => _("Due Date"),
@@ -84,16 +85,16 @@ $_prefs['sortby'] = array(
         Nag::SORT_COMPLETION => _("Completed?"),
         Nag::SORT_ESTIMATE => _("Estimated Time"),
         Nag::SORT_ASSIGNEE => _("Assignee"),
-        Nag::SORT_OWNER => _("Task List")
-    ),
+        Nag::SORT_OWNER => _("Task List"),
+    ],
     'desc' => _("Sort tasks by:"),
-);
+];
 
 // alternate sort column
-$_prefs['altsortby'] = array(
+$_prefs['altsortby'] = [
     'value' => Nag::SORT_DUE,
     'type' => 'enum',
-    'enum' => array(
+    'enum' => [
         Nag::SORT_PRIORITY => _("Priority"),
         Nag::SORT_NAME => _("Task Name"),
         Nag::SORT_DUE => _("Due Date"),
@@ -101,66 +102,66 @@ $_prefs['altsortby'] = array(
         Nag::SORT_COMPLETION => _("Completed?"),
         Nag::SORT_ESTIMATE => _("Estimated Time"),
         Nag::SORT_ASSIGNEE => _("Assignee"),
-        Nag::SORT_OWNER => _("Task List")
-    ),
+        Nag::SORT_OWNER => _("Task List"),
+    ],
     'desc' => _("Then:"),
-);
+];
 
 // user preferred sorting direction
-$_prefs['sortdir'] = array(
+$_prefs['sortdir'] = [
     'value' => Nag::SORT_ASCEND,
     'type' => 'enum',
-    'enum' => array(
+    'enum' => [
         Nag::SORT_ASCEND => _("Ascending"),
-        Nag::SORT_DESCEND => _("Descending")
-    ),
+        Nag::SORT_DESCEND => _("Descending"),
+    ],
     'desc' => _("Sort direction:"),
-);
+];
 
 // preference for delete confirmation dialog.
-$_prefs['delete_opt'] = array(
+$_prefs['delete_opt'] = [
     'value' => 1,
     'type' => 'checkbox',
     'desc' => _("Do you want to confirm deleting entries?"),
-);
+];
 
 // how often to purge completed tasks?
-$_prefs['purge_completed_interval'] = array(
+$_prefs['purge_completed_interval'] = [
     'value' => 0,
     'type' => 'enum',
-    'enum' => array_merge(array(0 => _("Never")), Horde_LoginTasks::getLabels()),
-    'desc' => _("Purge completed tasks how often:")
-);
+    'enum' => array_merge([0 => _("Never")], Horde_LoginTasks::getLabels()),
+    'desc' => _("Purge completed tasks how often:"),
+];
 
-$_prefs['purge_completed_keep'] = array(
+$_prefs['purge_completed_keep'] = [
     'value' => 30,
     'type' => 'number',
-    'desc' => _("Purge completed tasks older than this amount of days.")
-);
+    'desc' => _("Purge completed tasks older than this amount of days."),
+];
 
 // default to tasks having a due date?
-$_prefs['default_due'] = array(
+$_prefs['default_due'] = [
     'value' => 0,
     'type' => 'checkbox',
     'desc' => _("When creating a new task, should it default to having a due date?"),
-);
+];
 
 // default number of days out for due dates
-$_prefs['default_due_days'] = array(
+$_prefs['default_due_days'] = [
     'value' => 1,
     'type' => 'number',
     'zero' => true,
     'desc' => _("When creating a new task, how many days in the future should the default due date be (0 means today)?"),
-);
+];
 
 // default due time
-$_prefs['default_due_time'] = array(
+$_prefs['default_due_time'] = [
     'value' => 'now',
     'type' => 'enum',
-    'enum' => array(),
+    'enum' => [],
     'desc' => _("What do you want to be the default due time for tasks?"),
-    'on_init' => function($ui) {
-        $enum = array('now' => _("The current hour"));
+    'on_init' => function ($ui) {
+        $enum = ['now' => _("The current hour")];
         $twentyfour = $GLOBALS['prefs']->getValue('twentyFour');
         for ($i = 0; $i < 24; ++$i) {
             $value = sprintf('%02d:00', $i);
@@ -169,87 +170,87 @@ $_prefs['default_due_time'] = array(
                 : sprintf('%02d:00 ' . ($i >= 12 ? _("pm") : _("am")), ($i % 12 ? $i % 12 : 12));
         }
         $ui->prefs['default_due_time']['enum'] = $enum;
-    }
-);
+    },
+];
 
 // new task notifications
-$_prefs['task_notification'] = array(
+$_prefs['task_notification'] = [
     'value' => '',
     'type' => 'enum',
-    'enum' => array(
+    'enum' => [
         '' => _("No"),
         'owner' => _("On my task lists only"),
         'show' => _("On all shown task lists"),
-        'read' => _("On all task lists I have read access to")
-    ),
+        'read' => _("On all task lists I have read access to"),
+    ],
     'desc' => _("Choose if you want to be notified of new, edited, and deleted tasks by email:"),
-    'locked' => function() {
+    'locked' => function () {
         return $GLOBALS['conf']['assignees']['allow_external'];
-    }
-);
+    },
+];
 
-$_prefs['task_notification_exclude_self'] = array(
+$_prefs['task_notification_exclude_self'] = [
     'value' => 0,
     'locked' => false,
     'type' => 'checkbox',
     'desc' => _("Don't send me a notification if I've added, changed or deleted the task?"),
-    'locked' => function() {
+    'locked' => function () {
         return $GLOBALS['conf']['assignees']['allow_external'];
-    }
-);
+    },
+];
 
 // alarm methods
-$_prefs['task_alarms_select'] = array(
+$_prefs['task_alarms_select'] = [
     'type' => 'special',
     'handler' => 'Nag_Prefs_Special_TaskAlarms',
-    'suppress' => function() {
+    'suppress' => function () {
         return empty($GLOBALS['conf']['alarms']['driver']);
-    }
-);
+    },
+];
 
-$_prefs['task_alarms'] = array(
-    'value' => 'a:1:{s:6:"notify";a:0:{}}'
-);
+$_prefs['task_alarms'] = [
+    'value' => 'a:1:{s:6:"notify";a:0:{}}',
+];
 
 // show data from other applications that can be listed as tasks?
-$_prefs['show_external'] = array(
+$_prefs['show_external'] = [
     'value' => 'a:0:{}',
     'type' => 'multienum',
-    'enum' => array('whups' => $GLOBALS['registry']->get('name', 'whups')),
+    'enum' => ['whups' => $GLOBALS['registry']->get('name', 'whups')],
     'desc' => _("Show data from any of these other applications in your task list?"),
-    'suppress' => function() {
+    'suppress' => function () {
         return !$GLOBALS['registry']->hasMethod('getListTypes', 'whups');
-    }
-);
+    },
+];
 
 // show complete/incomplete tasks?
-$_prefs['show_completed'] = array(
+$_prefs['show_completed'] = [
     'value' => 1,
     'type' => 'enum',
-    'enum' => array(
+    'enum' => [
         Nag::VIEW_ALL => _("All tasks"),
         Nag::VIEW_INCOMPLETE => _("Incomplete tasks"),
         Nag::VIEW_COMPLETE => _("Complete tasks"),
-        Nag::VIEW_FUTURE => _("Future tasks")
-    ),
+        Nag::VIEW_FUTURE => _("Future tasks"),
+    ],
     'desc' => _("Show complete, incomplete, or all tasks in the task list?"),
-);
+];
 
 // default tasklists
 // Set locked to true if you don't want users to have multiple task lists.
-$_prefs['default_tasklist'] = array(
+$_prefs['default_tasklist'] = [
     'value' => '',
     'type' => 'enum',
-    'enum' => array(),
+    'enum' => [],
     'desc' => _("Your default task list:"),
-    'on_init' => function($ui) {
-        $enum = array();
+    'on_init' => function ($ui) {
+        $enum = [];
         foreach (Nag::listTasklists(false, Horde_Perms::EDIT, false) as $key => $val) {
             $enum[$key] = Nag::getLabel($val);
         }
         $ui->prefs['default_tasklist']['enum'] = $enum;
     },
-    'on_change' => function() {
+    'on_change' => function () {
         $GLOBALS['injector']->getInstance('Nag_Factory_Tasklists')
             ->create()
             ->setDefaultShare($GLOBALS['prefs']->getValue('default_tasklist'));
@@ -266,28 +267,28 @@ $_prefs['default_tasklist'] = array(
             $sync[] = $default;
             $GLOBALS['prefs']->setValue('sync_lists', serialize($sync));
         }
-    }
-);
+    },
+];
 
 // store the task lists to diplay
-$_prefs['display_tasklists'] = array(
-    'value' => 'a:0:{}'
-);
+$_prefs['display_tasklists'] = [
+    'value' => 'a:0:{}',
+];
 
 // Tasklists use for synchronization
-$_prefs['sync_lists'] = array(
+$_prefs['sync_lists'] = [
     'value' => 'a:0:{}',
     'type' => 'multienum',
-    'enum' => array(),
+    'enum' => [],
     'desc' => _("Select the task lists that, in addition to the default, should be used for synchronization with external devices:"),
-    'on_init' => function($ui) {
-        $enum = array();
+    'on_init' => function ($ui) {
+        $enum = [];
         $sync = @unserialize($GLOBALS['prefs']->getValue('sync_lists'));
         if (empty($sync)) {
             $default_tasklist = Nag::getDefaultTasklist(Horde_Perms::DELETE);
             $sync_list = !empty($default_tasklist)
-                ? array($default_tasklist)
-                : array();
+                ? [$default_tasklist]
+                : [];
             $GLOBALS['prefs']->setValue('sync_lists', serialize($sync_list));
         }
         foreach (Nag::listTasklists(false, Horde_Perms::DELETE, false) as $key => $list) {
@@ -297,7 +298,7 @@ $_prefs['sync_lists'] = array(
         }
         $ui->prefs['sync_lists']['enum'] = $enum;
     },
-    'on_change' => function() {
+    'on_change' => function () {
         $sync = @unserialize($GLOBALS['prefs']->getValue('sync_lists'));
         $haveDefault = false;
         $default = Nag::getDefaultTasklist(Horde_Perms::DELETE);
@@ -317,24 +318,24 @@ $_prefs['sync_lists'] = array(
                 $sm->setLogger($GLOBALS['injector']->getInstance('Horde_Log_Logger'));
                 $devices = $sm->listDevices($GLOBALS['registry']->getAuth());
                 foreach ($devices as $device) {
-                    $sm->removeState(array(
+                    $sm->removeState([
                         'devId' => $device['device_id'],
                         'id' => Horde_Core_ActiveSync_Driver::TASKS_FOLDER_UID,
-                        'user' => $GLOBALS['registry']->getAuth()
-                    ));
+                        'user' => $GLOBALS['registry']->getAuth(),
+                    ]);
                 }
                 $GLOBALS['notification']->push(_("All state removed for your ActiveSync devices. They will resynchronize next time they connect to the server."));
             } catch (Horde_ActiveSync_Exception $e) {
                 $GLOBALS['notification']->push(_("There was an error communicating with the ActiveSync server: %s"), $e->getMessage(), 'horde.error');
             }
         }
-    }
-);
+    },
+];
 
 // @todo We default to using multiplex since that is the current behavior
 // For Nag 5 we should default to separate.
-$_prefs['activesync_no_multiplex'] = array(
+$_prefs['activesync_no_multiplex'] = [
     'type' => 'checkbox',
     'desc' => _("Support separate task lists?"),
-    'value' => 0
-);
+    'value' => 0,
+];

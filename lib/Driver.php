@@ -75,9 +75,9 @@ abstract class Nag_Driver
         $alarms = [];
         $this->tasks->reset();
         while ($task = $this->tasks->each()) {
-            if ($task->alarm &&
-                ($due = $task->getNextDue()) &&
-                ($due->timestamp() - ($task->alarm * 60)) <= $date) {
+            if ($task->alarm
+                && ($due = $task->getNextDue())
+                && ($due->timestamp() - ($task->alarm * 60)) <= $date) {
                 $alarms[$task_id] = $task;
             }
         }
@@ -182,8 +182,8 @@ abstract class Nag_Driver
         $result = Nag::sendNotification('add', $task);
 
         /* Add an alarm if necessary. */
-        if (!empty($task->due) && !empty($task->alarm) &&
-            ($alarm = $task->toAlarm())) {
+        if (!empty($task->due) && !empty($task->alarm)
+            && ($alarm = $task->toAlarm())) {
             $hordeAlarm = $GLOBALS['injector']->getInstance('Horde_Alarm');
             $hordeAlarm->set($alarm);
             if ($task->snooze) {
@@ -213,8 +213,8 @@ abstract class Nag_Driver
         $task = $this->get($taskId);
 
         /* Avoid circular reference. */
-        if (isset($properties['parent']) &&
-            $properties['parent'] == $taskId) {
+        if (isset($properties['parent'])
+            && $properties['parent'] == $taskId) {
             unset($properties['parent']);
         }
 
@@ -223,8 +223,8 @@ abstract class Nag_Driver
          * task complete might only shift the due date to the next
          * recurrence. */
         $task_completed = $task->completed;
-        $completed_changed = isset($properties['completed']) &&
-            $properties['completed'] != $task->completed;
+        $completed_changed = isset($properties['completed'])
+            && $properties['completed'] != $task->completed;
         $new_completed = !empty($properties['completed']);
         if ($completed_changed) {
             if (isset($properties['recurrence'])) {
@@ -251,8 +251,8 @@ abstract class Nag_Driver
 
         $new_task = $this->get($task->id);
         $log_tasklist = $this->_tasklist;
-        if (isset($properties['tasklist']) &&
-            $task->tasklist != $properties['tasklist']) {
+        if (isset($properties['tasklist'])
+            && $task->tasklist != $properties['tasklist']) {
             /* Moving the task to another tasklist. */
             try {
                 $share = $GLOBALS['nag_shares']->getShare($task->tasklist);
@@ -308,8 +308,8 @@ abstract class Nag_Driver
 
         /* Update alarm if necessary. */
         $horde_alarm = $GLOBALS['injector']->getInstance('Horde_Alarm');
-        if ((isset($properties['alarm']) && empty($properties['alarm'])) ||
-            $new_completed || empty($task->due)) {
+        if ((isset($properties['alarm']) && empty($properties['alarm']))
+            || $new_completed || empty($task->due)) {
             $horde_alarm->delete($task->uid);
         } else {
             $task = $this->get($taskId);
@@ -530,7 +530,7 @@ abstract class Nag_Driver
      * @throws Horde_Exception_NotFound
      * @throws Nag_Exception
      */
-    public function getByUID($uids, array $tasklists = null, $getall = true)
+    public function getByUID($uids, ?array $tasklists = null, $getall = true)
     {
         throw new Nag_Exception($this->_errormsg);
     }

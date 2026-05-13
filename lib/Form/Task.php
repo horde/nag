@@ -1,5 +1,7 @@
 <?php
 
+use Horde\Util\Util;
+
 /**
  * This file contains all Horde_Form extensions required for editing tasks.
  *
@@ -96,8 +98,8 @@ class Nag_Form_Task extends Horde_Form
 
         $this->setSection(self::SECTION_GENERAL, _("General"));
         $this->addVariable(_("Name"), 'name', 'text', true);
-        if (!$prefs->isLocked('default_tasklist') &&
-            count($tasklist_enums) > 1) {
+        if (!$prefs->isLocked('default_tasklist')
+            && count($tasklist_enums) > 1) {
             $v = $this->addVariable(
                 _("Task List"),
                 'tasklist_id',
@@ -156,9 +158,9 @@ class Nag_Form_Task extends Horde_Form
                 foreach ($groups as $group) {
                     if ($horde_group->exists($group)) {
                         $users = array_merge(
-                          $users,
-                          $horde_group->listUsers($group)
-		        );
+                            $users,
+                            $horde_group->listUsers($group)
+                        );
                     }
                 }
             }
@@ -207,7 +209,12 @@ class Nag_Form_Task extends Horde_Form
 
         $this->setSection(self::SECTION_DESC, _("Description"));
         try {
-            $description = Horde::callHook('description_help', [], 'nag');
+            /**
+             * ARCHITECTURE VIOLATION: Using deprecated Horde::callHook()
+             * @deprecated Use $GLOBALS['injector']->getInstance('Horde_Core_Hooks')->callHook() instead
+             * @see Horde_Deprecated::callHook()
+             */
+$description = Horde::callHook('description_help', [], 'nag');
         } catch (Horde_Exception_HookNotSet $e) {
             $description = '';
         }
@@ -220,7 +227,7 @@ class Nag_Form_Task extends Horde_Form
         if (!$vars->get('task_id')) {
             $buttons[] = ['value' => _("Save and New"), 'name' => 'savenewbutton', 'class' => 'horde-create'];
         }
-        if (Horde_Util::getFormData('have_search')) {
+        if (Util::getFormData('have_search')) {
             $buttons[] = ['value' => _("Return to Search Results"), 'name' => 'search_return', 'class' => 'horde-button'];
         }
         $this->setButtons($buttons);

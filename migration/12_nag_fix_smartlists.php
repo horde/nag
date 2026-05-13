@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Fix smart lists flag in PostrgreSQL (Bug #12101).
  *
- * Copyright 2013-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2013-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -26,7 +27,5 @@ class NagFixSmartlists extends Horde_Db_Migration_Base
     /**
      * Downgrade
      */
-    public function down()
-    {
-    }
+    public function down() {}
 }

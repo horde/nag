@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2001-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2001-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -9,13 +10,13 @@
 require_once __DIR__ . '/lib/Application.php';
 Horde_Registry::appInit('nag');
 
-$page_output->addInlineScript(array(
-    '$("search_pattern")'
-), true);
+$page_output->addInlineScript([
+    '$("search_pattern")',
+], true);
 
-$page_output->header(array(
-    'title' => _("Search")
-));
+$page_output->header([
+    'title' => _("Search"),
+]);
 
 // Editing existing SmartList?
 $vars = Horde_Variables::getDefaultVariables();

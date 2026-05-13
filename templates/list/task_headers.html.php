@@ -3,7 +3,12 @@
   <th id="s<?php echo Nag::SORT_COMPLETION ?>"<?php if ($this->sortby == Nag::SORT_COMPLETION) {
       echo ' class="' . $this->sortdirclass . '"';
   } ?> width="2%">
-   <?php echo $this->headerWidget($this->baseurl, $this->sortdir, $this->sortby, Nag::SORT_COMPLETION, Horde::img('checked.png', _("Completed?"))) ?>
+   <?php /**
+ * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+ * @deprecated Use Horde_Themes_Image::tag() instead
+ * @see Horde_Deprecated::img()
+ */
+echo $this->headerWidget($this->baseurl, $this->sortdir, $this->sortby, Nag::SORT_COMPLETION, Horde::img('checked.png', _("Completed?"))) ?>
   </th>
 <?php if (in_array('priority', $this->columns)): ?>
   <th id="s<?php echo Nag::SORT_PRIORITY ?>" class="horde-split-left<?php if ($this->sortby == Nag::SORT_PRIORITY) {
@@ -20,15 +25,30 @@
   </th>
 <?php endif; ?>
   <th width="2%" class="horde-split-left nosort">
-   <?php echo Horde::img('edit.png', _("Edit Task")) ?>
+   <?php /**
+ * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+ * @deprecated Use Horde_Themes_Image::tag() instead
+ * @see Horde_Deprecated::img()
+ */
+echo Horde::img('edit.png', _("Edit Task")) ?>
   </th>
   <th id="s<?php echo Nag::SORT_NAME ?>" class="horde-split-left<?php if ($this->sortby == Nag::SORT_NAME) {
       echo ' ' . $this->sortdirclass;
   } ?>">
    <?php echo $this->headerWidget($this->baseurl, $this->sortdir, $this->sortby, Nag::SORT_NAME, _("Na_me")) ?>
   </th>
-  <th width="2%" class="horde-split-left nosort"><?php echo Horde::img('note.png', _("Task Note?")) ?></th>
-  <th width="2%" class="horde-split-left nosort"><?php echo Horde::img('alarm.png', _("Task Alarm?")) ?></th>
+  <th width="2%" class="horde-split-left nosort"><?php /**
+ * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+ * @deprecated Use Horde_Themes_Image::tag() instead
+ * @see Horde_Deprecated::img()
+ */
+echo Horde::img('note.png', _("Task Note?")) ?></th>
+  <th width="2%" class="horde-split-left nosort"><?php /**
+ * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+ * @deprecated Use Horde_Themes_Image::tag() instead
+ * @see Horde_Deprecated::img()
+ */
+echo Horde::img('alarm.png', _("Task Alarm?")) ?></th>
 <?php if (in_array('due', $this->columns)): ?>
   <th id="s<?php echo Nag::SORT_DUE ?>" class="horde-split-left<?php if ($this->sortby == Nag::SORT_DUE) {
       echo ' ' . $this->sortdirclass;

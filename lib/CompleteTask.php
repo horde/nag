@@ -19,9 +19,9 @@ class Nag_CompleteTask
             } else {
                 $wasCompleted = $task->completed;
                 $task->loadChildren();
-                if ($wasCompleted &&
-                    $task->parent &&
-                    $task->parent->completed) {
+                if ($wasCompleted
+                    && $task->parent
+                    && $task->parent->completed) {
                     $result = ['data' => 'complete'];
                     $notification->push(_("Completed parent task, mark it as incomplete first"), 'horde.error');
                 } elseif (!$wasCompleted && !$task->childrenCompleted()) {

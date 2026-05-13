@@ -3,7 +3,7 @@
 /**
  * Task list view.
  *
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (BSD). If you did not
  * did not receive this file, see http://www.horde.org/licenses/bsdl.php.
@@ -72,7 +72,7 @@ class Nag_View_List
      *
      * @return Nag_View_List
      */
-    public function __construct(Variables|\Horde_Variables $vars)
+    public function __construct(Variables|Horde_Variables $vars)
     {
         $this->_vars = $vars;
         $this->_title = _("My Tasks");
@@ -405,7 +405,12 @@ class Nag_View_List
         }
         $rtags = $this->_browser->getRelatedTags($ids);
         if (count($rtags)) {
-            $html = '<div class="nag-tags-related">'
+            /**
+             * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+             * @deprecated Use Horde_Themes_Image::tag() instead
+             * @see Horde_Deprecated::img()
+             */
+$html = '<div class="nag-tags-related">'
                 . Horde::img('tags.png')
                 . ' <ul class="horde-tags">';
             foreach ($rtags as $id => $taginfo) {
@@ -427,9 +432,19 @@ class Nag_View_List
     protected function _getTagTrail()
     {
         if ($this->_browser->tagCount() >= 1) {
-            $html = '<div class="nag-tags-browsing">' . Horde::img('filter.png') . '<ul class="horde-tags">';
+            /**
+             * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+             * @deprecated Use Horde_Themes_Image::tag() instead
+             * @see Horde_Deprecated::img()
+             */
+$html = '<div class="nag-tags-browsing">' . Horde::img('filter.png') . '<ul class="horde-tags">';
             foreach ($this->_browser->getTags() as $tag => $id) {
-                $html .= '<li>' . htmlspecialchars($tag)
+                /**
+                 * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+                 * @deprecated Use Horde_Themes_Image::tag() instead
+                 * @see Horde_Deprecated::img()
+                 */
+$html .= '<li>' . htmlspecialchars($tag)
                     . $this->_linkRemoveTag($tag)->link()
                     . Horde::img('delete-small.png', _("Remove from search"))
                     . '</a></li>';

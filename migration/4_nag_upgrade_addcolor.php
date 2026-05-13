@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Add color attribute to shares.
  *
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -22,7 +23,7 @@ class NagUpgradeAddColor extends Horde_Db_Migration_Base
         $t = $this->_connection->table('nag_shares');
         $cols = $t->getColumns();
         if (!in_array('attribute_color', array_keys($cols))) {
-            $this->addColumn('nag_shares', 'attribute_color', 'string', array('limit' => 7));
+            $this->addColumn('nag_shares', 'attribute_color', 'string', ['limit' => 7]);
         }
     }
 

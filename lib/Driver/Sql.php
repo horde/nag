@@ -60,7 +60,7 @@ class Nag_Driver_Sql extends Nag_Driver
      * @throws Horde_Exception_NotFound
      * @throws Nag_Exception
      */
-    public function getByUID($uids, array $tasklists = null, $getall = true)
+    public function getByUID($uids, ?array $tasklists = null, $getall = true)
     {
         $results = $this->_getBy($uids, 'task_uid', $tasklists);
         if ($getall) {
@@ -103,7 +103,7 @@ class Nag_Driver_Sql extends Nag_Driver
      * @throws Horde_Exception_NotFound
      * @throws Nag_Exception
      */
-    protected function _getBy($taskIds, $column, array $tasklists = null)
+    protected function _getBy($taskIds, $column, ?array $tasklists = null)
     {
         if (!is_array($taskIds)) {
             $query = 'SELECT * FROM nag_tasks WHERE ' . $column . ' = ?';
@@ -177,8 +177,8 @@ class Nag_Driver_Sql extends Nag_Driver
     {
         $taskId = strval(new Horde_Support_Randomid());
 
-        $query =
-            'INSERT INTO nag_tasks (task_owner, task_creator, task_assignee, '
+        $query
+            = 'INSERT INTO nag_tasks (task_owner, task_creator, task_assignee, '
             . 'task_id, task_name, task_uid, task_desc, task_start, task_due, '
             . 'task_priority, task_estimate, task_completed, '
             . 'task_alarm, task_alarm_methods, task_private, task_parent, '
@@ -274,33 +274,33 @@ class Nag_Driver_Sql extends Nag_Driver
      */
     protected function _modify($taskId, array $task)
     {
-        $query = 'UPDATE nag_tasks SET ' .
-                 'task_creator = ?, ' .
-                 'task_assignee = ?, ' .
-                 'task_name = ?, ' .
-                 'task_desc = ?, ' .
-                 'task_start = ?, ' .
-                 'task_due = ?, ' .
-                 'task_priority = ?, ' .
-                 'task_estimate = ?, ' .
-                 'task_completed = ?, ' .
-                 'task_completed_date = ?, ' .
-                 'task_alarm = ?, ' .
-                 'task_alarm_methods = ?, ' .
-                 'task_parent = ?, ' .
-                 'task_private = ?, ' .
-                 'task_organizer = ?, ' .
-                 'task_status = ?, ' .
-                 'task_actual = ?, ' .
-                 'task_recurtype = ?, ' .
-                 'task_recurinterval = ?, ' .
-                 'task_recurenddate = ?, ' .
-                 'task_recurcount = ?, ' .
-                 'task_recurdays = ?, ' .
-                 'task_exceptions = ?, ' .
-                 'task_completions = ?, ' .
-                 'task_other_attributes = ? ' .
-                 'WHERE task_owner = ? AND task_id = ?';
+        $query = 'UPDATE nag_tasks SET '
+                 . 'task_creator = ?, '
+                 . 'task_assignee = ?, '
+                 . 'task_name = ?, '
+                 . 'task_desc = ?, '
+                 . 'task_start = ?, '
+                 . 'task_due = ?, '
+                 . 'task_priority = ?, '
+                 . 'task_estimate = ?, '
+                 . 'task_completed = ?, '
+                 . 'task_completed_date = ?, '
+                 . 'task_alarm = ?, '
+                 . 'task_alarm_methods = ?, '
+                 . 'task_parent = ?, '
+                 . 'task_private = ?, '
+                 . 'task_organizer = ?, '
+                 . 'task_status = ?, '
+                 . 'task_actual = ?, '
+                 . 'task_recurtype = ?, '
+                 . 'task_recurinterval = ?, '
+                 . 'task_recurenddate = ?, '
+                 . 'task_recurcount = ?, '
+                 . 'task_recurdays = ?, '
+                 . 'task_exceptions = ?, '
+                 . 'task_completions = ?, '
+                 . 'task_other_attributes = ? '
+                 . 'WHERE task_owner = ? AND task_id = ?';
 
         $values = [
             $task['owner'],
@@ -524,15 +524,15 @@ class Nag_Driver_Sql extends Nag_Driver
                 $this,
                 $this->_buildTask($row, $include_history)
             );
-            if (($completed == Nag::VIEW_INCOMPLETE ||
-                 $completed == Nag::VIEW_FUTURE) &&
-                $task->start &&
-                $task->recurs()) {
+            if (($completed == Nag::VIEW_INCOMPLETE
+                 || $completed == Nag::VIEW_FUTURE)
+                && $task->start
+                && $task->recurs()) {
                 $start = $task->getNextStart();
-                if (($completed == Nag::VIEW_INCOMPLETE &&
-                     $start->after($_SERVER['REQUEST_TIME'])) ||
-                    ($completed == Nag::VIEW_FUTURE &&
-                     $start->before($_SERVER['REQUEST_TIME']))) {
+                if (($completed == Nag::VIEW_INCOMPLETE
+                     && $start->after($_SERVER['REQUEST_TIME']))
+                    || ($completed == Nag::VIEW_FUTURE
+                     && $start->before($_SERVER['REQUEST_TIME']))) {
                     continue;
                 }
             }
@@ -608,11 +608,11 @@ class Nag_Driver_Sql extends Nag_Driver
     {
         // Check for non-empty alarm AND a non-empty due date.
         // See Bug: 14214
-        $q = 'SELECT * FROM nag_tasks' .
-            ' WHERE task_owner = ?' .
-            ' AND task_alarm > 0 AND task_due > 0' .
-            ' AND (task_due - (task_alarm * 60) <= ?)' .
-            ' AND task_completed = 0';
+        $q = 'SELECT * FROM nag_tasks'
+            . ' WHERE task_owner = ?'
+            . ' AND task_alarm > 0 AND task_due > 0'
+            . ' AND (task_due - (task_alarm * 60) <= ?)'
+            . ' AND task_completed = 0';
         $values = [$this->_tasklist, $date];
 
         try {
@@ -647,9 +647,9 @@ class Nag_Driver_Sql extends Nag_Driver
         if (empty($row['task_uid'])) {
             $row['task_uid'] = strval(new Horde_Support_Guid());
 
-            $query = 'UPDATE nag_tasks' .
-                ' SET task_uid = ?' .
-                ' WHERE task_owner = ? AND task_id = ?';
+            $query = 'UPDATE nag_tasks'
+                . ' SET task_uid = ?'
+                . ' WHERE task_owner = ? AND task_id = ?';
             $values = [
                 $row['task_uid'],
                 $row['task_owner'],
@@ -668,8 +668,8 @@ class Nag_Driver_Sql extends Nag_Driver
             $recurrence = new Horde_Date_Recurrence($row['task_due']);
             $recurrence->setRecurType((int) $row['task_recurtype']);
             $recurrence->setRecurInterval((int) $row['task_recurinterval']);
-            if (isset($row['task_recurenddate']) &&
-                $row['task_recurenddate'] != '9999-12-31 23:59:59') {
+            if (isset($row['task_recurenddate'])
+                && $row['task_recurenddate'] != '9999-12-31 23:59:59') {
                 $recur_end = new Horde_Date($row['task_recurenddate'], 'UTC');
                 $recur_end->setTimezone(date_default_timezone_get());
                 $recurrence->setRecurEnd($recur_end);

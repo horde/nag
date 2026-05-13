@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Allows null values in share_owner, needed for system shares.
  *
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -19,7 +20,7 @@ class NagUpgradeSystemShares extends Horde_Db_Migration_Base
      */
     public function up()
     {
-        $this->changeColumn('nag_shares', 'share_owner', 'string', array('limit' => 255));
+        $this->changeColumn('nag_shares', 'share_owner', 'string', ['limit' => 255]);
     }
 
     /**
@@ -27,7 +28,7 @@ class NagUpgradeSystemShares extends Horde_Db_Migration_Base
      */
     public function down()
     {
-        $this->changeColumn('nag_shares', 'share_owner', 'string', array('limit' => 255, 'null' => false));
+        $this->changeColumn('nag_shares', 'share_owner', 'string', ['limit' => 255, 'null' => false]);
     }
 
 }

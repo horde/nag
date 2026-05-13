@@ -1,8 +1,11 @@
 <?php
+
+use Horde\Util\Util;
+
 /**
  * Nag data script.
  *
- * Copyright 2001-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2001-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -19,31 +22,31 @@ if (!$conf['menu']['import_export']) {
 }
 
 /* Importable file types. */
-$file_types = array('csv' => _("CSV"),
-                    'vtodo' => _("iCalendar (vTodo)"));
+$file_types = ['csv' => _("CSV"),
+    'vtodo' => _("iCalendar (vTodo)")];
 
 /* Templates for the different import steps. */
-$templates = array(
-    Horde_Data::IMPORT_CSV => array($registry->get('templates', 'horde') . '/data/csvinfo.inc'),
-    Horde_Data::IMPORT_MAPPED => array($registry->get('templates', 'horde') . '/data/csvmap.inc'),
-    Horde_Data::IMPORT_DATETIME => array($registry->get('templates', 'horde') . '/data/datemap.inc')
-);
+$templates = [
+    Horde_Data::IMPORT_CSV => [$registry->get('templates', 'horde') . '/data/csvinfo.inc'],
+    Horde_Data::IMPORT_MAPPED => [$registry->get('templates', 'horde') . '/data/csvmap.inc'],
+    Horde_Data::IMPORT_DATETIME => [$registry->get('templates', 'horde') . '/data/datemap.inc'],
+];
 
 $perms = $GLOBALS['injector']->getInstance('Horde_Core_Perms');
-if ($perms->hasAppPermission('max_tasks') !== true &&
-    $perms->hasAppPermission('max_tasks') <= Nag::countTasks()) {
+if ($perms->hasAppPermission('max_tasks') !== true
+    && $perms->hasAppPermission('max_tasks') <= Nag::countTasks()) {
     Horde::permissionDeniedError(
         'nag',
         'max_tasks',
         sprintf(_("You are not allowed to create more than %d tasks."), $perms->hasAppPermission('max_tasks'))
     );
-    $templates[Horde_Data::IMPORT_FILE] = array(NAG_TEMPLATES . '/data/export.inc');
+    $templates[Horde_Data::IMPORT_FILE] = [NAG_TEMPLATES . '/data/export.inc'];
 } else {
-    $templates[Horde_Data::IMPORT_FILE] = array(NAG_TEMPLATES . '/data/import.inc', NAG_TEMPLATES . '/data/export.inc');
+    $templates[Horde_Data::IMPORT_FILE] = [NAG_TEMPLATES . '/data/import.inc', NAG_TEMPLATES . '/data/export.inc'];
 }
 
 /* Field/clear name mapping. */
-$app_fields = array(
+$app_fields = [
     'name'           => _("Name"),
     'desc'           => _("Description"),
     'assignee'       => _("Assignee"),
@@ -56,36 +59,36 @@ $app_fields = array(
     'completed'      => _("Completion Status"),
     'completed_date' => _("Completion Date"),
     'uid'            => _("Unique ID"),
-    'tags'           => _("Tags")
-);
+    'tags'           => _("Tags"),
+];
 
 /* Date/time fields. */
-$time_fields = array(
+$time_fields = [
     'due' => 'datetime',
     'start' => 'datetime',
-    'completed_date' => 'datetime'
-);
+    'completed_date' => 'datetime',
+];
 
 /* Initial values. */
-$param = array('time_fields' => $time_fields,
-               'file_types'  => $file_types);
-$import_format = Horde_Util::getFormData('import_format', '');
-$import_step   = Horde_Util::getFormData('import_step', 0) + 1;
+$param = ['time_fields' => $time_fields,
+    'file_types'  => $file_types];
+$import_format = Util::getFormData('import_format', '');
+$import_step   = Util::getFormData('import_step', 0) + 1;
 $next_step     = Horde_Data::IMPORT_FILE;
-$actionID      = Horde_Util::getFormData('actionID');
+$actionID      = Util::getFormData('actionID');
 $storage = $injector->getInstance('Horde_Core_Data_Storage');
 
 /* Loop through the action handlers. */
 switch ($actionID) {
-case Horde_Data::IMPORT_FILE:
-    $storage->set('target', Horde_Util::getFormData('tasklist_target', $prefs->getValue('default_tasklist')));
-    break;
+    case Horde_Data::IMPORT_FILE:
+        $storage->set('target', Util::getFormData('tasklist_target', $prefs->getValue('default_tasklist')));
+        break;
 }
 
 if ($import_format) {
     $data = null;
     try {
-        $data = $injector->getInstance('Horde_Core_Factory_Data')->create($import_format, array('cleanup' => array($app_ob, 'cleanupData')));
+        $data = $injector->getInstance('Horde_Core_Factory_Data')->create($import_format, ['cleanup' => [$app_ob, 'cleanupData']]);
         $next_step = $data->nextStep($actionID, $param);
     } catch (Horde_Exception $e) {
         if ($data) {
@@ -130,7 +133,7 @@ if (is_array($next_step)) {
             }
         }
         $row['owner'] = $GLOBALS['registry']->getAuth();
-        foreach (array('start', 'due', 'completed_date') as $field) {
+        foreach (['start', 'due', 'completed_date'] as $field) {
             if (!empty($row[$field])) {
                 try {
                     $date = new Horde_Date($row[$field]);
@@ -146,9 +149,13 @@ if (is_array($next_step)) {
             $nag_storage->add($row);
         } catch (Nag_Exception $e) {
             $haveError = true;
-            $notification->push(sprintf(
-                _("There was an error importing the data: %s"), $e->getMessage()),
-                'horde.error');
+            $notification->push(
+                sprintf(
+                    _("There was an error importing the data: %s"),
+                    $e->getMessage()
+                ),
+                'horde.error'
+            );
             break;
         }
 
@@ -157,24 +164,28 @@ if (is_array($next_step)) {
 
 
     if (!count($next_step)) {
-        $notification->push(sprintf(_("The %s file didn't contain any tasks."),
-                                    $file_types[$storage->get('format')]), 'horde.error');
+        $notification->push(sprintf(
+            _("The %s file didn't contain any tasks."),
+            $file_types[$storage->get('format')]
+        ), 'horde.error');
     } elseif (empty($haveError)) {
-        $notification->push(sprintf(_("%s successfully imported"),
-                                    $file_types[$storage->get('format')]), 'horde.success');
+        $notification->push(sprintf(
+            _("%s successfully imported"),
+            $file_types[$storage->get('format')]
+        ), 'horde.success');
     }
     $next_step = $data->cleanup();
 }
 
-$import_tasklists = $export_tasklists = array();
+$import_tasklists = $export_tasklists = [];
 if ($GLOBALS['registry']->getAuth()) {
     $import_tasklists = Nag::listTasklists(false, Horde_Perms::EDIT);
 }
 $export_tasklists = Nag::listTasklists(false, Horde_Perms::READ);
 
-$page_output->header(array(
-    'title' => _("Import/Export Tasks")
-));
+$page_output->header([
+    'title' => _("Import/Export Tasks"),
+]);
 Nag::status();
 foreach ($templates[$next_step] as $template) {
     require $template;

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -26,8 +27,8 @@ class NagUpgradeParents extends Horde_Db_Migration_Base
      */
     public function up()
     {
-        $this->changeColumn('nag_shares', 'share_parents', 'string', array('limit' => 4000));
-        $this->changeColumn('nag_sharesng', 'share_parents', 'string', array('limit' => 4000));
+        $this->changeColumn('nag_shares', 'share_parents', 'string', ['limit' => 4000]);
+        $this->changeColumn('nag_sharesng', 'share_parents', 'string', ['limit' => 4000]);
     }
 
     /**

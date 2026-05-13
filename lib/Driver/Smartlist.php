@@ -110,7 +110,7 @@ class Nag_Driver_Smartlist extends Nag_Driver
      * @throws Horde_Exception_NotFound
      * @throws Nag_Exception
      */
-    public function getByUID($uids, array $tasklists = null, $getall = true)
+    public function getByUID($uids, ?array $tasklists = null, $getall = true)
     {
         return $this->_driver->getByUID($uids, $tasklists, $getall);
     }

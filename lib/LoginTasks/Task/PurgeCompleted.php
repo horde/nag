@@ -3,7 +3,7 @@
 /**
  * Login tasks module that purges completed tasks.
  *
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -53,8 +53,8 @@ class Nag_LoginTasks_Task_PurgeCompleted extends Horde_LoginTasks_Task
         $count = 0;
         $tasks->reset();
         while ($task = $tasks->each()) {
-            if (($task->completed_date && $task->completed_date < $del_time) ||
-                (!$task->completed_date && $task->modified && $task->modified->timestamp() < $del_time)) {
+            if (($task->completed_date && $task->completed_date < $del_time)
+                || (!$task->completed_date && $task->modified && $task->modified->timestamp() < $del_time)) {
                 try {
                     $factory->create($task->tasklist)->delete($task->id);
                     ++$count;

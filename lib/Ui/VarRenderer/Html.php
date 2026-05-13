@@ -1,5 +1,7 @@
 <?php
+
 use function PHP81_BC\strftime;
+
 /**
  * This file contains all Horde_Core_Ui_VarRenderer extensions required for
  * editing tasks.
@@ -126,8 +128,13 @@ class Nag_Ui_VarRenderer_Html extends Horde_Core_Ui_VarRenderer_Html
                 'full_weekdays' => true,
             ]);
             $GLOBALS['page_output']->addScriptFile('calendar.js');
-            $html .= ' <span id="due_wday"></span>' .
-                Horde::img('calendar.png', _("Calendar"), 'id="dueimg"');
+            /**
+             * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+             * @deprecated Use Horde_Themes_Image::tag() instead
+             * @see Horde_Deprecated::img()
+             */
+$html .= ' <span id="due_wday"></span>'
+                . Horde::img('calendar.png', _("Calendar"), 'id="dueimg"');
         }
 
         $time_format = $GLOBALS['prefs']->getValue('twentyFour') ? 'H:i' : 'h:i a';
@@ -147,8 +154,8 @@ class Nag_Ui_VarRenderer_Html extends Horde_Core_Ui_VarRenderer_Html
     {
         $varname = htmlspecialchars($var->getVarName());
         $varvalue = $var->getValue($vars);
-        $on = !empty($varvalue) &&
-            (!isset($varvalue['on']) || !empty($varvalue['on']));
+        $on = !empty($varvalue)
+            && (!isset($varvalue['on']) || !empty($varvalue['on']));
 
         $html = sprintf(
             '<input id="%soff" type="radio" class="radio" name="%s[on]" value="0"%s %s/><label for="%soff">&nbsp;%s</label><br />',
@@ -172,8 +179,8 @@ class Nag_Ui_VarRenderer_Html extends Horde_Core_Ui_VarRenderer_Html
             Horde_Core_Prefs_Ui_Widgets::alarmInit();
             $html .= '<br />';
             $params = ['pref' => 'task_alarms', 'label' => ''];
-            if ((!empty($varvalue) && !isset($varvalue['on'])) ||
-                $form->isSubmitted()) {
+            if ((!empty($varvalue) && !isset($varvalue['on']))
+                || $form->isSubmitted()) {
                 $params['value'] = $varvalue;
             }
             $html .= Horde_Core_Prefs_Ui_Widgets::alarm($params);
@@ -377,8 +384,13 @@ class Nag_Ui_VarRenderer_Html extends Horde_Core_Ui_VarRenderer_Html
                 'full_weekdays' => true,
             ]);
             $GLOBALS['page_output']->addScriptFile('calendar.js');
-            $html .= ' <span id="recur_end_wday"></span>' .
-                Horde::img('calendar.png', _("Set recurrence end date"), 'id="recur_endimg"');
+            /**
+             * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+             * @deprecated Use Horde_Themes_Image::tag() instead
+             * @see Horde_Deprecated::img()
+             */
+$html .= ' <span id="recur_end_wday"></span>'
+                . Horde::img('calendar.png', _("Set recurrence end date"), 'id="recur_endimg"');
         }
 
         $on = $recur && $recur->getRecurCount();
@@ -458,8 +470,13 @@ class Nag_Ui_VarRenderer_Html extends Horde_Core_Ui_VarRenderer_Html
                 'full_weekdays' => true,
             ]);
             $GLOBALS['page_output']->addScriptFile('calendar.js');
-            $html .= ' <span id="start_wday"></span>' .
-                Horde::img('calendar.png', _("Calendar"), 'id="startimg"');
+            /**
+             * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+             * @deprecated Use Horde_Themes_Image::tag() instead
+             * @see Horde_Deprecated::img()
+             */
+$html .= ' <span id="start_wday"></span>'
+                . Horde::img('calendar.png', _("Calendar"), 'id="startimg"');
         }
 
         return $html;
@@ -471,10 +488,15 @@ class Nag_Ui_VarRenderer_Html extends Horde_Core_Ui_VarRenderer_Html
     protected function _renderVarInput_NagTags($form, $var, $vars)
     {
         $varname = htmlspecialchars($var->getVarName());
-        $value = htmlspecialchars((string)$var->getValue($vars));
+        $value = htmlspecialchars((string) $var->getValue($vars));
 
         $html = sprintf('<input id="%s" type="text" name="%s" value="%s" />', $varname, $varname, $value);
-        $html .= sprintf(
+        /**
+         * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+         * @deprecated Use Horde_Themes_Image::tag() instead
+         * @see Horde_Deprecated::img()
+         */
+$html .= sprintf(
             '<span id="%s_loading_img" style="display:none;">%s</span>',
             $varname,
             Horde::img('loading.gif', _("Loading..."))
@@ -492,7 +514,12 @@ class Nag_Ui_VarRenderer_Html extends Horde_Core_Ui_VarRenderer_Html
                 'Nag_Ajax_Imple_ContactAutoCompleter',
                 ['id' => $name]
             );
-        return sprintf(
+        /**
+         * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+         * @deprecated Use Horde_Themes_Image::tag() instead
+         * @see Horde_Deprecated::img()
+         */
+return sprintf(
             '<input type="text" name="%s" id="%s" value="%s" autocomplete="off"%s />',
             $name,
             $name,

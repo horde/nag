@@ -1,9 +1,11 @@
 <?php
 
+use Horde\Util\Util;
+
 require_once __DIR__ . '/lib/Application.php';
 Horde_Registry::appInit('nag');
 
-if ($quickText = Horde_Util::getPost('quickText')) {
+if ($quickText = Util::getPost('quickText')) {
     try {
         $result = Nag::createTasksFromText($quickText, Nag::getDefaultTasklist(Horde_Perms::EDIT));
     } catch (Nag_Exception $e) {

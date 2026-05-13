@@ -23,7 +23,7 @@ class Nag_Form_Type_NagStart extends Horde_Form_Type
         }
 
         // Handle null $start_type for PHP 8.1+ compatibility
-        $info = strcasecmp((string)$start_type, 'none') ? $start : 0;
+        $info = strcasecmp((string) $start_type, 'none') ? $start : 0;
         return $info;
     }
 

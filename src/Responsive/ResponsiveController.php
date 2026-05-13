@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Nag Responsive Controller
  *
@@ -31,6 +32,13 @@ use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Nag;
 use Nag_Driver;
+use Exception;
+use Horde;
+use Horde_Date;
+use Horde_Perms;
+use Horde_Share_Exception;
+use Nag_CompleteTask;
+use Nag_Exception;
 
 /**
  * Nag Responsive Controller
@@ -48,8 +56,7 @@ class ResponsiveController implements RequestHandlerInterface
         private UriFactoryInterface $uriFactory,
         private ResponseFactoryInterface $responseFactory,
         private StreamFactoryInterface $streamFactory
-    ) {
-    }
+    ) {}
 
     /**
      * Get application name for topbar display
@@ -263,19 +270,19 @@ class ResponsiveController implements RequestHandlerInterface
 
         try {
             $task = Nag::getTask($tasklistId, $taskId);
-        } catch (\Nag_Exception $e) {
+        } catch (Nag_Exception $e) {
             return $this->redirectToBrowse('Task not found: ' . $e->getMessage());
         }
 
         // Check permissions
         try {
             $share = $nag_shares->getShare($tasklistId);
-        } catch (\Horde_Share_Exception $e) {
+        } catch (Horde_Share_Exception $e) {
             return $this->redirectToBrowse('Access denied: ' . $e->getMessage());
         }
 
-        $canEdit = $share->hasPermission($registry->getAuth(), \Horde_Perms::EDIT);
-        $canDelete = $share->hasPermission($registry->getAuth(), \Horde_Perms::DELETE);
+        $canEdit = $share->hasPermission($registry->getAuth(), Horde_Perms::EDIT);
+        $canDelete = $share->hasPermission($registry->getAuth(), Horde_Perms::DELETE);
 
         $viewData = [
             'task' => $this->buildTaskData($task, true),
@@ -295,10 +302,10 @@ class ResponsiveController implements RequestHandlerInterface
         global $registry;
 
         // Get available task lists
-        $taskLists = Nag::listTasklists(false, \Horde_Perms::EDIT);
+        $taskLists = Nag::listTasklists(false, Horde_Perms::EDIT);
 
         // Get default task list
-        $defaultTasklist = Nag::getDefaultTasklist(\Horde_Perms::EDIT);
+        $defaultTasklist = Nag::getDefaultTasklist(Horde_Perms::EDIT);
 
         $viewData = [
             'taskLists' => $taskLists,
@@ -324,13 +331,13 @@ class ResponsiveController implements RequestHandlerInterface
             return $this->redirectToAdd();
         }
 
-        $tasklistId = $postData['tasklist'] ?? Nag::getDefaultTasklist(\Horde_Perms::EDIT);
+        $tasklistId = $postData['tasklist'] ?? Nag::getDefaultTasklist(Horde_Perms::EDIT);
 
         // Build task array
         $task = [
             'name' => $postData['name'],
             'desc' => $postData['description'] ?? '',
-            'priority' => (int)($postData['priority'] ?? 3),
+            'priority' => (int) ($postData['priority'] ?? 3),
             'owner' => $registry->getAuth(),
             'private' => !empty($postData['private']),
         ];
@@ -338,9 +345,9 @@ class ResponsiveController implements RequestHandlerInterface
         // Handle due date
         if (!empty($postData['due'])) {
             try {
-                $date = new \Horde_Date($postData['due']);
+                $date = new Horde_Date($postData['due']);
                 $task['due'] = $date->timestamp();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // Invalid date, skip it
             }
         }
@@ -348,16 +355,16 @@ class ResponsiveController implements RequestHandlerInterface
         // Handle start date
         if (!empty($postData['start'])) {
             try {
-                $date = new \Horde_Date($postData['start']);
+                $date = new Horde_Date($postData['start']);
                 $task['start'] = $date->timestamp();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // Invalid date, skip it
             }
         }
 
         // Handle estimate
         if (!empty($postData['estimate'])) {
-            $task['estimate'] = (float)$postData['estimate'];
+            $task['estimate'] = (float) $postData['estimate'];
         }
 
         // Handle assignee
@@ -373,7 +380,7 @@ class ResponsiveController implements RequestHandlerInterface
 
             // Redirect to task detail
             return $this->redirectToTask($taskIds[0], $tasklistId);
-        } catch (\Nag_Exception $e) {
+        } catch (Nag_Exception $e) {
             $notification->push(sprintf(_("Error creating task: %s"), $e->getMessage()), 'horde.error');
             return $this->redirectToAdd();
         }
@@ -389,17 +396,17 @@ class ResponsiveController implements RequestHandlerInterface
         try {
             $task = Nag::getTask($tasklistId, $taskId);
             $share = $nag_shares->getShare($tasklistId);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->redirectToBrowse('Error: ' . $e->getMessage());
         }
 
         // Check edit permission
-        if (!$share->hasPermission($registry->getAuth(), \Horde_Perms::EDIT)) {
+        if (!$share->hasPermission($registry->getAuth(), Horde_Perms::EDIT)) {
             return $this->redirectToBrowse('Access denied');
         }
 
         // Get available task lists (user might move task)
-        $taskLists = Nag::listTasklists(false, \Horde_Perms::EDIT);
+        $taskLists = Nag::listTasklists(false, Horde_Perms::EDIT);
 
         $viewData = [
             'task' => $this->buildTaskData($task, true),
@@ -434,30 +441,30 @@ class ResponsiveController implements RequestHandlerInterface
 
             // Check permission
             $share = $nag_shares->getShare($tasklistId);
-            if (!$share->hasPermission($registry->getAuth(), \Horde_Perms::EDIT)) {
-                throw new \Nag_Exception(_("Access denied"));
+            if (!$share->hasPermission($registry->getAuth(), Horde_Perms::EDIT)) {
+                throw new Nag_Exception(_("Access denied"));
             }
 
             // Build update array
             $updates = [
                 'name' => $postData['name'] ?? $task->name,
                 'desc' => $postData['description'] ?? '',
-                'priority' => (int)($postData['priority'] ?? 3),
+                'priority' => (int) ($postData['priority'] ?? 3),
                 'private' => !empty($postData['private']),
                 'assignee' => trim($postData['assignee'] ?? ''),
             ];
 
             // Handle dates
             if (!empty($postData['due'])) {
-                $date = new \Horde_Date($postData['due']);
+                $date = new Horde_Date($postData['due']);
                 $updates['due'] = $date->timestamp();
             }
             if (!empty($postData['start'])) {
-                $date = new \Horde_Date($postData['start']);
+                $date = new Horde_Date($postData['start']);
                 $updates['start'] = $date->timestamp();
             }
             if (!empty($postData['estimate'])) {
-                $updates['estimate'] = (float)$postData['estimate'];
+                $updates['estimate'] = (float) $postData['estimate'];
             }
 
             // Merge and save
@@ -466,7 +473,7 @@ class ResponsiveController implements RequestHandlerInterface
 
             $notification->push(sprintf(_("Updated task: %s"), $task->name), 'horde.success');
             return $this->redirectToTask($taskId, $tasklistId);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $notification->push(sprintf(_("Error updating task: %s"), $e->getMessage()), 'horde.error');
             return $this->redirectToBrowse();
         }
@@ -494,15 +501,15 @@ class ResponsiveController implements RequestHandlerInterface
 
             // Check permission
             $share = $nag_shares->getShare($tasklistId);
-            if (!$share->hasPermission($registry->getAuth(), \Horde_Perms::DELETE)) {
-                throw new \Nag_Exception(_("Access denied"));
+            if (!$share->hasPermission($registry->getAuth(), Horde_Perms::DELETE)) {
+                throw new Nag_Exception(_("Access denied"));
             }
 
             $taskName = $task->name;
             $storage->delete($taskId);
 
             $notification->push(sprintf(_("Deleted task: %s"), $taskName), 'horde.success');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $notification->push(sprintf(_("Error deleting task: %s"), $e->getMessage()), 'horde.error');
         }
 
@@ -526,7 +533,7 @@ class ResponsiveController implements RequestHandlerInterface
         }
 
         try {
-            $completeTask = new \Nag_CompleteTask();
+            $completeTask = new Nag_CompleteTask();
             $result = $completeTask->result($taskId, $tasklistId);
 
             if ($result['data'] === 'complete') {
@@ -534,7 +541,7 @@ class ResponsiveController implements RequestHandlerInterface
             } else {
                 $notification->push(_("Task marked as incomplete"), 'horde.success');
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $notification->push(sprintf(_("Error: %s"), $e->getMessage()), 'horde.error');
         }
 
@@ -556,12 +563,12 @@ class ResponsiveController implements RequestHandlerInterface
 
         // Due date
         if ($task->due) {
-            $dueDate = new \Horde_Date($task->due);
+            $dueDate = new Horde_Date($task->due);
             $data['due'] = $dueDate->format('Y-m-d');
             $data['dueFormatted'] = $dueDate->format('M j, Y');
 
             // Check if overdue
-            $now = new \Horde_Date(time());
+            $now = new Horde_Date(time());
             $data['overdue'] = !$task->completed && $dueDate->compareDate($now) < 0;
         }
 
@@ -570,7 +577,7 @@ class ResponsiveController implements RequestHandlerInterface
             $data['private'] = $task->private ?? false;
 
             if ($task->start) {
-                $startDate = new \Horde_Date($task->start);
+                $startDate = new Horde_Date($task->start);
                 $data['start'] = $startDate->format('Y-m-d');
                 $data['startFormatted'] = $startDate->format('M j, Y');
             }
@@ -609,7 +616,7 @@ class ResponsiveController implements RequestHandlerInterface
     protected function redirectToBrowse(string $message = ''): ResponseInterface
     {
         return $this->redirectTo(
-            (string) \Horde::url('responsive', true),
+            (string) Horde::url('responsive', true),
             $message
         );
     }
@@ -617,14 +624,14 @@ class ResponsiveController implements RequestHandlerInterface
     protected function redirectToTask(string $taskId, string $tasklistId): ResponseInterface
     {
         return $this->redirectTo(
-            (string) \Horde::url('responsive/task/' . $tasklistId . '/' . $taskId, true)
+            (string) Horde::url('responsive/task/' . $tasklistId . '/' . $taskId, true)
         );
     }
 
     protected function redirectToAdd(): ResponseInterface
     {
         return $this->redirectTo(
-            (string) \Horde::url('responsive/add', true)
+            (string) Horde::url('responsive/add', true)
         );
     }
 }

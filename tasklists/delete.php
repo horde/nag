@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2002-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2002-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -22,8 +23,8 @@ try {
     $notification->push($e);
     Horde::url('list.php', true)->redirect();
 }
-if ($tasklist->get('owner') != $GLOBALS['registry']->getAuth() &&
-    (!is_null($tasklist->get('owner')) || !$GLOBALS['registry']->isAdmin())) {
+if ($tasklist->get('owner') != $GLOBALS['registry']->getAuth()
+    && (!is_null($tasklist->get('owner')) || !$GLOBALS['registry']->isAdmin())) {
     $notification->push(_("You are not allowed to delete this task list."), 'horde.error');
     Horde::url('list.php', true)->redirect();
 }
@@ -41,9 +42,9 @@ if ($form->validate(new Horde_Variables($_POST))) {
     Horde::url('list.php', true)->redirect();
 }
 
-$page_output->header(array(
-    'title' => $form->getTitle()
-));
+$page_output->header([
+    'title' => $form->getTitle(),
+]);
 Nag::status();
 echo $form->renderActive($form->getRenderer(), $vars, Horde::url('tasklists/delete.php'), 'post');
 $page_output->footer();

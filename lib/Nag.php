@@ -1,5 +1,9 @@
 <?php
+
+use Horde\Util\Util;
+
 use function PHP81_BC\strftime;
+
 /**
  * Nag Base Class.
  *
@@ -272,13 +276,13 @@ class Nag
         // Process all tasks.
         $tasks->process();
 
-        if ($options['external'] &&
-            ($apps = @unserialize($prefs->getValue('show_external'))) &&
-            is_array($apps)) {
+        if ($options['external']
+            && ($apps = @unserialize($prefs->getValue('show_external')))
+            && is_array($apps)) {
             foreach ($apps as $app) {
                 // We look for registered apis that support listAs(taskHash).
-                if ($app == 'nag' ||
-                    !$registry->hasMethod('getListTypes', $app)) {
+                if ($app == 'nag'
+                    || !$registry->hasMethod('getListTypes', $app)) {
                     continue;
                 }
                 try {
@@ -299,17 +303,17 @@ class Nag
                         $task['tasklist_id'] = '**EXTERNAL**';
                         $task['tasklist_name'] = $registry->get('name', $app);
                         $task = new Nag_Task(null, $task);
-                        if (($options['completed'] == Nag::VIEW_INCOMPLETE &&
-                             ($task->completed ||
-                              $task->start > $_SERVER['REQUEST_TIME'])) ||
-                            ($options['completed'] == Nag::VIEW_COMPLETE &&
-                             !$task->completed) ||
-                            ($options['completed'] == Nag::VIEW_FUTURE &&
-                             ($task->completed ||
-                              !$task->start ||
-                              $task->start < $_SERVER['REQUEST_TIME'])) ||
-                            ($options['completed'] == Nag::VIEW_FUTURE_INCOMPLETE &&
-                             $task->completed)) {
+                        if (($options['completed'] == Nag::VIEW_INCOMPLETE
+                             && ($task->completed
+                              || $task->start > $_SERVER['REQUEST_TIME']))
+                            || ($options['completed'] == Nag::VIEW_COMPLETE
+                             && !$task->completed)
+                            || ($options['completed'] == Nag::VIEW_FUTURE
+                             && ($task->completed
+                              || !$task->start
+                              || $task->start < $_SERVER['REQUEST_TIME']))
+                            || ($options['completed'] == Nag::VIEW_FUTURE_INCOMPLETE
+                             && $task->completed)) {
                             continue;
                         }
                         $tasks->add($task);
@@ -428,7 +432,9 @@ class Nag
             if (preg_match_all($pattern, $name, $results)) {
                 $tags = $results[0];
                 $name = str_replace($tags, '', $name);
-                $tags = array_map(function ($x) { return substr($x, -(strlen($x) - 1)); }, $tags);
+                $tags = array_map(function ($x) {
+                    return substr($x, -(strlen($x) - 1));
+                }, $tags);
             } else {
                 $tags = '';
             }
@@ -453,7 +459,7 @@ class Nag
      *
      * @return array  An array of Nag_Task objects with alarms active on $date.
      */
-    public static function listAlarms($date, array $tasklists = null)
+    public static function listAlarms($date, ?array $tasklists = null)
     {
         if (is_null($tasklists)) {
             $tasklists = $GLOBALS['display_tasklists'];
@@ -654,9 +660,9 @@ class Nag
      */
     public static function updateTasklist(Horde_Share_Object $tasklist, array $info)
     {
-        if (!$GLOBALS['registry']->getAuth() ||
-            ($tasklist->get('owner') != $GLOBALS['registry']->getAuth() &&
-             (!is_null($tasklist->get('owner')) || !$GLOBALS['registry']->isAdmin()))) {
+        if (!$GLOBALS['registry']->getAuth()
+            || ($tasklist->get('owner') != $GLOBALS['registry']->getAuth()
+             && (!is_null($tasklist->get('owner')) || !$GLOBALS['registry']->isAdmin()))) {
 
             throw new Horde_Exception_PermissionDenied(_("You are not allowed to change this task list."));
         }
@@ -688,9 +694,9 @@ class Nag
      */
     public static function deleteTasklist(Horde_Share_Object $tasklist)
     {
-        if (!$GLOBALS['registry']->getAuth() ||
-            ($tasklist->get('owner') != $GLOBALS['registry']->getAuth() &&
-             (!is_null($tasklist->get('owner')) || !$GLOBALS['registry']->isAdmin()))) {
+        if (!$GLOBALS['registry']->getAuth()
+            || ($tasklist->get('owner') != $GLOBALS['registry']->getAuth()
+             && (!is_null($tasklist->get('owner')) || !$GLOBALS['registry']->isAdmin()))) {
             throw new Horde_Exception_PermissionDenied(_("You are not allowed to delete this task list."));
         }
 
@@ -718,8 +724,8 @@ class Nag
     public static function getLabel($tasklist)
     {
         $label = $tasklist->get('name');
-        if ($tasklist->get('owner') &&
-            $tasklist->get('owner') != $GLOBALS['registry']->getAuth()) {
+        if ($tasklist->get('owner')
+            && $tasklist->get('owner') != $GLOBALS['registry']->getAuth()) {
             $label .= ' [' . $GLOBALS['registry']->convertUsername($tasklist->get('owner'), false) . ']';
         }
         return $label;
@@ -739,8 +745,8 @@ class Nag
         global $conf, $injector, $registry;
 
         $url = $registry->get('webroot', 'horde');
-        $rewrite = isset($conf['urls']['pretty']) &&
-            $conf['urls']['pretty'] == 'rewrite';
+        $rewrite = isset($conf['urls']['pretty'])
+            && $conf['urls']['pretty'] == 'rewrite';
 
         switch ($type) {
             case Nag::DAV_WEBDAV:
@@ -832,8 +838,8 @@ class Nag
     public static function buildCheckboxWidget($name, $checked = 0)
     {
         $name = htmlspecialchars($name);
-        return "<input type=\"checkbox\" id=\"$name\" name=\"$name\"" .
-            ($checked ? ' checked="checked"' : '') . ' />';
+        return "<input type=\"checkbox\" id=\"$name\" name=\"$name\""
+            . ($checked ? ' checked="checked"' : '') . ' />';
     }
 
     /**
@@ -873,9 +879,14 @@ class Nag
      */
     public static function formatCompletion($completed)
     {
-        return $completed ?
-            Horde::img('checked.png', _("Completed")) :
-            Horde::img('unchecked.png', _("Not Completed"));
+        /**
+         * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+         * @deprecated Use Horde_Themes_Image::tag() instead
+         * @see Horde_Deprecated::img()
+         */
+return $completed
+            ? Horde::img('checked.png', _("Completed"))
+            : Horde::img('unchecked.png', _("Not Completed"));
     }
 
     /**
@@ -887,8 +898,8 @@ class Nag
      */
     public static function formatPriority($priority)
     {
-        return '<span class="pri-' . (int) $priority . '">' . (int) $priority .
-            '</span>';
+        return '<span class="pri-' . (int) $priority . '">' . (int) $priority
+            . '</span>';
     }
 
     /**
@@ -979,8 +990,8 @@ class Nag
             $email = $identity->getValue('from_addr');
         }
 
-        if ($link && !empty($email) &&
-            $GLOBALS['registry']->hasMethod('mail/compose')) {
+        if ($link && !empty($email)
+            && $GLOBALS['registry']->hasMethod('mail/compose')) {
             return Horde::link($GLOBALS['registry']->call(
                 'mail/compose',
                 [['to' => $email]]
@@ -1009,8 +1020,8 @@ class Nag
         if (!$GLOBALS['display_tasklists']) {
             $GLOBALS['display_tasklists'] = [];
         }
-        if (($actionID = Horde_Util::getFormData('actionID')) !== null) {
-            $tasklistId = Horde_Util::getFormData('display_tasklist');
+        if (($actionID = Util::getFormData('actionID')) !== null) {
+            $tasklistId = Util::getFormData('display_tasklist');
             switch ($actionID) {
                 case 'add_displaylist':
                     if (!in_array($tasklistId, $GLOBALS['display_tasklists'])) {
@@ -1036,8 +1047,8 @@ class Nag
         }
 
         /* All tasklists for guests. */
-        if (!count($GLOBALS['display_tasklists']) &&
-            !$GLOBALS['registry']->getAuth()) {
+        if (!count($GLOBALS['display_tasklists'])
+            && !$GLOBALS['registry']->getAuth()) {
             $GLOBALS['display_tasklists'] = array_keys($GLOBALS['all_tasklists']);
         }
 
@@ -1319,8 +1330,8 @@ class Nag
 
                 case 'delete':
                     $subject = _("Task deleted:");
-                    $notification_message =
-                        _("You requested to be notified when tasks are deleted from your task lists.")
+                    $notification_message
+                        = _("You requested to be notified when tasks are deleted from your task lists.")
                         . "\n\n"
                         . _("The task \"%s\" has been deleted from task list \"%s\".");
                     break;
@@ -1457,8 +1468,8 @@ class Nag
             'tf' => $prefs->getValue('twentyFour'),
             'df' => $prefs->getValue('date_format')];
 
-        if ($prefs->getValue('task_notification_exclude_self') &&
-            $user == $GLOBALS['registry']->getAuth()) {
+        if ($prefs->getValue('task_notification_exclude_self')
+            && $user == $GLOBALS['registry']->getAuth()) {
             return false;
         }
 
@@ -1856,7 +1867,7 @@ class Nag
         Nag_Task $task,
         Horde_Notification_Handler $notification,
         $action,
-        Horde_Date $instance = null,
+        ?Horde_Date $instance = null,
         $range = null
     ) {
         global $injector, $registry, $nag_shares;

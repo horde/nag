@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -24,8 +25,8 @@ class NagUpgradeAddOrganizer extends Horde_Db_Migration_Base
      */
     public function up()
     {
-        $this->addColumn('nag_tasks', 'task_organizer', 'string', array('limit' => 250));
-        $this->addColumn('nag_tasks', 'task_status', 'integer', array('default' => 0));
+        $this->addColumn('nag_tasks', 'task_organizer', 'string', ['limit' => 250]);
+        $this->addColumn('nag_tasks', 'task_status', 'integer', ['default' => 0]);
     }
 
     /**

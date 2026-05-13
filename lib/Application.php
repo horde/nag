@@ -114,9 +114,9 @@ class Nag_Application extends Horde_Registry_Application
         global $display_tasklists, $page_output, $prefs;
 
         $perms = $GLOBALS['injector']->getInstance('Horde_Core_Perms');
-        if (Nag::getDefaultTasklist(Horde_Perms::EDIT) &&
-            ($perms->hasAppPermission('max_tasks') === true ||
-             $perms->hasAppPermission('max_tasks') > Nag::countTasks())) {
+        if (Nag::getDefaultTasklist(Horde_Perms::EDIT)
+            && ($perms->hasAppPermission('max_tasks') === true
+             || $perms->hasAppPermission('max_tasks') > Nag::countTasks())) {
             $sidebar->addNewButton(
                 _("_New Task"),
                 Horde::url('task.php')->add('actionID', 'add_task')
@@ -188,8 +188,8 @@ class Nag_Application extends Horde_Registry_Application
                 'edit' => $edit->add('t', $tasklist->getName()),
                 'type' => 'checkbox',
             ];
-            if ($GLOBALS['registry']->isAdmin() &&
-                is_null($tasklist->get('owner'))) {
+            if ($GLOBALS['registry']->isAdmin()
+                && is_null($tasklist->get('owner'))) {
                 $sidebar->addRow($row, 'system');
             } elseif ($tasklist->get('owner') == $user) {
                 $sidebar->addRow($row, 'my');
@@ -263,17 +263,17 @@ class Nag_Application extends Horde_Registry_Application
      */
     public function listAlarms($time, $user = null)
     {
-        if ((empty($user) || $user != $GLOBALS['registry']->getAuth()) &&
-            !$GLOBALS['registry']->isAdmin()) {
+        if ((empty($user) || $user != $GLOBALS['registry']->getAuth())
+            && !$GLOBALS['registry']->isAdmin()) {
 
             throw new Horde_Exception_PermissionDenied();
         }
 
         $group = $GLOBALS['injector']->getInstance('Horde_Group');
         $alarm_list = [];
-        $tasklists = is_null($user) ?
-            array_keys($GLOBALS['nag_shares']->listAllShares()) :
-            $GLOBALS['display_tasklists'];
+        $tasklists = is_null($user)
+            ? array_keys($GLOBALS['nag_shares']->listAllShares())
+            : $GLOBALS['display_tasklists'];
 
         $alarms = Nag::listAlarms($time, $tasklists);
         foreach ($alarms as $alarm) {
@@ -459,8 +459,8 @@ class Nag_Application extends Horde_Registry_Application
                             $task['recurrence']
                         );
                     }
-                    if (!empty($task['parent']) &&
-                        isset($map[$task['parent']])) {
+                    if (!empty($task['parent'])
+                        && isset($map[$task['parent']])) {
                         $task['parent'] = $map[$task['parent']];
                     }
                     $driver = $factory->create($task['tasklist_id']);
@@ -486,7 +486,7 @@ class Nag_Application extends Horde_Registry_Application
     /**
      * @throws Nag_Exception
      */
-    public function download(Variables|\Horde_Variables $vars)
+    public function download(Variables|Horde_Variables $vars)
     {
         global $display_tasklists, $injector, $registry;
 
@@ -592,22 +592,22 @@ class Nag_Application extends Horde_Registry_Application
             $tasklists[] = [
                 'id' => $id,
                 'uri' => $id,
-                '{' . CalDAV\Plugin::NS_CALENDARSERVER . '}shared-url' =>
-                    Nag::getUrl(Nag::DAV_CALDAV, $share),
+                '{' . CalDAV\Plugin::NS_CALENDARSERVER . '}shared-url'
+                    => Nag::getUrl(Nag::DAV_CALDAV, $share),
                 'principaluri' => 'principals/' . $user,
-                '{http://sabredav.org/ns}owner-principal' =>
-                    'principals/'
+                '{http://sabredav.org/ns}owner-principal'
+                    => 'principals/'
                         . (
                             $share->get('owner')
                            ? $registry->convertUsername($share->get('owner'), false)
                            : '-system-'
                         ),
                 '{DAV:}displayname' => Nag::getLabel($share),
-                '{urn:ietf:params:xml:ns:caldav}calendar-description' =>
-                    $share->get('desc'),
-                '{http://apple.com/ns/ical/}calendar-color' =>
-                    $share->get('color'),
-                '{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set' => new Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet(['VTODO']),
+                '{urn:ietf:params:xml:ns:caldav}calendar-description'
+                    => $share->get('desc'),
+                '{http://apple.com/ns/ical/}calendar-color'
+                    => $share->get('color'),
+                '{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set' => new CalDAV\Xml\Property\SupportedCalendarComponentSet(['VTODO']),
                 '{http://sabredav.org/ns}read-only' => !$share->hasPermission($hordeUser, Horde_Perms::EDIT),
             ];
         }
@@ -735,8 +735,8 @@ class Nag_Application extends Horde_Registry_Application
                  * task's history. */
                 $modified = $this->_modified($internal, $existing_task->uid);
                 try {
-                    if (!empty($modified) &&
-                        $content->getAttribute('LAST-MODIFIED') < $modified) {
+                    if (!empty($modified)
+                        && $content->getAttribute('LAST-MODIFIED') < $modified) {
                         /* LAST-MODIFIED timestamp of existing entry is newer:
                          * don't replace it. */
                         continue;

@@ -15,7 +15,7 @@
 
     <div class="container nag-container">
         <!-- Back link -->
-        <a href="<?php echo $escape(\Horde::url('responsive')) ?>" class="back-link">
+        <a href="<?php echo $escape(Horde::url('responsive')) ?>" class="back-link">
             <span class="back-arrow">←</span>
             <?php echo _("Back to Tasks") ?>
         </a>
@@ -32,7 +32,7 @@
 
             <!-- Quick actions -->
             <div class="quick-actions">
-                <form method="POST" action="<?php echo \Horde::url('responsive')->add(['action' => 'complete', 'id' => $task['id'], 'tasklist' => $task['tasklist']]) ?>" style="display:inline;">
+                <form method="POST" action="<?php echo Horde::url('responsive')->add(['action' => 'complete', 'id' => $task['id'], 'tasklist' => $task['tasklist']]) ?>" style="display:inline;">
                     <button type="submit" class="quick-action-btn quick-action-complete">
                         <span class="quick-action-icon"><?php echo $task['completed'] ? '☐' : '☑' ?></span>
                         <span class="quick-action-label"><?php echo $task['completed'] ? _("Mark Incomplete") : _("Mark Complete") ?></span>
@@ -40,7 +40,7 @@
                 </form>
 
                 <?php if ($canEdit): ?>
-                    <a href="<?php echo $escape(\Horde::url('responsive/edit/' . $task['tasklist'] . '/' . $task['id'])) ?>"
+                    <a href="<?php echo $escape(Horde::url('responsive/edit/' . $task['tasklist'] . '/' . $task['id'])) ?>"
                        class="quick-action-btn quick-action-edit">
                         <span class="quick-action-icon">✎</span>
                         <span class="quick-action-label"><?php echo _("Edit") ?></span>
@@ -48,7 +48,7 @@
                 <?php endif; ?>
 
                 <?php if ($canDelete): ?>
-                    <form method="POST" action="<?php echo \Horde::url('responsive')->add(['action' => 'delete', 'id' => $task['id'], 'tasklist' => $task['tasklist']]) ?>" style="display:inline;">
+                    <form method="POST" action="<?php echo Horde::url('responsive')->add(['action' => 'delete', 'id' => $task['id'], 'tasklist' => $task['tasklist']]) ?>" style="display:inline;">
                         <button type="submit" class="quick-action-btn quick-action-delete"
                            onclick="return confirm('<?php echo _("Really delete this task?") ?>')">
                             <span class="quick-action-icon">🗑</span>
@@ -92,8 +92,8 @@
                             <span class="priority-badge priority-<?php echo $task['priority'] ?>">
                                 <?php
                                 $priorities = [1 => _("Highest"), 2 => _("High"), 3 => _("Normal"), 4 => _("Low"), 5 => _("Lowest")];
-                                echo $escape($priorities[$task['priority']] ?? _("Normal"));
-                                ?>
+    echo $escape($priorities[$task['priority']] ?? _("Normal"));
+    ?>
                             </span>
                         </div>
                     </div>

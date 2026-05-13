@@ -463,8 +463,8 @@ class Nag_Api extends Horde_Registry_Api
                 } catch (Horde_Dav_Exception $e) {
                 }
                 $key = 'nag/' . $parts[0] . '/' . $parts[1] . '/' . $id;
-                if (in_array('modified', $properties) ||
-                    in_array('etag', $properties)) {
+                if (in_array('modified', $properties)
+                    || in_array('etag', $properties)) {
                     $modified = $this->modified($task->uid, $parts[1]);
                 }
                 if (in_array('name', $properties)) {
@@ -500,8 +500,8 @@ class Nag_Api extends Horde_Registry_Api
             //
             // The only valid request left is for either a specific task item.
             //
-            if (count($parts) == 3 &&
-                Nag::hasPermission($parts[1], Horde_Perms::READ)) {
+            if (count($parts) == 3
+                && Nag::hasPermission($parts[1], Horde_Perms::READ)) {
                 //
                 // This request is for a specific item within a given task list.
                 //
@@ -652,8 +652,8 @@ class Nag_Api extends Horde_Registry_Api
                         // Entry exists, remove from uids_remove list so we won't
                         // delete in the end.
                         unset($uids_remove[$task->uid]);
-                        if ($existing->private &&
-                            $existing->owner != $registry->getAuth()) {
+                        if ($existing->private
+                            && $existing->owner != $registry->getAuth()) {
                             continue;
                         }
                         // Check if our task is newer then the existing - get the
@@ -678,8 +678,8 @@ class Nag_Api extends Horde_Registry_Api
                         if (empty($modified) && !empty($add)) {
                             $modified = $add;
                         }
-                        if (!empty($modified) &&
-                            $modified >= $content->getAttribute('LAST-MODIFIED')) {
+                        if (!empty($modified)
+                            && $modified >= $content->getAttribute('LAST-MODIFIED')) {
                             // LAST-MODIFIED timestamp of existing entry
                             // is newer: don't replace it.
                             continue;
@@ -755,8 +755,8 @@ class Nag_Api extends Horde_Registry_Api
             $tasklistID = $parts[1];
         }
 
-        if (!(count($parts) == 2 || count($parts) == 3) ||
-            !Nag::hasPermission($tasklistID, Horde_Perms::DELETE)) {
+        if (!(count($parts) == 2 || count($parts) == 3)
+            || !Nag::hasPermission($tasklistID, Horde_Perms::DELETE)) {
 
             throw new Nag_Exception(
                 _("Task list does not exist or no permission to delete"),
@@ -1094,8 +1094,8 @@ class Nag_Api extends Horde_Registry_Api
      */
     public function addTask(array $task)
     {
-        if (!$GLOBALS['registry']->isAdmin() &&
-            !Nag::hasPermission($task['tasklist'], Horde_Perms::EDIT)) {
+        if (!$GLOBALS['registry']->isAdmin()
+            && !Nag::hasPermission($task['tasklist'], Horde_Perms::EDIT)) {
             throw new Horde_Exception_PermissionDenied();
         }
 
@@ -1300,8 +1300,8 @@ class Nag_Api extends Horde_Registry_Api
         $factory = $GLOBALS['injector']->getInstance('Nag_Factory_Driver');
         $task = $factory->create('')->getByUID($uid);
 
-        if (!$GLOBALS['registry']->isAdmin() &&
-            !Nag::hasPermission($task->tasklist, Horde_Perms::DELETE)) {
+        if (!$GLOBALS['registry']->isAdmin()
+            && !Nag::hasPermission($task->tasklist, Horde_Perms::DELETE)) {
 
             throw new Horde_Exception_PermissionDenied();
         }
@@ -1317,8 +1317,8 @@ class Nag_Api extends Horde_Registry_Api
      */
     public function deleteTask($tasklist, $id)
     {
-        if (!$GLOBALS['registry']->isAdmin() &&
-            !Nag::hasPermission($tasklist, Horde_Perms::DELETE)) {
+        if (!$GLOBALS['registry']->isAdmin()
+            && !Nag::hasPermission($tasklist, Horde_Perms::DELETE)) {
 
             throw new Horde_Exception_PermissionDenied();
         }
@@ -1406,8 +1406,8 @@ class Nag_Api extends Horde_Registry_Api
      */
     public function updateTask($tasklist, $id, $task)
     {
-        if (!$GLOBALS['registry']->isAdmin() &&
-            !Nag::hasPermission($tasklist, Horde_Perms::EDIT)) {
+        if (!$GLOBALS['registry']->isAdmin()
+            && !Nag::hasPermission($tasklist, Horde_Perms::EDIT)) {
             throw new Horde_Exception_PermissionDenied();
         }
 
@@ -1436,8 +1436,8 @@ class Nag_Api extends Horde_Registry_Api
         $tasks->reset();
         $last_week = $_SERVER['REQUEST_TIME'] - 7 * 86400;
         while ($task = $tasks->each()) {
-            if (($task->completed && $task->completed_date < $last_week) ||
-                ($task->start && $task->start > $_SERVER['REQUEST_TIME'])) {
+            if (($task->completed && $task->completed_date < $last_week)
+                || ($task->start && $task->start > $_SERVER['REQUEST_TIME'])) {
                 continue;
             }
             $result[$task->id] = [
@@ -1473,8 +1473,8 @@ class Nag_Api extends Horde_Registry_Api
     {
         $storage = $GLOBALS['injector']->getInstance('Nag_Factory_Driver')->create('');
         $task = $storage->get($id);
-        if (!$GLOBALS['registry']->isAdmin() &&
-            !Nag::hasPermission($task->tasklist, Horde_Perms::EDIT)) {
+        if (!$GLOBALS['registry']->isAdmin()
+            && !Nag::hasPermission($task->tasklist, Horde_Perms::EDIT)) {
             throw new Horde_Exception_PermissionDenied();
         }
         $adjust = ['actual' => $task->actual += $data['hours']];
@@ -1525,11 +1525,11 @@ class Nag_Api extends Horde_Registry_Api
         $tasks->reset();
         while ($task = $tasks->each()) {
             // If there's no due date, it's not a time object.
-            if (!$task->due ||
-                $task->due > $end_ts ||
-                (!$task->recurs() && $task->due + 1 < $start_ts) ||
-                ($task->recurs() && $task->recurrence->getRecurEnd() &&
-                 $task->recurrence->getRecurEnd()->timestamp() + 1 < $start_ts)) {
+            if (!$task->due
+                || $task->due > $end_ts
+                || (!$task->recurs() && $task->due + 1 < $start_ts)
+                || ($task->recurs() && $task->recurrence->getRecurEnd()
+                 && $task->recurrence->getRecurEnd()->timestamp() + 1 < $start_ts)) {
                 continue;
             }
             $due_date = date('Y-m-d\TH:i:s', $task->due);

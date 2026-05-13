@@ -15,7 +15,7 @@
 
     <div class="container nag-container">
         <!-- Back link -->
-        <a href="<?php echo $escape(\Horde::url('responsive')) ?>" class="back-link">
+        <a href="<?php echo $escape(Horde::url('responsive')) ?>" class="back-link">
             <span class="back-arrow">←</span>
             <?php echo _("Back to Tasks") ?>
         </a>
@@ -25,7 +25,7 @@
             <h1><?php echo isset($isEdit) ? _("Edit Task") : _("New Task") ?></h1>
 
             <form method="post"
-                  action="<?php echo $escape(\Horde::url('responsive')->add('action', isset($isEdit) ? 'update' : 'create')) ?>"
+                  action="<?php echo $escape(Horde::url('responsive')->add('action', isset($isEdit) ? 'update' : 'create')) ?>"
                   class="task-form">
 
                 <?php if (isset($isEdit)): ?>
@@ -143,7 +143,7 @@
                     <button type="submit" class="btn btn-primary">
                         <?php echo isset($isEdit) ? _("Update Task") : _("Create Task") ?>
                     </button>
-                    <a href="<?php echo $escape(\Horde::url('responsive')) ?>" class="btn btn-secondary">
+                    <a href="<?php echo $escape(Horde::url('responsive')) ?>" class="btn btn-secondary">
                         <?php echo _("Cancel") ?>
                     </a>
                 </div>

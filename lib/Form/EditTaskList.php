@@ -34,9 +34,9 @@ class Nag_Form_EditTaskList extends Horde_Form
     {
         $this->_tasklist = $tasklist;
 
-        $owner = $tasklist->get('owner') == $GLOBALS['registry']->getAuth() ||
-            (is_null($tasklist->get('owner')) &&
-             $GLOBALS['registry']->isAdmin());
+        $owner = $tasklist->get('owner') == $GLOBALS['registry']->getAuth()
+            || (is_null($tasklist->get('owner'))
+             && $GLOBALS['registry']->isAdmin());
 
         parent::__construct(
             $vars,

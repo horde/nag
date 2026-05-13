@@ -1,6 +1,9 @@
 <?php
+
+use Horde\Util\Util;
+
 /**
- * Copyright 2001-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2001-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -30,22 +33,32 @@ function _delete($task_id, $tasklist_id)
                     $storage->delete($task_id);
                 } catch (Nag_Exception $e) {
                     $notification->push(
-                        sprintf(_("There was a problem deleting %s: %s"),
-                                $task->name, $e->getMessage()),
-                        'horde.error');
+                        sprintf(
+                            _("There was a problem deleting %s: %s"),
+                            $task->name,
+                            $e->getMessage()
+                        ),
+                        'horde.error'
+                    );
                 }
-                $notification->push(sprintf(_("Deleted %s."), $task->name),
-                                               'horde.success');
+                $notification->push(
+                    sprintf(_("Deleted %s."), $task->name),
+                    'horde.success'
+                );
             }
         } catch (Nag_Exception $e) {
             $notification->push(
-                sprintf(_("Error deleting task: %s"),
-                        $e->getMessage()), 'horde.error');
+                sprintf(
+                    _("Error deleting task: %s"),
+                    $e->getMessage()
+                ),
+                'horde.error'
+            );
         }
     }
 
     /* Return to the last page or to the task list. */
-    if ($url = Horde::verifySignedUrl(Horde_Util::getFormData('url'))) {
+    if ($url = Horde::verifySignedUrl(Util::getFormData('url'))) {
         header('Location: ' . $url);
         exit;
     }
@@ -65,78 +78,78 @@ if (is_null($actionID)) {
 
 /* Run through the action handlers. */
 switch ($actionID) {
-case 'add_task':
-    /* Check permissions. */
-    $perms = $injector->getInstance('Horde_Core_Perms');
-    if ($perms->hasAppPermission('max_tasks') !== true &&
-        $perms->hasAppPermission('max_tasks') <= Nag::countTasks()) {
-        Horde::permissionDeniedError(
-            'nag',
-            'max_tasks',
-            sprintf(_("You are not allowed to create more than %d tasks."), $perms->hasAppPermission('max_tasks'))
-        );
-        Horde::url('list.php', true)->redirect();
-    }
+    case 'add_task':
+        /* Check permissions. */
+        $perms = $injector->getInstance('Horde_Core_Perms');
+        if ($perms->hasAppPermission('max_tasks') !== true
+            && $perms->hasAppPermission('max_tasks') <= Nag::countTasks()) {
+            Horde::permissionDeniedError(
+                'nag',
+                'max_tasks',
+                sprintf(_("You are not allowed to create more than %d tasks."), $perms->hasAppPermission('max_tasks'))
+            );
+            Horde::url('list.php', true)->redirect();
+        }
 
-    if (!$vars->exists('tasklist_id')) {
-        $vars->set('tasklist_id', Nag::getDefaultTasklist(Horde_Perms::EDIT));
-    }
-    if ($parent = Horde_Util::getFormData('parent_task')) {
-        $vars->set('parent', $parent);
-    }
-    $form = new Nag_Form_Task($vars, _("New Task"));
-    break;
+        if (!$vars->exists('tasklist_id')) {
+            $vars->set('tasklist_id', Nag::getDefaultTasklist(Horde_Perms::EDIT));
+        }
+        if ($parent = Util::getFormData('parent_task')) {
+            $vars->set('parent', $parent);
+        }
+        $form = new Nag_Form_Task($vars, _("New Task"));
+        break;
 
-case 'modify_task':
-    $task_id = $vars->get('task');
-    $tasklist_id = $vars->get('tasklist');
-    try {
-        $share = $nag_shares->getShare($tasklist_id);
-    } catch (Horde_Share_Exception $e) {
-        $notification->push(sprintf(_("Access denied editing task: %s"), $e->getMessage()), 'horde.error');
-    }
-    if (!$share->hasPermission($registry->getAuth(), Horde_Perms::EDIT)) {
-        $notification->push(_("Access denied editing task."), 'horde.error');
-    } else {
-        $task = Nag::getTask($tasklist_id, $task_id);
-        if (!isset($task) || !isset($task->id)) {
-            $notification->push(_("Task not found."), 'horde.error');
-        } elseif ($task->private && $task->owner != $registry->getAuth()) {
+    case 'modify_task':
+        $task_id = $vars->get('task');
+        $tasklist_id = $vars->get('tasklist');
+        try {
+            $share = $nag_shares->getShare($tasklist_id);
+        } catch (Horde_Share_Exception $e) {
+            $notification->push(sprintf(_("Access denied editing task: %s"), $e->getMessage()), 'horde.error');
+        }
+        if (!$share->hasPermission($registry->getAuth(), Horde_Perms::EDIT)) {
             $notification->push(_("Access denied editing task."), 'horde.error');
         } else {
-            $h = $task->toHash();
-            $h['tags'] = implode(',', $h['tags']);
-            $vars = new Horde_Variables($h);
-            $vars->set('old_tasklist', $task->tasklist);
-            $vars->set('url', Horde_Util::getFormData('url'));
-            if ($sl = Horde_Util::getFormData('list')) {
-                $vars->set('list', $sl);
+            $task = Nag::getTask($tasklist_id, $task_id);
+            if (!isset($task) || !isset($task->id)) {
+                $notification->push(_("Task not found."), 'horde.error');
+            } elseif ($task->private && $task->owner != $registry->getAuth()) {
+                $notification->push(_("Access denied editing task."), 'horde.error');
+            } else {
+                $h = $task->toHash();
+                $h['tags'] = implode(',', $h['tags']);
+                $vars = new Horde_Variables($h);
+                $vars->set('old_tasklist', $task->tasklist);
+                $vars->set('url', Util::getFormData('url'));
+                if ($sl = Util::getFormData('list')) {
+                    $vars->set('list', $sl);
+                }
+                if ($tn = Util::getFormData('tab_name')) {
+                    $vars->set('tab_name', $tn);
+                }
+                $form = new Nag_Form_Task($vars, sprintf(_("Edit: %s"), $task->name));
+                if (!$task->completed) {
+                    $task->loadChildren();
+                    $form->setTask($task);
+                }
+                break;
             }
-            if ($tn = Horde_Util::getFormData('tab_name')) {
-                $vars->set('tab_name', $tn);
-            }
-            $form = new Nag_Form_Task($vars, sprintf(_("Edit: %s"), $task->name));
-            if (!$task->completed) {
-                $task->loadChildren();
-                $form->setTask($task);
-            }
-            break;
         }
-    }
 
-    /* Return to the task list. */
-    Horde::url('list.php', true)->redirect();
+        /* Return to the task list. */
+        Horde::url('list.php', true)->redirect();
 
-case 'delete_task':
-    /* Delete the task if we're provided with a valid task ID. */
-    _delete(Horde_Util::getFormData('task'), Horde_Util::getFormData('tasklist'));
-    break;
+    case 'delete_task':
+        /* Delete the task if we're provided with a valid task ID. */
+        _delete(Util::getFormData('task'), Util::getFormData('tasklist'));
+        break;
 
-case 'task_form':
-    break;
+    case 'task_form':
+        break;
 
-default:
-    Horde::url('list.php', true)->redirect();
+    default:
+        Horde::url('list.php', true)->redirect();
 }
 
 $datejs = str_replace('_', '-', $GLOBALS['language']) . '.js';
@@ -152,9 +165,9 @@ $GLOBALS['page_output']->addScriptFile('date/date.js', 'horde');
 $GLOBALS['page_output']->addScriptFile('task.js');
 $GLOBALS['page_output']->addScriptPackage('Horde_Core_Script_Package_Keynavlist');
 
-$GLOBALS['page_output']->header(array(
-    'title' => $form->getTitle()
-));
+$GLOBALS['page_output']->header([
+    'title' => $form->getTitle(),
+]);
 require NAG_TEMPLATES . '/javascript_defs.php';
 Nag::status();
 echo $formhtml;

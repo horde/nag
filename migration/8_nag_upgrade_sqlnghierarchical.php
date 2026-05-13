@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Adds hierarchy related columns to the SQL-NG share driver.
  *
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -19,7 +20,7 @@ class NagUpgradeSqlnghierarchical extends Horde_Db_Migration_Base
      */
     public function up()
     {
-        $this->addColumn('nag_sharesng', 'share_parents','text');
+        $this->addColumn('nag_sharesng', 'share_parents', 'text');
     }
 
     /**

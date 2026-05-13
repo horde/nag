@@ -19,7 +19,7 @@
         <!-- Page header -->
         <div class="page-header">
             <h1><?php echo _("My Tasks") ?></h1>
-            <a href="<?php echo $escape(\Horde::url('responsive/add')) ?>" class="add-task-btn">
+            <a href="<?php echo $escape(Horde::url('responsive/add')) ?>" class="add-task-btn">
                 <span class="add-icon">+</span>
                 <?php echo _("New Task") ?>
             </a>
@@ -27,7 +27,7 @@
 
         <!-- Filter controls -->
         <div class="filter-controls">
-            <select id="task-filter" class="filter-select" onchange="window.location.href='<?php echo $escape(\Horde::url('responsive')) ?>/' + this.value">
+            <select id="task-filter" class="filter-select" onchange="window.location.href='<?php echo $escape(Horde::url('responsive')) ?>/' + this.value">
                 <option value="all" <?php echo $filter == Nag::VIEW_ALL ? 'selected' : '' ?>><?php echo _("All Tasks") ?></option>
                 <option value="incomplete" <?php echo $filter == Nag::VIEW_INCOMPLETE ? 'selected' : '' ?>><?php echo _("Incomplete") ?></option>
                 <option value="complete" <?php echo $filter == Nag::VIEW_COMPLETE ? 'selected' : '' ?>><?php echo _("Complete") ?></option>
@@ -56,14 +56,14 @@
                             <?php foreach ($taskList['tasks'] as $task): ?>
                                 <li class="task-item <?php echo $task['completed'] ? 'task-completed' : '' ?> <?php echo isset($task['overdue']) && $task['overdue'] ? 'task-overdue' : '' ?>">
                                     <!-- Complete checkbox -->
-                                    <form method="POST" action="<?php echo \Horde::url('responsive')->add(['action' => 'complete', 'id' => $task['id'], 'tasklist' => $task['tasklist']]) ?>" style="display:inline;">
+                                    <form method="POST" action="<?php echo Horde::url('responsive')->add(['action' => 'complete', 'id' => $task['id'], 'tasklist' => $task['tasklist']]) ?>" style="display:inline;">
                                         <button type="submit" class="task-complete-btn" onclick="return confirm('<?php echo $task['completed'] ? _("Mark as incomplete?") : _("Mark as complete?") ?>')">
                                             <span class="complete-checkbox"><?php echo $task['completed'] ? '☑' : '☐' ?></span>
                                         </button>
                                     </form>
 
                                     <!-- Task link -->
-                                    <a href="<?php echo $escape(\Horde::url('responsive/task/' . $task['tasklist'] . '/' . $task['id'])) ?>"
+                                    <a href="<?php echo $escape(Horde::url('responsive/task/' . $task['tasklist'] . '/' . $task['id'])) ?>"
                                        class="task-link">
                                         <div class="task-info">
                                             <div class="task-name <?php echo $task['completed'] ? 'strikethrough' : '' ?>">

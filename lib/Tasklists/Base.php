@@ -56,8 +56,8 @@ abstract class Nag_Tasklists_Base
     public function ensureDefaultShare()
     {
         /* If the user doesn't own a task list, create one. */
-        if (!empty($this->_params['auto_create']) && $this->_user &&
-            !count(Nag::listTasklists(true))) {
+        if (!empty($this->_params['auto_create']) && $this->_user
+            && !count(Nag::listTasklists(true))) {
             $share = $this->_shares->newShare(
                 $this->_user,
                 strval(new Horde_Support_Randomid()),

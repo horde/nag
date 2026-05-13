@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2001-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2001-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (BSD). If you did not
  * did not receive this file, see http://www.horde.org/licenses/bsdl.php.
@@ -17,7 +17,7 @@ use Horde\Util\Variables;
 /**
  * Nag_Search:: Interface for performing task searches.
  *
- * Copyright 2001-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2001-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (BSD). If you did not
  * did not receive this file, see http://www.horde.org/licenses/bsdl.php.
@@ -181,9 +181,9 @@ class Nag_Search implements Serializable
             }
 
             // If we have a search string and it doesn't match name|desc continue
-            if (!empty($this->_search) &&
-                !($this->_mask & self::MASK_NAME && preg_match($pattern, (string)$task->name)) &&
-                !($this->_mask & self::MASK_DESC && preg_match($pattern, (string)$task->desc))) {
+            if (!empty($this->_search)
+                && !($this->_mask & self::MASK_NAME && preg_match($pattern, (string) $task->name))
+                && !($this->_mask & self::MASK_DESC && preg_match($pattern, (string) $task->desc))) {
 
                 continue;
             }
@@ -202,8 +202,8 @@ class Nag_Search implements Serializable
         $processed_results = new Nag_Task();
 
         while ($result = $search_results_copy->each()) {
-            if ($result->parent_id &&
-                ($parent_task = $search_results->hasTask($result->parent_id))) {
+            if ($result->parent_id
+                && ($parent_task = $search_results->hasTask($result->parent_id))) {
                 $parent_task->add($result, true);
                 $processed_results->add($parent_task, true);
             } else {
@@ -225,7 +225,7 @@ class Nag_Search implements Serializable
      *
      * @param Horde_Variables|Variables $vars  The Horde_Variables object.
      */
-    public function getVars(Variables|\Horde_Variables &$vars)
+    public function getVars(Variables|Horde_Variables &$vars)
     {
         $vars->set('search_pattern', $this->_search);
         $vars->set('search_tags', implode(',', $this->_tags));
