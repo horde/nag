@@ -28,7 +28,7 @@ $mapper->buildRoute(uri: '/t/save', name: 'SaveTask')
 $mapper->buildRoute(uri: '/responsive', name: 'ResponsiveTasks')
     ->withController(Responsive\ResponsiveController::class)
     ->withDefaults(['HordeAuthType' => 'authenticate'])
-    ->noMiddleware()
+    ->withMiddleware(DefaultStack::get())
     ->withSecondaryRoute('/smartmobile')
     ->withSecondaryRoute('/smartmobile.php')
     ->add();
@@ -37,42 +37,42 @@ $mapper->buildRoute(uri: '/responsive', name: 'ResponsiveTasks')
 $mapper->buildRoute(uri: '/responsive/all', name: 'ResponsiveTasksAll')
     ->withController(Responsive\ResponsiveController::class)
     ->withDefaults(['HordeAuthType' => 'authenticate'])
-    ->noMiddleware()
+    ->withMiddleware(DefaultStack::get())
     ->add();
 
 // Filter: Incomplete Tasks
 $mapper->buildRoute(uri: '/responsive/incomplete', name: 'ResponsiveTasksIncomplete')
     ->withController(Responsive\ResponsiveController::class)
     ->withDefaults(['HordeAuthType' => 'authenticate'])
-    ->noMiddleware()
+    ->withMiddleware(DefaultStack::get())
     ->add();
 
 // Filter: Complete Tasks
 $mapper->buildRoute(uri: '/responsive/complete', name: 'ResponsiveTasksComplete')
     ->withController(Responsive\ResponsiveController::class)
     ->withDefaults(['HordeAuthType' => 'authenticate'])
-    ->noMiddleware()
+    ->withMiddleware(DefaultStack::get())
     ->add();
 
 // Filter: Future Tasks
 $mapper->buildRoute(uri: '/responsive/future', name: 'ResponsiveTasksFuture')
     ->withController(Responsive\ResponsiveController::class)
     ->withDefaults(['HordeAuthType' => 'authenticate'])
-    ->noMiddleware()
+    ->withMiddleware(DefaultStack::get())
     ->add();
 
 // Filter: Future Incomplete Tasks
 $mapper->buildRoute(uri: '/responsive/future-incomplete', name: 'ResponsiveTasksFutureIncomplete')
     ->withController(Responsive\ResponsiveController::class)
     ->withDefaults(['HordeAuthType' => 'authenticate'])
-    ->noMiddleware()
+    ->withMiddleware(DefaultStack::get())
     ->add();
 
 // Add New Task
 $mapper->buildRoute(uri: '/responsive/add', name: 'ResponsiveTaskAdd')
     ->withController(Responsive\ResponsiveController::class)
     ->withDefaults(['HordeAuthType' => 'authenticate'])
-    ->noMiddleware()
+    ->withMiddleware(DefaultStack::get())
     ->add();
 
 // Task Detail View
@@ -81,7 +81,7 @@ $mapper->buildRoute(uri: '/responsive/task/:tasklist/:id', name: 'ResponsiveTask
     ->withDefaults(['HordeAuthType' => 'authenticate'])
     ->requires('tasklist', '[a-zA-Z0-9\-_]+')
     ->requires('id', '[a-zA-Z0-9\-_]+')
-    ->noMiddleware()
+    ->withMiddleware(DefaultStack::get())
     ->add();
 
 // Task Edit View
@@ -90,5 +90,5 @@ $mapper->buildRoute(uri: '/responsive/edit/:tasklist/:id', name: 'ResponsiveTask
     ->withDefaults(['HordeAuthType' => 'authenticate'])
     ->requires('tasklist', '[a-zA-Z0-9\-_]+')
     ->requires('id', '[a-zA-Z0-9\-_]+')
-    ->noMiddleware()
+    ->withMiddleware(DefaultStack::get())
     ->add();
