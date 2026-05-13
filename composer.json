@@ -21,7 +21,12 @@
             "role": "lead"
         }
     ],
-    "time": "2026-05-02",
+    "keywords": [
+        "tasks",
+        "caldav",
+        "todo"
+    ],
+    "time": "2026-05-13",
     "repositories": [],
     "require": {
         "horde/horde-installer-plugin": "dev-FRAMEWORK_6_0 || ^3 || ^2",
@@ -39,6 +44,7 @@
         "horde/form": "^3 || dev-FRAMEWORK_6_0",
         "horde/group": "^3 || dev-FRAMEWORK_6_0",
         "horde/history": "^3 || dev-FRAMEWORK_6_0",
+        "horde/http_server": "^1 || dev-FRAMEWORK_6_0",
         "horde/icalendar": "^3 || dev-FRAMEWORK_6_0",
         "horde/mail": "^3 || dev-FRAMEWORK_6_0",
         "horde/mime": "^3 || dev-FRAMEWORK_6_0",

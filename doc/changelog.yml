@@ -243,6 +243,19 @@
     [jan] Import iCalendar 2.0 alarms.
     [jan] Import and export recurrence rules to iCalendar.
     [jan] Return ETags with browse() API method.
+5.0.0-RC1:
+  api: 5.0.0-RC1
+  state:
+    release: RC
+    api: RC
+  date: 2026-05-13
+  license:
+    identifier: GPL-2.0-only
+    uri: https://spdx.org/licenses/GPL-2.0-only.html
+  notes: |-
+    chore(metadata): Update autoloader definition and remove dependency on horde/controller
+    style: php-cs-fixer
+    refactor: Migrate from horde/controller to PSR-7/14/15 horde/http_server
 4.2.20:
   api: 4.2.0
   state:
