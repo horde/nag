@@ -11,10 +11,12 @@ use Horde\Nag\Controller\SaveTaskController;
 
 $mapper->buildRoute(uri: '/t/complete', name: 'CompleteTask')
     ->withController(CompleteTaskController::class)
+    ->withSecondaryRoute('/task/complete.php')
     ->add();
 
 $mapper->buildRoute(uri: '/t/save', name: 'SaveTask')
     ->withController(SaveTaskController::class)
+    ->withSecondaryRoute('/task/save.php')
     ->add();
 
 // Responsive UI Routes - PSR-style builder pattern

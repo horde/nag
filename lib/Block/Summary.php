@@ -92,7 +92,7 @@ class Nag_Block_Summary extends Horde_Core_Block
      */
     protected function _content()
     {
-        global $conf, $prefs, $registry;
+        global $prefs, $registry;
 
         $html = '';
 
@@ -214,11 +214,7 @@ $html .= '<td width="1%"' . $style . '>'
                      * @see Horde_Deprecated::img()
                      */
 $html .= '<td width="1%"' . $style . '>'
-                        . Horde::url(
-                            $conf['urls']['pretty'] == 'rewrite'
-                                ? 't/complete'
-                                : 'task/complete.php'
-                        )->add([
+                        . Horde::url('t/complete')->add([
                             'task' => $task->id,
                             'tasklist' => $task->tasklist,
                             'url' => Horde::selfUrl(true),

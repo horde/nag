@@ -904,8 +904,6 @@ return Horde::callHook('format_description', [$desc], 'nag');
      */
     public function process($indent = null)
     {
-        global $conf;
-
         /* Link cache. */
         static $view_url_list, $task_url_list;
 
@@ -952,11 +950,7 @@ return Horde::callHook('format_description', [$desc], 'nag');
         $this->view_link = $view_url_list[$this->tasklist]->copy()->add('task', $this->id);
 
         $task_url_task = $task_url_list[$this->tasklist]->copy()->add('task', $this->id);
-        $this->complete_link = Horde::url(
-            $conf['urls']['pretty'] == 'rewrite'
-                ? 't/complete'
-                : 'task/complete.php'
-        )->add([
+        $this->complete_link = Horde::url('t/complete')->add([
             'url' => Horde::signUrl(Horde::url('list.php')),
             'task' => $this->id,
             'tasklist' => $this->tasklist,

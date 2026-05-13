@@ -241,16 +241,10 @@ $description = Horde::callHook('description_help', [], 'nag');
         $enctype = null,
         $focus = true
     ) {
-        global $conf;
-
         return parent::renderActive(
             $this->getRenderer(['varrenderer_driver' => ['nag', 'html']]),
             $this->_vars,
-            Horde::url(
-                $conf['urls']['pretty'] == 'rewrite'
-                    ? 't/save'
-                    : 'task/save.php'
-            ),
+            Horde::url('t/save'),
             'post',
             $enctype,
             $focus
