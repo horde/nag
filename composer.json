@@ -30,7 +30,6 @@
         "horde/content": "^3 || dev-FRAMEWORK_6_0",
         "horde/horde": "^6 || dev-FRAMEWORK_6_0",
         "horde/auth": "^3 || dev-FRAMEWORK_6_0",
-        "horde/controller": "^3 || dev-FRAMEWORK_6_0",
         "horde/core": "^3 || dev-FRAMEWORK_6_0",
         "horde/data": "^3 || dev-FRAMEWORK_6_0",
         "horde/date": "^3 || dev-FRAMEWORK_6_0",
@@ -68,7 +67,7 @@
             "app/"
         ],
         "psr-4": {
-            "Horde\\Nag\\": "/src"
+            "Horde\\Nag\\": "src/"
         }
     },
     "autoload-dev": {
