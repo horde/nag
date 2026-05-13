@@ -4,6 +4,7 @@
 
 namespace Horde\Nag;
 
+use Horde\Core\Middleware\DefaultStack;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Horde\Nag\Controller\CompleteTaskController;
@@ -11,11 +12,13 @@ use Horde\Nag\Controller\SaveTaskController;
 
 $mapper->buildRoute(uri: '/t/complete', name: 'CompleteTask')
     ->withController(CompleteTaskController::class)
+    ->withMiddleware(DefaultStack::get())
     ->withSecondaryRoute('/task/complete.php')
     ->add();
 
 $mapper->buildRoute(uri: '/t/save', name: 'SaveTask')
     ->withController(SaveTaskController::class)
+    ->withMiddleware(DefaultStack::get())
     ->withSecondaryRoute('/task/save.php')
     ->add();
 
