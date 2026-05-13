@@ -81,7 +81,6 @@ dependencies:
 autoload:
   classmap:
     - lib/
-    - app/
   psr-4:
     Horde\Nag\: src/
 vendor: horde
