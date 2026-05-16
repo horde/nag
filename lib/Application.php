@@ -46,7 +46,7 @@ class Nag_Application extends Horde_Registry_Application
 
     /**
      */
-    public $version = '5.0.0-RC1';
+    public $version = '5.0.0-RC2';
 
     /**
      * Global variables defined:
