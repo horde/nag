@@ -106,6 +106,12 @@
     padding-bottom: 12px;
     padding-left: 5px;
 }
+.nag-tags-related img,
+.nag-tags-browsing img {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+}
 
 .horde-tags li a img {
     padding-left: 5px;
