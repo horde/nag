@@ -1,6 +1,6 @@
 <?php
 
-use function PHP81_BC\strftime;
+use Horde\Date\Formatter\IcuFormatter;
 
 /**
  * Nag_Task handles as single task as well as a list of tasks and implements a
@@ -788,7 +788,7 @@ class Nag_Task
              * @deprecated Use $GLOBALS['injector']->getInstance('Horde_Core_Hooks')->callHook() instead
              * @see Horde_Deprecated::callHook()
              */
-return Horde::callHook('format_description', [$desc], 'nag');
+            return Horde::callHook('format_description', [$desc], 'nag');
         } catch (Horde_Exception_HookNotSet $e) {
             return $desc;
         }
@@ -1005,14 +1005,14 @@ return Horde::callHook('format_description', [$desc], 'nag');
                  * @deprecated Use Horde_Themes_Image::tag() instead
                  * @see Horde_Deprecated::img()
                  */
-$html = Horde::img('tree/blank' . $foreground . '.png') . $html;
+                $html = Horde::img('tree/blank' . $foreground . '.png') . $html;
             } else {
                 /**
                  * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
                  * @deprecated Use Horde_Themes_Image::tag() instead
                  * @see Horde_Deprecated::img()
                  */
-$html = Horde::img('tree/line' . $foreground . '.png', '|') . $html;
+                $html = Horde::img('tree/line' . $foreground . '.png', '|') . $html;
             }
             $parent = $parent->parent;
         }
@@ -1023,14 +1023,14 @@ $html = Horde::img('tree/line' . $foreground . '.png', '|') . $html;
                  * @deprecated Use Horde_Themes_Image::tag() instead
                  * @see Horde_Deprecated::img()
                  */
-$html .= Horde::img($GLOBALS['registry']->nlsconfig->curr_rtl ? 'tree/rev-joinbottom' . $foreground . '.png' : 'tree/joinbottom' . $foreground . '.png', '\\');
+                $html .= Horde::img($GLOBALS['registry']->nlsconfig->curr_rtl ? 'tree/rev-joinbottom' . $foreground . '.png' : 'tree/joinbottom' . $foreground . '.png', '\\');
             } else {
                 /**
                  * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
                  * @deprecated Use Horde_Themes_Image::tag() instead
                  * @see Horde_Deprecated::img()
                  */
-$html .= Horde::img($GLOBALS['registry']->nlsconfig->curr_rtl ? 'tree/rev-join' . $foreground . '.png' : 'tree/join' . $foreground . '.png', '+');
+                $html .= Horde::img($GLOBALS['registry']->nlsconfig->curr_rtl ? 'tree/rev-join' . $foreground . '.png' : 'tree/join' . $foreground . '.png', '+');
             }
         }
 
@@ -1229,7 +1229,7 @@ $html .= Horde::img($GLOBALS['registry']->nlsconfig->curr_rtl ? 'tree/rev-join' 
             $json->de = $this->desc;
             if ($this->due) {
                 $date = new Horde_Date($this->due);
-                $json->dd = $date->strftime('%x');
+                $json->dd = $date->format('short', new IcuFormatter(), $GLOBALS['language']);
                 $json->dt = $date->format($time_format);
             }
             $json->as = $this->assignee;

@@ -1,6 +1,4 @@
-<?php use function PHP81_BC\strftime;
-
-?><tr class="<?php echo $style ?>" style="background-color:<?php echo $task->backgroundColor() ?>;color:<?php echo $task->foregroundColor() ?>">
+<?php ?><tr class="<?php echo $style ?>" style="background-color:<?php echo $task->backgroundColor() ?>;color:<?php echo $task->foregroundColor() ?>">
   <td>
     <?php
     if ($have_edit) {
@@ -12,7 +10,7 @@
                  * @deprecated Use Horde_Themes_Image::tag() instead
                  * @see Horde_Deprecated::img()
                  */
-echo Horde::img('unchecked.png', $label, ['title' => $label]);
+                echo Horde::img('unchecked.png', $label, ['title' => $label]);
             } else {
                 $label = sprintf(_("Complete \"%s\""), $task->name);
                 /**
@@ -20,7 +18,7 @@ echo Horde::img('unchecked.png', $label, ['title' => $label]);
                  * @deprecated Use Horde_Themes_Image::tag() instead
                  * @see Horde_Deprecated::img()
                  */
-echo Horde::link($task->complete_link, $label) . Horde::img('unchecked.png', $label) . '</a>';
+                echo Horde::link($task->complete_link, $label) . Horde::img('unchecked.png', $label) . '</a>';
             }
         } else {
             if ($task->parent && $task->parent->completed) {
@@ -30,7 +28,7 @@ echo Horde::link($task->complete_link, $label) . Horde::img('unchecked.png', $la
                  * @deprecated Use Horde_Themes_Image::tag() instead
                  * @see Horde_Deprecated::img()
                  */
-echo Horde::img('checked.png', $label, ['title' => $label]);
+                echo Horde::img('checked.png', $label, ['title' => $label]);
             } else {
                 $label = sprintf(_("Mark \"%s\" as incomplete"), $task->name);
                 /**
@@ -38,7 +36,7 @@ echo Horde::img('checked.png', $label, ['title' => $label]);
                  * @deprecated Use Horde_Themes_Image::tag() instead
                  * @see Horde_Deprecated::img()
                  */
-echo Horde::link($task->complete_link, $label) . Horde::img('checked.png', $label) . '</a>';
+                echo Horde::link($task->complete_link, $label) . Horde::img('checked.png', $label) . '</a>';
             }
         }
     } else {
@@ -67,7 +65,7 @@ if (in_array('tasklist', $columns)): ?>
          * @deprecated Use Horde_Themes_Image::tag() instead
          * @see Horde_Deprecated::img()
          */
-echo Horde::link($task->edit_link->add($params), $label) . Horde::img('edit-sidebar-' . substr($task->foregroundColor(), 1) . '.png', $label) . '</a>';
+        echo Horde::link($task->edit_link->add($params), $label) . Horde::img('edit-sidebar-' . substr($task->foregroundColor(), 1) . '.png', $label) . '</a>';
     }
 ?>
   </td>
@@ -107,12 +105,12 @@ echo ($task->alarm && $due)
   </td>
 <?php if (in_array('due', $columns)): ?>
   <td class="nowrap" sortval="<?php echo $due ? $due->timestamp() : PHP_INT_MAX ?>">
-    <?php echo $due ? $due->strftime($dateFormat) : '&nbsp;' ?>
+    <?php echo $due ? $due->format($dateFormat, new Horde\Date\Formatter\IcuFormatter(), $GLOBALS['language'] ?? 'en_US') : '&nbsp;' ?>
   </td>
 <?php endif;
 if (in_array('start', $columns)): ?>
   <td class="nowrap" sortval="<?php echo $task->start ? (int) $task->start : PHP_INT_MAX ?>">
-    <?php echo $task->start ? strftime($dateFormat, $task->start) : '&nbsp;' ?>
+    <?php echo $task->start ? Horde\Date\Format::formatDate($task->start, $dateFormat, $GLOBALS['language'] ?? 'en_US') : '&nbsp;' ?>
   </td>
 <?php endif;
 if (in_array('estimate', $columns)): ?>

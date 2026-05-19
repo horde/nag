@@ -164,6 +164,9 @@ class Nag_Form_Task extends Horde_Form
                     }
                 }
             }
+            if (!in_array($registry->getAuth(), $users)) {
+                $users[] = $registry->getAuth();
+            }
             if (empty($GLOBALS['conf']['assignees']['allow_external'])) {
                 $users = array_flip($users);
                 if (count($users)) {
@@ -214,7 +217,7 @@ class Nag_Form_Task extends Horde_Form
              * @deprecated Use $GLOBALS['injector']->getInstance('Horde_Core_Hooks')->callHook() instead
              * @see Horde_Deprecated::callHook()
              */
-$description = Horde::callHook('description_help', [], 'nag');
+            $description = Horde::callHook('description_help', [], 'nag');
         } catch (Horde_Exception_HookNotSet $e) {
             $description = '';
         }

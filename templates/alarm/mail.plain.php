@@ -4,11 +4,9 @@
 <?php echo $this->task->name ?>
 
 
-<?php echo _("Date:") ?> <?php use function PHP81_BC\strftime;
+<?php echo _("Date:") ?> <?php echo $this->due->format($this->dateFormat, new Horde\Date\Formatter\IcuFormatter(), $GLOBALS['language'] ?? 'en_US') ?>
 
-echo $this->due->strftime($this->dateFormat) ?>
-
-<?php echo _("Time:") ?> <?php echo $this->due->format($this->timeFormat) ?>
+<?php echo _("Time:") ?> <?php echo $this->due->format($this->timeFormat, new Horde\Date\Formatter\IcuFormatter(), $GLOBALS['language'] ?? 'en_US') ?>
 
 
 <?php echo $this->task->desc ?>

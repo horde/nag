@@ -410,9 +410,9 @@ class Nag_View_List
              * @deprecated Use Horde_Themes_Image::tag() instead
              * @see Horde_Deprecated::img()
              */
-$html = '<div class="nag-tags-related">'
-                . Horde::img('tags.png')
-                . ' <ul class="horde-tags">';
+            $html = '<div class="nag-tags-related">'
+                            . Horde::img('tags.png')
+                            . ' <ul class="horde-tags">';
             foreach ($rtags as $id => $taginfo) {
                 $html .= '<li>'
                     . $this->_linkAddTag($taginfo['tag_name'])->link()
@@ -437,17 +437,17 @@ $html = '<div class="nag-tags-related">'
              * @deprecated Use Horde_Themes_Image::tag() instead
              * @see Horde_Deprecated::img()
              */
-$html = '<div class="nag-tags-browsing">' . Horde::img('filter.png') . '<ul class="horde-tags">';
+            $html = '<div class="nag-tags-browsing">' . Horde::img('filter.png') . '<ul class="horde-tags">';
             foreach ($this->_browser->getTags() as $tag => $id) {
                 /**
                  * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
                  * @deprecated Use Horde_Themes_Image::tag() instead
                  * @see Horde_Deprecated::img()
                  */
-$html .= '<li>' . htmlspecialchars($tag)
-                    . $this->_linkRemoveTag($tag)->link()
-                    . Horde::img('delete-small.png', _("Remove from search"))
-                    . '</a></li>';
+                $html .= '<li>' . htmlspecialchars($tag)
+                                    . $this->_linkRemoveTag($tag)->link()
+                                    . Horde::img('delete-small.png', _("Remove from search"))
+                                    . '</a></li>';
             }
             return $html .= '</ul></div>';
         }

@@ -16,9 +16,7 @@ echo $url->remove(session_name()) ?>"><?php echo $this->h($this->task->name) ?><
           <font size="2"><strong><?php echo _("Date and time:") ?></strong></font>
         </td>
         <td width="5">&nbsp;</td>
-        <td width="100%"><font size="2"><strong><?php   use function PHP81_BC\strftime;
-
-echo $this->due->strftime($this->dateFormat) ?>, <?php echo $this->due->format($this->timeFormat) ?></strong></font></td>
+        <td width="100%"><font size="2"><strong><?php echo $this->due->format($this->dateFormat, new Horde\Date\Formatter\IcuFormatter(), $GLOBALS['language'] ?? 'en_US') ?>, <?php echo $this->due->format($this->timeFormat, new Horde\Date\Formatter\IcuFormatter(), $GLOBALS['language'] ?? 'en_US') ?></strong></font></td>
       </tr>
 
       <?php if (strlen($this->task->desc)): ?>

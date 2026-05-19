@@ -1,6 +1,7 @@
 <?php
 
-use function PHP81_BC\strftime;
+use Horde\Date\Format;
+use Horde\Date\Formatter\IcuFormatter;
 
 /**
  * This file contains all Horde_Core_Ui_VarRenderer extensions required for
@@ -120,7 +121,7 @@ class Nag_Ui_VarRenderer_Html extends Horde_Core_Ui_VarRenderer_Html
             $on ? ' checked="checked"' : '',
             _("Due date specified."),
             _("Date"),
-            htmlspecialchars(strftime($GLOBALS['prefs']->getValue('date_format_mini'), $due_dt))
+            htmlspecialchars(Format::formatDate($due_dt, $GLOBALS['prefs']->getValue('date_format_mini'), $GLOBALS['language'] ?? 'en_US'))
         );
 
         if ($GLOBALS['browser']->hasFeature('javascript')) {
@@ -133,8 +134,8 @@ class Nag_Ui_VarRenderer_Html extends Horde_Core_Ui_VarRenderer_Html
              * @deprecated Use Horde_Themes_Image::tag() instead
              * @see Horde_Deprecated::img()
              */
-$html .= ' <span id="due_wday"></span>'
-                . Horde::img('calendar.png', _("Calendar"), 'id="dueimg"');
+            $html .= ' <span id="due_wday"></span>'
+                            . Horde::img('calendar.png', _("Calendar"), 'id="dueimg"');
         }
 
         $time_format = $GLOBALS['prefs']->getValue('twentyFour') ? 'H:i' : 'h:i a';
@@ -376,7 +377,7 @@ $html .= ' <span id="due_wday"></span>'
             $recur && ($recur->hasRecurEnd() || $recur->hasRecurCount()) ? '' : ' checked="checked"',
             Horde::label('recurnoend', _("No end date")),
             $recur && $recur->hasRecurEnd() ? ' checked="checked"' : '',
-            $recur && $recur->hasRecurEnd() ? $recur->getRecurEnd()->strftime('%x') : ''
+            $recur && $recur->hasRecurEnd() ? $recur->getRecurEnd()->format('short', new IcuFormatter(), $GLOBALS['language']) : ''
         );
 
         if ($GLOBALS['browser']->hasFeature('javascript')) {
@@ -389,8 +390,8 @@ $html .= ' <span id="due_wday"></span>'
              * @deprecated Use Horde_Themes_Image::tag() instead
              * @see Horde_Deprecated::img()
              */
-$html .= ' <span id="recur_end_wday"></span>'
-                . Horde::img('calendar.png', _("Set recurrence end date"), 'id="recur_endimg"');
+            $html .= ' <span id="recur_end_wday"></span>'
+                            . Horde::img('calendar.png', _("Set recurrence end date"), 'id="recur_endimg"');
         }
 
         $on = $recur && $recur->getRecurCount();
@@ -462,7 +463,7 @@ $html .= ' <span id="recur_end_wday"></span>'
             $on ? ' checked="checked"' : '',
             _("Start date specified."),
             _("Date"),
-            htmlspecialchars(strftime($GLOBALS['prefs']->getValue('date_format_mini'), $start_dt))
+            htmlspecialchars(Format::formatDate($start_dt, $GLOBALS['prefs']->getValue('date_format_mini'), $GLOBALS['language'] ?? 'en_US'))
         );
 
         if ($GLOBALS['browser']->hasFeature('javascript')) {
@@ -475,8 +476,8 @@ $html .= ' <span id="recur_end_wday"></span>'
              * @deprecated Use Horde_Themes_Image::tag() instead
              * @see Horde_Deprecated::img()
              */
-$html .= ' <span id="start_wday"></span>'
-                . Horde::img('calendar.png', _("Calendar"), 'id="startimg"');
+            $html .= ' <span id="start_wday"></span>'
+                            . Horde::img('calendar.png', _("Calendar"), 'id="startimg"');
         }
 
         return $html;
@@ -496,7 +497,7 @@ $html .= ' <span id="start_wday"></span>'
          * @deprecated Use Horde_Themes_Image::tag() instead
          * @see Horde_Deprecated::img()
          */
-$html .= sprintf(
+        $html .= sprintf(
             '<span id="%s_loading_img" style="display:none;">%s</span>',
             $varname,
             Horde::img('loading.gif', _("Loading..."))
@@ -519,15 +520,15 @@ $html .= sprintf(
          * @deprecated Use Horde_Themes_Image::tag() instead
          * @see Horde_Deprecated::img()
          */
-return sprintf(
+        return sprintf(
             '<input type="text" name="%s" id="%s" value="%s" autocomplete="off"%s />',
             $name,
             $name,
             @htmlspecialchars($var->getValue($vars)),
             $this->_getActionScripts($form, $var)
         )
-            . '<span id="' . $name . '_loading_img" style="display:none;">'
-            . Horde::img('loading.gif', _("Loading..."))
-            . '</span>';
+                    . '<span id="' . $name . '_loading_img" style="display:none;">'
+                    . Horde::img('loading.gif', _("Loading..."))
+                    . '</span>';
     }
 }

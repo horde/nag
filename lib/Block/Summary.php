@@ -1,6 +1,6 @@
 <?php
 
-use function PHP81_BC\strftime;
+use Horde\Date\Formatter\IcuFormatter;
 
 /**
  */
@@ -135,9 +135,9 @@ class Nag_Block_Summary extends Horde_Core_Block
                  * @deprecated Use Horde_Themes_Image::tag() instead
                  * @see Horde_Deprecated::img()
                  */
-$html .= '<tr><td class="control">'
-                    . Horde::img('alarm_small.png') . '&nbsp;&nbsp;<strong>'
-                    . $message . '</strong></td></tr>';
+                $html .= '<tr><td class="control">'
+                                    . Horde::img('alarm_small.png') . '&nbsp;&nbsp;<strong>'
+                                    . $message . '</strong></td></tr>';
             }
 
             if (!empty($messages)) {
@@ -194,18 +194,18 @@ $html .= '<tr><td class="control">'
                  * @deprecated Use Horde_Themes_Image::tag() instead
                  * @see Horde_Deprecated::img()
                  */
-$html .= '<td width="1%"' . $style . '>'
-                    . $taskurl->copy()->add('actionID', 'modify_task')->link()
-                    . Horde::img('edit-sidebar-' . substr($task->foregroundColor(), 1) . '.png', $label)
-                    . '</a></td>';
+                $html .= '<td width="1%"' . $style . '>'
+                                    . $taskurl->copy()->add('actionID', 'modify_task')->link()
+                                    . Horde::img('edit-sidebar-' . substr($task->foregroundColor(), 1) . '.png', $label)
+                                    . '</a></td>';
                 if ($task->completed) {
                     /**
                      * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
                      * @deprecated Use Horde_Themes_Image::tag() instead
                      * @see Horde_Deprecated::img()
                      */
-$html .= '<td width="1%"' . $style . '>'
-                        . Horde::img('checked.png', _("Completed")) . '</td>';
+                    $html .= '<td width="1%"' . $style . '>'
+                                            . Horde::img('checked.png', _("Completed")) . '</td>';
                 } else {
                     $label = sprintf(_("Complete \"%s\""), $task->name);
                     /**
@@ -213,13 +213,13 @@ $html .= '<td width="1%"' . $style . '>'
                      * @deprecated Use Horde_Themes_Image::tag() instead
                      * @see Horde_Deprecated::img()
                      */
-$html .= '<td width="1%"' . $style . '>'
-                        . Horde::url('t/complete')->add([
-                            'task' => $task->id,
-                            'tasklist' => $task->tasklist,
-                            'url' => Horde::selfUrl(true),
-                        ])->link()
-                        . Horde::img('unchecked.png', $label) . '</a></td>';
+                    $html .= '<td width="1%"' . $style . '>'
+                                            . Horde::url('t/complete')->add([
+                                                'task' => $task->id,
+                                                'tasklist' => $task->tasklist,
+                                                'url' => Horde::selfUrl(true),
+                                            ])->link()
+                                            . Horde::img('unchecked.png', $label) . '</a></td>';
                 }
             }
 
@@ -249,7 +249,7 @@ $html .= '<td width="1%"' . $style . '>'
             if ($due && empty($task->completed)
                 && !empty($this->_params['show_due'])) {
                 $html .= ' ('
-                    . $due->strftime($prefs->getValue('date_format'))
+                    . $due->format($prefs->getValue('date_format'), new IcuFormatter(), $GLOBALS['language'] ?? 'en_US')
                     . ')';
             }
 

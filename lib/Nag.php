@@ -1,8 +1,7 @@
 <?php
 
 use Horde\Util\Util;
-
-use function PHP81_BC\strftime;
+use Horde\Date\Format;
 
 /**
  * Nag Base Class.
@@ -858,7 +857,7 @@ class Nag
             return '';
         }
 
-        $date = strftime($prefs->getValue('date_format'), $unixdate);
+        $date = Format::formatDate($unixdate, $prefs->getValue('date_format'), $GLOBALS['language'] ?? 'en_US');
         if (!$hours) {
             return $date;
         }
@@ -866,7 +865,7 @@ class Nag
         return sprintf(
             _("%s at %s"),
             $date,
-            strftime($prefs->getValue('twentyFour') ? '%H:%M' : '%I:%M %p', $unixdate)
+            Format::formatDate($unixdate, $prefs->getValue('twentyFour') ? 'HH:mm' : 'h:mm a', $GLOBALS['language'] ?? 'en_US')
         );
     }
 
@@ -884,9 +883,9 @@ class Nag
          * @deprecated Use Horde_Themes_Image::tag() instead
          * @see Horde_Deprecated::img()
          */
-return $completed
-            ? Horde::img('checked.png', _("Completed"))
-            : Horde::img('unchecked.png', _("Not Completed"));
+        return $completed
+                    ? Horde::img('checked.png', _("Completed"))
+                    : Horde::img('unchecked.png', _("Not Completed"));
     }
 
     /**
@@ -1345,7 +1344,7 @@ return $completed
                         $notification_message,
                         $task->name,
                         Nag::getLabel($share),
-                        $task->due ? strftime($df, $task->due) . ' ' . date($tf ? 'H:i' : 'h:ia', $task->due) : ''
+                        $task->due ? Format::formatDate($task->due, $df, $GLOBALS['language'] ?? 'en_US') . ' ' . Format::formatDate($task->due, $tf ? 'HH:mm' : 'h:mma', $GLOBALS['language'] ?? 'en_US') : ''
                     );
                     if (strlen(trim($task->desc))) {
                         $message .= "\n\n" . _("Task description:") . "\n\n" . $task->desc;
