@@ -68,6 +68,12 @@ function _delete($task_id, $tasklist_id)
 require_once __DIR__ . '/lib/Application.php';
 Horde_Registry::appInit('nag');
 
+global $injector, $nag_shares, $notification, $registry;
+if (!isset($registry)) {
+    $registry = $GLOBALS['registry']
+        ?? $injector->getInstance('Horde_Registry');
+}
+
 $vars = Horde_Variables::getDefaultVariables();
 
 /* Redirect to the task list if no action has been requested. */
