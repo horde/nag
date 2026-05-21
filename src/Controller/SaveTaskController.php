@@ -66,6 +66,8 @@ class SaveTaskController implements RequestHandlerInterface
 
         if (!$form->validate($vars)) {
             $_REQUEST['actionID'] = 'task_form';
+            // Legacy task.php expects Horde globals (e.g. on task list reload).
+            $GLOBALS['registry'] = $this->registry;
             require NAG_BASE . '/task.php';
             exit;
         }
