@@ -645,6 +645,10 @@ class Nag
      * @param boolean $display  Add the new tasklist to display_tasklists
      *
      * @return Horde_Share  The new share.
+     *
+     * Note: Does not update the sync_lists preference. Web-created lists are
+     * opt-in for ActiveSync via Nag preferences; EAS-created lists use
+     * Nag_Api::addTasklist() with synchronize => true.
      */
     public static function addTasklist(array $info, $display = true)
     {
