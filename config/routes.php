@@ -9,6 +9,13 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Horde\Nag\Controller\CompleteTaskController;
 use Horde\Nag\Controller\SaveTaskController;
+use Horde\Nag\Controller\TaskFormController;
+
+$mapper->buildRoute(uri: '/t/task', name: 'TaskForm')
+    ->withController(TaskFormController::class)
+    ->withMiddleware(DefaultStack::get())
+    ->withSecondaryRoute('/task.php')
+    ->add();
 
 $mapper->buildRoute(uri: '/t/complete', name: 'CompleteTask')
     ->withController(CompleteTaskController::class)
