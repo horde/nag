@@ -16,14 +16,14 @@ declare(strict_types=1);
 namespace Horde\Nag\Controller;
 
 use Horde;
-use Horde\Core\Controller\Traits\RedirectResponseTrait;
 use Horde_Core_Perms;
 use Horde_Notification_Handler;
+use Horde_PageOutput;
 use Horde_Perms;
 use Horde_Registry;
 use Horde_Share_Exception;
-use Horde_Util;
 use Horde_Variables;
+use Horde\Util\Util;
 use Nag;
 use Nag_Exception;
 use Nag_Factory_Driver;
@@ -31,7 +31,6 @@ use Nag_Form_Task;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Horde\Util\Util;
 
 /**
  * PSR-15 controller for saving (create/update/delete) a task.
@@ -42,13 +41,15 @@ use Horde\Util\Util;
  */
 class SaveTaskController implements RequestHandlerInterface
 {
-    use RedirectResponseTrait;
+    use ResponseTrait;
 
     public function __construct(
         private readonly Horde_Registry $registry,
         private readonly Horde_Notification_Handler $notification,
+        private readonly Horde_PageOutput $pageOutput,
         private readonly Nag_Factory_Driver $driverFactory,
         private readonly Horde_Core_Perms $perms,
+        private readonly TaskFormController $taskFormController,
     ) {}
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -65,9 +66,7 @@ class SaveTaskController implements RequestHandlerInterface
         );
 
         if (!$form->validate($vars)) {
-            $_REQUEST['actionID'] = 'task_form';
-            require NAG_BASE . '/task.php';
-            exit;
+            return $this->taskFormController->renderTaskForm($form);
         }
 
         $info = $form->getInfo($vars);
