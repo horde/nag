@@ -12,7 +12,7 @@ class Nag_Form_Type_NagMethod extends Horde_Form_Type
     public function getInfo($vars, $var, $info)
     {
         $info = $var->getValue($vars);
-        if (empty($info['on'])) {
+        if (!is_array($info) || empty($info['on'])) {
             $info = [];
             return $info;
         }
@@ -40,7 +40,8 @@ class Nag_Form_Type_NagMethod extends Horde_Form_Type
     public function isValid($var, $vars, $value, $message)
     {
         $alarm = $vars->get('alarm');
-        if ($value['on'] && !$alarm['on']) {
+        $alarmOn = is_array($alarm) ? !empty($alarm['on']) : !empty($alarm);
+        if (is_array($value) && !empty($value['on']) && !$alarmOn) {
             $this->message = _("An alarm must be set to specify a notification method");
             return false;
         }
