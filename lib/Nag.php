@@ -2,7 +2,6 @@
 
 use Horde\Util\Util;
 use Horde\Date\Format;
-use Horde\Date\Formatter\IcuFormatter;
 
 /**
  * Nag Base Class.
@@ -173,69 +172,14 @@ class Nag
         $dateFormat = $GLOBALS['prefs']->getValue('date_format_mini');
         $locale = $GLOBALS['language'] ?? ($GLOBALS['prefs']->getValue('language') ?? 'en_US');
 
-        if (!Format::isStrftimeFormat($dateFormat)) {
-            try {
-                $formatter = new IcuFormatter();
-                if ($withtime && preg_match('/^(.+?)\s+(\S+)$/', $date, $parts)) {
-                    $datePart = $formatter->parse($parts[1], $dateFormat, $locale);
-                    $timeFormat = $GLOBALS['prefs']->getValue('twentyFour') ? 'HH:mm' : 'h:mm a';
-                    $timePart = $formatter->parse($parts[2], $timeFormat, $locale);
-
-                    return new Horde_Date(
-                        ['year'  => (int) $datePart->format('Y'),
-                            'month' => (int) $datePart->format('n'),
-                            'mday'  => (int) $datePart->format('j'),
-                            'hour'  => (int) $timePart->format('G'),
-                            'min'   => (int) $timePart->format('i'),
-                            'sec'   => 0]
-                    );
-                }
-
-                $parsed = $formatter->parse($date, $dateFormat, $locale);
-
-                return new Horde_Date($parsed->getTimestamp());
-            } catch (Exception $e) {
-                // Fall through to legacy parsing.
-            }
-        }
-
-        // strptime() is not available on Windows.
-        if (!function_exists('strptime')) {
-            return new Horde_Date($date);
-        }
-
-        // strptime() is locale dependent, i.e. %p is not always matching
-        // AM/PM. Set the locale to C to workaround this, but grab the
-        // locale's D_FMT before that.
-        $format = $dateFormat;
         if ($withtime) {
-            $format .= ' '
-                . ($GLOBALS['prefs']->getValue('twentyFour') ? '%H:%M' : '%I:%M %p');
-        }
-        $old_locale = setlocale(LC_TIME, '0');
-        setlocale(LC_TIME, 'C');
-
-        // Try exact format match first.
-        $date_arr = strptime($date, $format);
-        setlocale(LC_TIME, $old_locale);
-
-        if (!$date_arr) {
-            // Try with locale dependent parsing next.
-            $date_arr = strptime($date, $format);
-            if (!$date_arr) {
-                // Try throwing at Horde_Date finally.
-                return new Horde_Date($date);
-            }
+            $timeFormat = $GLOBALS['prefs']->getValue('twentyFour') ? 'HH:mm' : 'h:mm a';
+            $parsed = Format::parseDateTime($date, $dateFormat, $timeFormat, $locale);
+        } else {
+            $parsed = Format::parse($date, $dateFormat, $locale);
         }
 
-        return new Horde_Date(
-            ['year'  => $date_arr['tm_year'] + 1900,
-                'month' => $date_arr['tm_mon'] + 1,
-                'mday'  => $date_arr['tm_mday'],
-                'hour'  => $date_arr['tm_hour'],
-                'min'   => $date_arr['tm_min'],
-                'sec'   => $date_arr['tm_sec']]
-        );
+        return new Horde_Date($parsed->toDateTimeImmutable());
     }
 
     /**
