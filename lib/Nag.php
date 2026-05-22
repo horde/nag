@@ -2,6 +2,7 @@
 
 use Horde\Util\Util;
 use Horde\Date\Format;
+use Horde\Date\Formatter\IcuFormatter;
 
 /**
  * Nag Base Class.
@@ -168,6 +169,36 @@ class Nag
      */
     public static function parseDate($date, $withtime = true)
     {
+        $date = trim($date);
+        $dateFormat = $GLOBALS['prefs']->getValue('date_format_mini');
+        $locale = $GLOBALS['language'] ?? ($GLOBALS['prefs']->getValue('language') ?? 'en_US');
+
+        if (!Format::isStrftimeFormat($dateFormat)) {
+            try {
+                $formatter = new IcuFormatter();
+                if ($withtime && preg_match('/^(.+?)\s+(\S+)$/', $date, $parts)) {
+                    $datePart = $formatter->parse($parts[1], $dateFormat, $locale);
+                    $timeFormat = $GLOBALS['prefs']->getValue('twentyFour') ? 'HH:mm' : 'h:mm a';
+                    $timePart = $formatter->parse($parts[2], $timeFormat, $locale);
+
+                    return new Horde_Date(
+                        ['year'  => (int) $datePart->format('Y'),
+                            'month' => (int) $datePart->format('n'),
+                            'mday'  => (int) $datePart->format('j'),
+                            'hour'  => (int) $timePart->format('G'),
+                            'min'   => (int) $timePart->format('i'),
+                            'sec'   => 0]
+                    );
+                }
+
+                $parsed = $formatter->parse($date, $dateFormat, $locale);
+
+                return new Horde_Date($parsed->getTimestamp());
+            } catch (Exception $e) {
+                // Fall through to legacy parsing.
+            }
+        }
+
         // strptime() is not available on Windows.
         if (!function_exists('strptime')) {
             return new Horde_Date($date);
@@ -176,7 +207,7 @@ class Nag
         // strptime() is locale dependent, i.e. %p is not always matching
         // AM/PM. Set the locale to C to workaround this, but grab the
         // locale's D_FMT before that.
-        $format = $GLOBALS['prefs']->getValue('date_format_mini');
+        $format = $dateFormat;
         if ($withtime) {
             $format .= ' '
                 . ($GLOBALS['prefs']->getValue('twentyFour') ? '%H:%M' : '%I:%M %p');
