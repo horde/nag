@@ -590,9 +590,8 @@ class Nag
      *
      * @return Horde_Share  The new share.
      *
-     * Note: Does not update the sync_lists preference. Web-created lists are
-     * opt-in for ActiveSync via Nag preferences; EAS-created lists use
-     * Nag_Api::addTasklist() with synchronize => true.
+     * Note: Does not update sync_lists itself. The create-task-list form and
+     * Nag_Api::addTasklist() with synchronize => true call addTasklistToSyncLists().
      */
     public static function addTasklist(array $info, $display = true)
     {
@@ -678,6 +677,8 @@ class Nag
             throw new Horde_Exception_PermissionDenied(_("You are not allowed to delete this task list."));
         }
 
+        self::removeTasklistFromSyncLists($tasklist->getName());
+
         // Delete the task list.
         $storage = &$GLOBALS['injector']->getInstance('Nag_Factory_Driver')->create($tasklist->getName());
         $result = $storage->deleteAll();
@@ -688,6 +689,9 @@ class Nag
         } catch (Horde_Share_Exception $e) {
             throw new Nag_Exception($e);
         }
+
+        self::pruneActiveSyncTaskCache();
+        self::touchActiveSyncDeviceCaches();
     }
 
     /**
@@ -1756,6 +1760,173 @@ class Nag
             $owner = $share->get('name');
         }
         return $owner;
+    }
+
+    /**
+     * Add a task list to the sync_lists preference.
+     *
+     * @param string $tasklistId  Task list share id.
+     */
+    public static function addTasklistToSyncLists($tasklistId)
+    {
+        $sync = @unserialize($GLOBALS['prefs']->getValue('sync_lists'));
+        if (!is_array($sync)) {
+            $sync = [];
+        }
+        if (in_array($tasklistId, $sync, true)) {
+            return;
+        }
+
+        $sync[] = $tasklistId;
+        $GLOBALS['prefs']->setValue('sync_lists', serialize(array_values($sync)));
+    }
+
+    /**
+     * Drop cached task folder/collection mappings that are no longer synced.
+     *
+     * FolderSync state in storage is kept so the next client FolderSync can
+     * diff and emit FolderHierarchy:Remove. Pruning stale cache entries causes
+     * PING on those folders to fail with FolderGone, which prompts clients to
+     * run FolderSync (status FolderSync required).
+     *
+     * @param array|null $allowedShareIds  Share ids that may remain cached;
+     *                                     defaults to current getSyncLists().
+     *
+     * @return boolean  True if at least one device cache was updated.
+     *
+     * @throws Horde_ActiveSync_Exception
+     */
+    public static function pruneActiveSyncTaskCache(array $allowedShareIds = null)
+    {
+        if (empty($GLOBALS['conf']['activesync']['enabled'])
+            || !$GLOBALS['prefs']->getValue('activesync_no_multiplex')) {
+            return false;
+        }
+
+        $user = $GLOBALS['registry']->getAuth();
+        if (!$user) {
+            return false;
+        }
+
+        if ($allowedShareIds === null) {
+            $allowedShareIds = array_keys(self::getSyncLists());
+        }
+
+        $allowed = [];
+        foreach ($allowedShareIds as $tasklistId) {
+            $allowed[Horde_ActiveSync::CLASS_TASKS . ':' . $tasklistId] = true;
+        }
+
+        $sm = $GLOBALS['injector']->getInstance('Horde_ActiveSyncState');
+        $logger = $GLOBALS['injector']->getInstance('Horde_Log_Logger');
+        $sm->setLogger($logger);
+        $devices = $sm->listDevices($user);
+        if (!count($devices)) {
+            return false;
+        }
+
+        $updated = false;
+        foreach ($devices as $device) {
+            $devId = $device['device_id'];
+            $cache = new Horde_ActiveSync_SyncCache($sm, $devId, $user, $logger);
+            if (!count($cache->getFolders())) {
+                continue;
+            }
+
+            $deviceUpdated = false;
+            foreach ($cache->getFolders() as $clientUid => $folder) {
+                if (($folder['class'] ?? '') !== Horde_ActiveSync::CLASS_TASKS) {
+                    continue;
+                }
+                $backendId = $folder['serverid'] ?? '';
+                if (empty($backendId) || !isset($allowed[$backendId])) {
+                    $cache->deleteFolder($clientUid);
+                    $deviceUpdated = true;
+                }
+            }
+
+            foreach ($cache->getCollections(false) as $collectionId => $collection) {
+                if (($collection['class'] ?? '') !== Horde_ActiveSync::CLASS_TASKS) {
+                    continue;
+                }
+                $backendId = $collection['serverid'] ?? '';
+                if (empty($backendId) && isset($cache->getFolders()[$collectionId]['serverid'])) {
+                    $backendId = $cache->getFolders()[$collectionId]['serverid'];
+                }
+                if (empty($backendId) || !isset($allowed[$backendId])) {
+                    $cache->removeCollection($collectionId, true);
+                    $deviceUpdated = true;
+                }
+            }
+
+            if ($deviceUpdated) {
+                $cache->save();
+                $updated = true;
+            }
+        }
+
+        return $updated;
+    }
+
+    /**
+     * Bump the ActiveSync cache timestamp on all devices for the current user.
+     *
+     * @return boolean  True if at least one device cache was touched.
+     *
+     * @throws Horde_ActiveSync_Exception
+     */
+    public static function touchActiveSyncDeviceCaches()
+    {
+        if (empty($GLOBALS['conf']['activesync']['enabled'])) {
+            return false;
+        }
+
+        $user = $GLOBALS['registry']->getAuth();
+        if (!$user) {
+            return false;
+        }
+
+        $sm = $GLOBALS['injector']->getInstance('Horde_ActiveSyncState');
+        $logger = $GLOBALS['injector']->getInstance('Horde_Log_Logger');
+        $sm->setLogger($logger);
+        $devices = $sm->listDevices($user);
+        if (!count($devices)) {
+            return false;
+        }
+
+        foreach ($devices as $device) {
+            $cache = new Horde_ActiveSync_SyncCache(
+                $sm,
+                $device['device_id'],
+                $user,
+                $logger
+            );
+            $cache->updateTimestamp();
+            $cache->save();
+        }
+
+        return true;
+    }
+
+    /**
+     * Remove a task list from the sync_lists preference (no UI notification).
+     *
+     * @param string $tasklistId  Task list share id.
+     */
+    public static function removeTasklistFromSyncLists($tasklistId)
+    {
+        $sync = @unserialize($GLOBALS['prefs']->getValue('sync_lists'));
+        if (!is_array($sync)) {
+            return;
+        }
+
+        $key = array_search($tasklistId, $sync);
+        if ($key === false) {
+            return;
+        }
+
+        unset($sync[$key]);
+        $GLOBALS['prefs']->setValue('sync_lists', serialize(array_values($sync)));
     }
 
     /**
