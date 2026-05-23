@@ -156,14 +156,14 @@ class Nag_Api extends Horde_Registry_Api
      */
     public function addTasklist($name, $description = '', $color = '', array $params = [])
     {
-        $tasklist = Nag::addTasklist(['name' => $name, 'description' => $description, 'color' => $color]);
+        $tasklist = Nag::addTasklist(
+            ['name' => $name, 'description' => $description, 'color' => $color],
+            true,
+            !empty($params['synchronize'])
+        );
+        Nag::persistPrefs();
 
-        $name = $tasklist->getName();
-        if (!empty($params['synchronize'])) {
-            Nag::addTasklistToSyncLists($name);
-        }
-
-        return $name;
+        return $tasklist->getName();
     }
 
     /**
@@ -272,7 +272,8 @@ class Nag_Api extends Horde_Registry_Api
     public function deleteTasklist($id)
     {
         $tasklist = $GLOBALS['nag_shares']->getShare($id);
-        return Nag::deleteTasklist($tasklist);
+        Nag::deleteTasklist($tasklist);
+        Nag::persistPrefs();
     }
 
     /**
