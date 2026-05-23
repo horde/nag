@@ -586,14 +586,12 @@ class Nag
      * Creates a new share.
      *
      * @param array $info       Hash with tasklist information.
-     * @param boolean $display  Add the new tasklist to display_tasklists
+     * @param boolean $display  Add the new tasklist to display_tasklists.
+     * @param boolean $sync     Add the new tasklist to sync_lists (ActiveSync).
      *
      * @return Horde_Share  The new share.
-     *
-     * Note: Does not update sync_lists itself. The create-task-list form and
-     * Nag_Api::addTasklist() with synchronize => true call addTasklistToSyncLists().
      */
-    public static function addTasklist(array $info, $display = true)
+    public static function addTasklist(array $info, $display = true, $sync = false)
     {
         try {
             $tasklist = $GLOBALS['nag_shares']->newShare(
@@ -619,8 +617,10 @@ class Nag
         }
 
         if ($display) {
-            $GLOBALS['display_tasklists'][] = $tasklist->getName();
-            $GLOBALS['prefs']->setValue('display_tasklists', serialize($GLOBALS['display_tasklists']));
+            self::addTasklistToDisplayListsPref($tasklist->getName());
+        }
+        if ($sync) {
+            self::addTasklistToSyncLists($tasklist->getName());
         }
 
         return $tasklist;
@@ -677,6 +677,7 @@ class Nag
             throw new Horde_Exception_PermissionDenied(_("You are not allowed to delete this task list."));
         }
 
+        self::removeTasklistFromDisplayListsPref($tasklist->getName());
         self::removeTasklistFromSyncLists($tasklist->getName());
 
         // Delete the task list.
@@ -690,8 +691,7 @@ class Nag
             throw new Nag_Exception($e);
         }
 
-        self::pruneActiveSyncTaskCache();
-        self::touchActiveSyncDeviceCaches();
+        self::removeActiveSyncTaskListFromDeviceCache($tasklist->getName());
     }
 
     /**
@@ -995,10 +995,12 @@ class Nag
             $_SERVER['REQUEST_TIME'] = time();
         }
 
+        self::refreshWebSessionState();
+
         // Update the preference for what task lists to display. If the user
         // doesn't have any selected task lists for view then fall back to
         // some available list.
-        $GLOBALS['display_tasklists'] = @unserialize($GLOBALS['prefs']->getValue('display_tasklists'));
+        $GLOBALS['display_tasklists'] = self::_getPrefList('display_tasklists');
         if (!$GLOBALS['display_tasklists']) {
             $GLOBALS['display_tasklists'] = [];
         }
@@ -1763,31 +1765,173 @@ class Nag
     }
 
     /**
+     * Reload Nag state that is cached in the web PHP session.
+     *
+     * ActiveSync (and other clients) update the database in their own requests;
+     * the browser session may still hold stale Horde_Prefs and Horde_Share list
+     * caches until logout.
+     */
+    public static function refreshWebSessionState()
+    {
+        if ($GLOBALS['registry']->getApp() !== 'nag') {
+            return;
+        }
+
+        $GLOBALS['prefs']->cleanup();
+        $GLOBALS['prefs']->retrieve();
+
+        if (!empty($GLOBALS['nag_shares'])) {
+            $GLOBALS['nag_shares']->expireListCache();
+        }
+    }
+
+    /**
+     * Write preference changes to storage immediately.
+     *
+     * ActiveSync requests use a separate PHP session; the web UI may otherwise
+     * read stale values from the session prefs cache until reload.
+     */
+    public static function persistPrefs()
+    {
+        $GLOBALS['prefs']->store();
+    }
+
+    /**
+     * Add a task list to the display_tasklists preference.
+     *
+     * @param string $tasklistId  Task list share id.
+     */
+    public static function addTasklistToDisplayListsPref($tasklistId)
+    {
+        $display = self::_getPrefList('display_tasklists');
+        if (in_array($tasklistId, $display, true)) {
+            return;
+        }
+
+        $display[] = $tasklistId;
+        self::_setPrefList('display_tasklists', $display);
+        $GLOBALS['display_tasklists'] = $display;
+    }
+
+    /**
+     * Remove a task list from the display_tasklists preference.
+     *
+     * @param string $tasklistId  Task list share id.
+     */
+    public static function removeTasklistFromDisplayListsPref($tasklistId)
+    {
+        $display = self::_getPrefList('display_tasklists');
+        $key = array_search($tasklistId, $display, true);
+        if ($key === false) {
+            return;
+        }
+
+        unset($display[$key]);
+        $display = array_values($display);
+        self::_setPrefList('display_tasklists', $display);
+        if (isset($GLOBALS['display_tasklists']) && is_array($GLOBALS['display_tasklists'])) {
+            $gkey = array_search($tasklistId, $GLOBALS['display_tasklists'], true);
+            if ($gkey !== false) {
+                unset($GLOBALS['display_tasklists'][$gkey]);
+                $GLOBALS['display_tasklists'] = array_values($GLOBALS['display_tasklists']);
+            }
+        }
+    }
+
+    /**
      * Add a task list to the sync_lists preference.
      *
      * @param string $tasklistId  Task list share id.
      */
     public static function addTasklistToSyncLists($tasklistId)
     {
-        $sync = @unserialize($GLOBALS['prefs']->getValue('sync_lists'));
-        if (!is_array($sync)) {
-            $sync = [];
-        }
+        $sync = self::_getPrefList('sync_lists');
         if (in_array($tasklistId, $sync, true)) {
             return;
         }
 
         $sync[] = $tasklistId;
-        $GLOBALS['prefs']->setValue('sync_lists', serialize(array_values($sync)));
+        self::_setPrefList('sync_lists', $sync);
+    }
+
+    /**
+     * Remove one task list from per-device ActiveSync caches.
+     *
+     * Used when a list is deleted. Only the matching folder/collection entries
+     * are removed so other task folders keep their synckeys for PING. During
+     * FolderDelete, ActiveSync also calls deleteFolderFromHierarchy() for the
+     * hierarchy uid after the backend delete returns.
+     *
+     * @param string $tasklistId  Task list share id.
+     *
+     * @return boolean  True if at least one device cache was updated.
+     *
+     * @throws Horde_ActiveSync_Exception
+     */
+    public static function removeActiveSyncTaskListFromDeviceCache($tasklistId)
+    {
+        if (empty($GLOBALS['conf']['activesync']['enabled'])
+            || !$GLOBALS['prefs']->getValue('activesync_no_multiplex')) {
+            return false;
+        }
+
+        $user = $GLOBALS['registry']->getAuth();
+        if (!$user) {
+            return false;
+        }
+
+        $backendId = Horde_ActiveSync::CLASS_TASKS . ':' . $tasklistId;
+        $sm = $GLOBALS['injector']->getInstance('Horde_ActiveSyncState');
+        $logger = $GLOBALS['injector']->getInstance('Horde_Log_Logger');
+        $sm->setLogger($logger);
+        $devices = $sm->listDevices($user);
+        if (!count($devices)) {
+            return false;
+        }
+
+        $updated = false;
+        foreach ($devices as $device) {
+            $cache = new Horde_ActiveSync_SyncCache($sm, $device['device_id'], $user, $logger);
+            $deviceUpdated = false;
+
+            foreach ($cache->getFolders() as $clientUid => $folder) {
+                if (($folder['class'] ?? '') !== Horde_ActiveSync::CLASS_TASKS) {
+                    continue;
+                }
+                if (($folder['serverid'] ?? '') === $backendId) {
+                    $cache->deleteFolder($clientUid);
+                    $deviceUpdated = true;
+                }
+            }
+
+            foreach ($cache->getCollections(false) as $collectionId => $collection) {
+                if (($collection['class'] ?? '') !== Horde_ActiveSync::CLASS_TASKS) {
+                    continue;
+                }
+                $collBackendId = $collection['serverid'] ?? '';
+                if ($collBackendId === $backendId
+                    || $collectionId === $backendId
+                    || $collectionId === $tasklistId) {
+                    $cache->removeCollection($collectionId, true);
+                    $deviceUpdated = true;
+                }
+            }
+
+            if ($deviceUpdated) {
+                $cache->save();
+                $updated = true;
+            }
+        }
+
+        return $updated;
     }
 
     /**
      * Drop cached task folder/collection mappings that are no longer synced.
      *
+     * Intended for sync_lists preference changes, not for single list deletes.
      * FolderSync state in storage is kept so the next client FolderSync can
-     * diff and emit FolderHierarchy:Remove. Pruning stale cache entries causes
-     * PING on those folders to fail with FolderGone, which prompts clients to
-     * run FolderSync (status FolderSync required).
+     * diff and emit FolderHierarchy:Remove.
      *
      * @param array|null $allowedShareIds  Share ids that may remain cached;
      *                                     defaults to current getSyncLists().
@@ -1915,18 +2059,35 @@ class Nag
      */
     public static function removeTasklistFromSyncLists($tasklistId)
     {
-        $sync = @unserialize($GLOBALS['prefs']->getValue('sync_lists'));
-        if (!is_array($sync)) {
-            return;
-        }
-
-        $key = array_search($tasklistId, $sync);
+        $sync = self::_getPrefList('sync_lists');
+        $key = array_search($tasklistId, $sync, true);
         if ($key === false) {
             return;
         }
 
         unset($sync[$key]);
-        $GLOBALS['prefs']->setValue('sync_lists', serialize(array_values($sync)));
+        self::_setPrefList('sync_lists', array_values($sync));
+    }
+
+    /**
+     * @param string $pref  Preference name.
+     *
+     * @return array  List of share ids.
+     */
+    protected static function _getPrefList($pref)
+    {
+        $list = @unserialize($GLOBALS['prefs']->getValue($pref));
+
+        return is_array($list) ? array_values($list) : [];
+    }
+
+    /**
+     * @param string $pref  Preference name.
+     * @param array  $list  List of share ids.
+     */
+    protected static function _setPrefList($pref, array $list)
+    {
+        $GLOBALS['prefs']->setValue($pref, serialize(array_values($list)));
     }
 
     /**
