@@ -621,6 +621,9 @@ class Nag
         }
         if ($sync) {
             self::addTasklistToSyncLists($tasklist->getName());
+            self::notifyActiveSyncOfTaskListChange();
+        } elseif ($display) {
+            self::persistPrefs();
         }
 
         return $tasklist;
@@ -659,6 +662,8 @@ class Nag
         } catch (Horde_Share_Exception $e) {
             throw new Nag_Exception(sprintf(_("Unable to save task list \"%s\": %s"), $info['name'], $e->getMessage()));
         }
+
+        self::notifyActiveSyncOfTaskListChange();
     }
 
     /**
@@ -691,7 +696,11 @@ class Nag
             throw new Nag_Exception($e);
         }
 
-        self::removeActiveSyncTaskListFromDeviceCache($tasklist->getName());
+        // Do not remove folder/collection mappings from the device cache here.
+        // The iPhone may still PING/SYNC that folder until FolderSync delivers
+        // FolderHierarchy:Remove. notifyActiveSyncOfTaskListChange() only
+        // invalidates hierarchy; FolderSync diffs foldersync state vs getFolderList().
+        self::notifyActiveSyncOfTaskListChange();
     }
 
     /**
@@ -1797,6 +1806,145 @@ class Nag
     }
 
     /**
+     * Persist task list prefs and wake ActiveSync after web-side list changes.
+     *
+     * Folder hierarchy updates are delivered on the device's next FolderSync
+     * (there is no server push for new folders). This writes sync_lists to the
+     * database immediately and marks device caches so the next SYNC returns
+     * FolderSync required (status 12).
+     *
+     * Stored foldersync state in the database is left intact. Clearing it
+     * causes a synckey mismatch that makes Horde wipe the entire device folder
+     * cache and breaks ongoing PING/SYNC.
+     *
+     * @return boolean  True if at least one device was notified.
+     *
+     * @throws Horde_ActiveSync_Exception
+     */
+    public static function notifyActiveSyncOfTaskListChange()
+    {
+        if (!self::_isActiveSyncEnabled()) {
+            return false;
+        }
+
+        self::persistPrefs();
+
+        if (!empty($GLOBALS['nag_shares'])) {
+            $GLOBALS['nag_shares']->expireListCache();
+        }
+
+        // Do not prune the device folder cache here. Pruning removed entries
+        // before FolderSync breaks PING on those folder ids (status 132). Cache
+        // cleanup for manual sync_lists changes stays in config/prefs.php
+        // on_change; FolderSync Remove updates cache after the device applies it.
+        $updated = self::requestActiveSyncFolderHierarchySync();
+
+        if ($updated
+            && $GLOBALS['registry']->getApp() === 'nag'
+            && !empty($GLOBALS['notification'])) {
+            $GLOBALS['notification']->push(
+                _("Task list change saved. Your device will update task list folders on the next sync."),
+                'horde.message'
+            );
+        }
+
+        return $updated;
+    }
+
+    /**
+     * Tell all of a user's devices to run FolderSync on the next request.
+     *
+     * Clears only the hierarchy synckey in the device cache (same approach as
+     * Horde_ActiveSync_State when invalidating foldersync). Folder entries and
+     * collection synckeys in the cache are kept so PING still resolves folder
+     * ids and Add/Remove diffs in stored foldersync state still work.
+     *
+     * @return boolean  True if at least one device cache was updated.
+     *
+     * @throws Horde_ActiveSync_Exception
+     */
+    public static function requestActiveSyncFolderHierarchySync()
+    {
+        if (!self::_isActiveSyncEnabled()
+            || !$GLOBALS['prefs']->getValue('activesync_no_multiplex')) {
+            return false;
+        }
+
+        $devices = self::_listActiveSyncDevicesForUser();
+        if (!count($devices)) {
+            return false;
+        }
+
+        $sm = $GLOBALS['injector']->getInstance('Horde_ActiveSyncState');
+        $logger = $GLOBALS['injector']->getInstance('Horde_Log_Logger');
+        $sm->setLogger($logger);
+
+        $updated = false;
+        foreach ($devices as $device) {
+            $cache = new Horde_ActiveSync_SyncCache(
+                $sm,
+                $device['device_id'],
+                $device['device_user'],
+                $logger
+            );
+            if (!count($cache->getFolders()) && !count($cache->getCollections(false))) {
+                continue;
+            }
+
+            $cache->hierarchy = '0';
+            $cache->updateTimestamp();
+            $cache->save();
+            $updated = true;
+        }
+
+        return $updated;
+    }
+
+    /**
+     * @return boolean
+     */
+    protected static function _isActiveSyncEnabled()
+    {
+        return !empty($GLOBALS['conf']['activesync']['enabled']);
+    }
+
+    /**
+     * List ActiveSync devices for the logged-in user.
+     *
+     * Tries both the Horde auth id and the original login id so device rows
+     * registered under either form are found.
+     *
+     * @return array  Device rows from Horde_ActiveSync_State::listDevices().
+     *
+     * @throws Horde_ActiveSync_Exception
+     */
+    protected static function _listActiveSyncDevicesForUser()
+    {
+        $registry = $GLOBALS['registry'];
+        $userIds = array_unique(array_filter([
+            $registry->getAuth(),
+            $registry->getAuth('original'),
+        ]));
+        if (!count($userIds)) {
+            return [];
+        }
+
+        $sm = $GLOBALS['injector']->getInstance('Horde_ActiveSyncState');
+        $logger = $GLOBALS['injector']->getInstance('Horde_Log_Logger');
+        $sm->setLogger($logger);
+
+        $devices = [];
+        foreach ($userIds as $userId) {
+            foreach ($sm->listDevices($userId) as $device) {
+                $key = $device['device_id'] . "\0" . $device['device_user'];
+                $devices[$key] = $device;
+            }
+        }
+
+        return array_values($devices);
+    }
+
+    /**
      * Add a task list to the display_tasklists preference.
      *
      * @param string $tasklistId  Task list share id.
@@ -1857,10 +2005,10 @@ class Nag
     /**
      * Remove one task list from per-device ActiveSync caches.
      *
-     * Used when a list is deleted. Only the matching folder/collection entries
-     * are removed so other task folders keep their synckeys for PING. During
-     * FolderDelete, ActiveSync also calls deleteFolderFromHierarchy() for the
-     * hierarchy uid after the backend delete returns.
+     * Not used for web-side deletes (see deleteTasklist()). Intended for
+     * exceptional cleanup; normal list removal is delivered via FolderSync
+     * after requestActiveSyncFolderHierarchySync(). During FolderDelete,
+     * ActiveSync also calls deleteFolderFromHierarchy() for the hierarchy uid.
      *
      * @param string $tasklistId  Task list share id.
      *
@@ -1870,13 +2018,8 @@ class Nag
      */
     public static function removeActiveSyncTaskListFromDeviceCache($tasklistId)
     {
-        if (empty($GLOBALS['conf']['activesync']['enabled'])
+        if (!self::_isActiveSyncEnabled()
             || !$GLOBALS['prefs']->getValue('activesync_no_multiplex')) {
-            return false;
-        }
-
-        $user = $GLOBALS['registry']->getAuth();
-        if (!$user) {
             return false;
         }
 
@@ -1884,14 +2027,19 @@ class Nag
         $sm = $GLOBALS['injector']->getInstance('Horde_ActiveSyncState');
         $logger = $GLOBALS['injector']->getInstance('Horde_Log_Logger');
         $sm->setLogger($logger);
-        $devices = $sm->listDevices($user);
+        $devices = self::_listActiveSyncDevicesForUser();
         if (!count($devices)) {
             return false;
         }
 
         $updated = false;
         foreach ($devices as $device) {
-            $cache = new Horde_ActiveSync_SyncCache($sm, $device['device_id'], $user, $logger);
+            $cache = new Horde_ActiveSync_SyncCache(
+                $sm,
+                $device['device_id'],
+                $device['device_user'],
+                $logger
+            );
             $deviceUpdated = false;
 
             foreach ($cache->getFolders() as $clientUid => $folder) {
@@ -1942,18 +2090,13 @@ class Nag
      */
     public static function pruneActiveSyncTaskCache(array $allowedShareIds = null)
     {
-        if (empty($GLOBALS['conf']['activesync']['enabled'])
+        if (!self::_isActiveSyncEnabled()
             || !$GLOBALS['prefs']->getValue('activesync_no_multiplex')) {
             return false;
         }
 
-        $user = $GLOBALS['registry']->getAuth();
-        if (!$user) {
-            return false;
-        }
-
         if ($allowedShareIds === null) {
-            $allowedShareIds = array_keys(self::getSyncLists());
+            $allowedShareIds = array_values(self::getSyncLists());
         }
 
         $allowed = [];
@@ -1964,7 +2107,7 @@ class Nag
         $sm = $GLOBALS['injector']->getInstance('Horde_ActiveSyncState');
         $logger = $GLOBALS['injector']->getInstance('Horde_Log_Logger');
         $sm->setLogger($logger);
-        $devices = $sm->listDevices($user);
+        $devices = self::_listActiveSyncDevicesForUser();
         if (!count($devices)) {
             return false;
         }
@@ -1972,6 +2115,7 @@ class Nag
         $updated = false;
         foreach ($devices as $device) {
             $devId = $device['device_id'];
+            $user = $device['device_user'];
             $cache = new Horde_ActiveSync_SyncCache($sm, $devId, $user, $logger);
             if (!count($cache->getFolders())) {
                 continue;
@@ -2021,19 +2165,14 @@ class Nag
      */
     public static function touchActiveSyncDeviceCaches()
     {
-        if (empty($GLOBALS['conf']['activesync']['enabled'])) {
-            return false;
-        }
-
-        $user = $GLOBALS['registry']->getAuth();
-        if (!$user) {
+        if (!self::_isActiveSyncEnabled()) {
             return false;
         }
 
         $sm = $GLOBALS['injector']->getInstance('Horde_ActiveSyncState');
         $logger = $GLOBALS['injector']->getInstance('Horde_Log_Logger');
         $sm->setLogger($logger);
-        $devices = $sm->listDevices($user);
+        $devices = self::_listActiveSyncDevicesForUser();
         if (!count($devices)) {
             return false;
         }
@@ -2042,7 +2181,7 @@ class Nag
             $cache = new Horde_ActiveSync_SyncCache(
                 $sm,
                 $device['device_id'],
-                $user,
+                $device['device_user'],
                 $logger
             );
             $cache->updateTimestamp();
