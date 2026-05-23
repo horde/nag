@@ -696,10 +696,9 @@ class Nag
             throw new Nag_Exception($e);
         }
 
-        // Do not remove folder/collection mappings from the device cache here.
-        // The iPhone may still PING/SYNC that folder until FolderSync delivers
-        // FolderHierarchy:Remove. notifyActiveSyncOfTaskListChange() only
-        // invalidates hierarchy; FolderSync diffs foldersync state vs getFolderList().
+        // Drop collection/PING state only; keep folder cache entries so FolderSync
+        // can still emit FolderHierarchy:Remove for this list's client folder id.
+        self::removeActiveSyncTaskListCollectionsFromDeviceCache($tasklist->getName());
         self::notifyActiveSyncOfTaskListChange();
     }
 
@@ -2003,7 +2002,51 @@ class Nag
     }
 
     /**
-     * Remove one task list from per-device ActiveSync caches.
+     * Remove per-device SYNC/PING collection entries for one task list.
+     *
+     * Folder cache mappings are kept so FolderSync can still deliver
+     * FolderHierarchy:Remove after a web-side delete.
+     *
+     * @param string $tasklistId  Task list share id.
+     *
+     * @return boolean  True if at least one device cache was updated.
+     *
+     * @throws Horde_ActiveSync_Exception
+     */
+    public static function removeActiveSyncTaskListCollectionsFromDeviceCache($tasklistId)
+    {
+        if (!self::_isActiveSyncEnabled()
+            || !$GLOBALS['prefs']->getValue('activesync_no_multiplex')) {
+            return false;
+        }
+
+        $sm = $GLOBALS['injector']->getInstance('Horde_ActiveSyncState');
+        $logger = $GLOBALS['injector']->getInstance('Horde_Log_Logger');
+        $sm->setLogger($logger);
+        $devices = self::_listActiveSyncDevicesForUser();
+        if (!count($devices)) {
+            return false;
+        }
+
+        $updated = false;
+        foreach ($devices as $device) {
+            $cache = new Horde_ActiveSync_SyncCache(
+                $sm,
+                $device['device_id'],
+                $device['device_user'],
+                $logger
+            );
+            if (self::_purgeActiveSyncTaskListCollections($cache, $tasklistId)) {
+                $cache->save();
+                $updated = true;
+            }
+        }
+
+        return $updated;
+    }
+
+    /**
+     * Remove one task list from per-device ActiveSync caches (folders and collections).
      *
      * Not used for web-side deletes (see deleteTasklist()). Intended for
      * exceptional cleanup; normal list removal is delivered via FolderSync
@@ -2052,21 +2095,41 @@ class Nag
                 }
             }
 
-            foreach ($cache->getCollections(false) as $collectionId => $collection) {
-                if (($collection['class'] ?? '') !== Horde_ActiveSync::CLASS_TASKS) {
-                    continue;
-                }
-                $collBackendId = $collection['serverid'] ?? '';
-                if ($collBackendId === $backendId
-                    || $collectionId === $backendId
-                    || $collectionId === $tasklistId) {
-                    $cache->removeCollection($collectionId, true);
-                    $deviceUpdated = true;
-                }
+            if (self::_purgeActiveSyncTaskListCollections($cache, $tasklistId)) {
+                $deviceUpdated = true;
             }
 
             if ($deviceUpdated) {
                 $cache->save();
+                $updated = true;
+            }
+        }
+
+        return $updated;
+    }
+
+    /**
+     * @param Horde_ActiveSync_SyncCache $cache
+     * @param string $tasklistId
+     *
+     * @return boolean
+     */
+    protected static function _purgeActiveSyncTaskListCollections(
+        Horde_ActiveSync_SyncCache $cache,
+        $tasklistId
+    ) {
+        $backendId = Horde_ActiveSync::CLASS_TASKS . ':' . $tasklistId;
+        $updated = false;
+
+        foreach ($cache->getCollections(false) as $collectionId => $collection) {
+            if (($collection['class'] ?? '') !== Horde_ActiveSync::CLASS_TASKS) {
+                continue;
+            }
+            $collBackendId = $collection['serverid'] ?? '';
+            if ($collBackendId === $backendId
+                || $collectionId === $backendId
+                || $collectionId === $tasklistId) {
+                $cache->removeCollection($collectionId, true);
                 $updated = true;
             }
         }
