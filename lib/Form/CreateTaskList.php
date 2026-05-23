@@ -46,9 +46,6 @@ class Nag_Form_CreateTaskList extends Horde_Form
             $info[$key] = $this->_vars->get($key);
         }
 
-        $tasklist = Nag::addTasklist($info);
-        Nag::addTasklistToSyncLists($tasklist->getName());
-
-        return $tasklist;
+        return Nag::addTasklist($info, true, true);
     }
 }
