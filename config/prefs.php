@@ -312,21 +312,20 @@ $_prefs['sync_lists'] = [
             $sync[] = $default;
             $GLOBALS['prefs']->setValue('sync_lists', serialize($sync));
         }
-        if ($GLOBALS['conf']['activesync']['enabled'] && !$GLOBALS['prefs']->getValue('activesync_no_multiplex')) {
+        if ($GLOBALS['conf']['activesync']['enabled']
+            && $GLOBALS['prefs']->getValue('activesync_no_multiplex')) {
             try {
-                $sm = $GLOBALS['injector']->getInstance('Horde_ActiveSyncState');
-                $sm->setLogger($GLOBALS['injector']->getInstance('Horde_Log_Logger'));
-                $devices = $sm->listDevices($GLOBALS['registry']->getAuth());
-                foreach ($devices as $device) {
-                    $sm->removeState([
-                        'devId' => $device['device_id'],
-                        'id' => Horde_Core_ActiveSync_Driver::TASKS_FOLDER_UID,
-                        'user' => $GLOBALS['registry']->getAuth(),
-                    ]);
-                }
-                $GLOBALS['notification']->push(_("All state removed for your ActiveSync devices. They will resynchronize next time they connect to the server."));
+                Nag::pruneActiveSyncTaskCache();
+                Nag::touchActiveSyncDeviceCaches();
+                $GLOBALS['notification']->push(
+                    _("Task list sync preferences were saved. Your device will update task list folders on the next folder sync."),
+                    'horde.message'
+                );
             } catch (Horde_ActiveSync_Exception $e) {
-                $GLOBALS['notification']->push(_("There was an error communicating with the ActiveSync server: %s"), $e->getMessage(), 'horde.error');
+                $GLOBALS['notification']->push(
+                    sprintf(_("There was an error communicating with the ActiveSync server: %s"), $e->getMessage()),
+                    'horde.error'
+                );
             }
         }
     },
