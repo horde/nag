@@ -161,7 +161,6 @@ class Nag_Api extends Horde_Registry_Api
             true,
             !empty($params['synchronize'])
         );
-        Nag::persistPrefs();
 
         return $tasklist->getName();
     }
@@ -273,7 +272,6 @@ class Nag_Api extends Horde_Registry_Api
     {
         $tasklist = $GLOBALS['nag_shares']->getShare($id);
         Nag::deleteTasklist($tasklist);
-        Nag::persistPrefs();
     }
 
     /**
