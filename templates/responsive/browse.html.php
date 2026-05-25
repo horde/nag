@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="<?php echo htmlspecialchars($url) ?>">
     <?php endforeach; ?>
 </head>
-<body>
+<body class="horde-responsive">
     <!-- Topbar -->
     <?php echo $topbarHtml ?>
 

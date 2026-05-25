@@ -168,3 +168,520 @@
         display: none;
     }
 }
+
+/* ============================================================================
+   Responsive View (scoped under .horde-responsive)
+   ============================================================================ */
+
+/* App Icon */
+.horde-responsive .topbar-menu-app-nag::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-image: url('graphics/nag.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    vertical-align: middle;
+}
+
+/* Layout */
+.horde-responsive .nag-container {
+    padding-top: var(--space-lg);
+    padding-bottom: var(--space-2xl);
+}
+
+/* Page Header */
+.horde-responsive .page-header {
+    margin-bottom: var(--space-lg);
+}
+
+.horde-responsive .page-header h1 {
+    margin: 0 0 var(--space-md) 0;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+.horde-responsive .add-task-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-lg);
+    background-color: var(--horde-primary);
+    color: white;
+    text-decoration: none;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+}
+
+.horde-responsive .add-task-btn:hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.horde-responsive .add-icon {
+    font-size: var(--font-size-xl);
+    line-height: 1;
+    font-weight: var(--font-weight-bold);
+}
+
+/* Back link */
+.horde-responsive .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-md);
+    padding: var(--space-xs) var(--space-sm);
+    color: var(--horde-primary);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    border-radius: var(--radius-sm);
+    transition: background-color var(--transition-fast);
+}
+
+.horde-responsive .back-link:hover {
+    background-color: var(--bg-hover);
+}
+
+.horde-responsive .back-arrow {
+    font-size: var(--font-size-xl);
+    line-height: 1;
+    font-weight: var(--font-weight-bold);
+}
+
+/* Filter Controls */
+.horde-responsive .filter-controls {
+    margin-bottom: var(--space-lg);
+}
+
+.horde-responsive .filter-select {
+    width: 100%;
+    max-width: 300px;
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--font-size-base);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+}
+
+/* Task Lists */
+.horde-responsive #task-lists {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.horde-responsive .task-list {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.horde-responsive .tasklist-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md);
+    background-color: var(--bg-accent);
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+}
+
+.horde-responsive .tasklist-header::-webkit-details-marker {
+    display: none;
+}
+
+.horde-responsive .tasklist-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+.horde-responsive .tasklist-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    padding: 0.25rem 0.5rem;
+    background-color: var(--horde-primary);
+    color: white;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    border-radius: var(--radius-full);
+}
+
+/* Task Items */
+.horde-responsive .task-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.horde-responsive .task-item {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border-light);
+    position: relative;
+}
+
+.horde-responsive .task-item:last-child {
+    border-bottom: none;
+}
+
+.horde-responsive .task-item.task-completed {
+    opacity: 0.6;
+}
+
+.horde-responsive .task-complete-btn {
+    flex-shrink: 0;
+    padding: var(--space-md);
+    font-size: 24px;
+    line-height: 1;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: background-color var(--transition-fast);
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 0;
+}
+
+.horde-responsive .task-complete-btn:hover {
+    background-color: var(--bg-hover);
+}
+
+.horde-responsive .complete-checkbox {
+    display: inline-block;
+}
+
+.horde-responsive .task-link {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: var(--space-md);
+    padding-left: 0;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: background-color var(--transition-fast);
+}
+
+.horde-responsive .task-link:hover {
+    background-color: var(--bg-hover);
+}
+
+.horde-responsive .task-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    min-width: 0;
+}
+
+.horde-responsive .task-name {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.horde-responsive .task-name.strikethrough {
+    text-decoration: line-through;
+}
+
+.horde-responsive .task-meta {
+    display: flex;
+    gap: var(--space-md);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.horde-responsive .task-due {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.horde-responsive .task-due.overdue {
+    color: #dc2626;
+    font-weight: var(--font-weight-medium);
+}
+
+.horde-responsive .task-priority {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.horde-responsive .priority-1 { color: #dc2626; }
+.horde-responsive .priority-2 { color: #f59e0b; }
+
+.horde-responsive .task-chevron {
+    flex-shrink: 0;
+    font-size: var(--font-size-lg);
+    color: var(--text-tertiary);
+    font-weight: var(--font-weight-bold);
+}
+
+/* Task Detail */
+.horde-responsive .task-detail {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: var(--space-xl);
+}
+
+.horde-responsive .task-name-header {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin: 0 0 var(--space-lg) 0;
+}
+
+.horde-responsive .task-name-header.strikethrough {
+    text-decoration: line-through;
+}
+
+.horde-responsive .completion-badge {
+    display: inline-block;
+    margin-left: var(--space-sm);
+    padding: 0.25rem 0.75rem;
+    background-color: #10b981;
+    color: white;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-normal);
+    border-radius: var(--radius-full);
+    vertical-align: middle;
+}
+
+/* Quick actions */
+.horde-responsive .quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+}
+
+.horde-responsive .quick-action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-md);
+    background-color: var(--bg-accent);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    width: 100%;
+}
+
+.horde-responsive .quick-action-btn:hover {
+    background-color: var(--bg-hover);
+    border-color: var(--horde-primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.horde-responsive .quick-action-icon {
+    font-size: 24px;
+    line-height: 1;
+}
+
+.horde-responsive .quick-action-label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    text-align: center;
+}
+
+.horde-responsive .quick-action-complete {
+    border-left: 3px solid #10b981;
+}
+
+.horde-responsive .quick-action-edit {
+    border-left: 3px solid #3b82f6;
+}
+
+.horde-responsive .quick-action-delete {
+    border-left: 3px solid #dc2626;
+}
+
+/* Task sections */
+.horde-responsive .task-section {
+    margin-bottom: var(--space-lg);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.horde-responsive .task-section:last-child {
+    margin-bottom: 0;
+}
+
+.horde-responsive .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md);
+    background-color: var(--bg-accent);
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+.horde-responsive .section-header::-webkit-details-marker {
+    display: none;
+}
+
+.horde-responsive .section-content {
+    padding: var(--space-md);
+}
+
+.horde-responsive .task-field {
+    margin-bottom: var(--space-md);
+}
+
+.horde-responsive .task-field:last-child {
+    margin-bottom: 0;
+}
+
+.horde-responsive .field-label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-xs);
+}
+
+.horde-responsive .field-value {
+    font-size: var(--font-size-base);
+    color: var(--text-primary);
+}
+
+.horde-responsive .text-error {
+    color: #dc2626;
+}
+
+.horde-responsive .overdue-badge {
+    display: inline-block;
+    margin-left: var(--space-sm);
+    padding: 0.125rem 0.5rem;
+    background-color: #dc2626;
+    color: white;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    border-radius: var(--radius-full);
+}
+
+.horde-responsive .priority-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+}
+
+.horde-responsive .priority-badge.priority-1 {
+    background-color: #dc2626;
+    color: white;
+}
+
+.horde-responsive .priority-badge.priority-2 {
+    background-color: #f59e0b;
+    color: white;
+}
+
+.horde-responsive .priority-badge.priority-3 {
+    background-color: #6b7280;
+    color: white;
+}
+
+.horde-responsive .priority-badge.priority-4,
+.horde-responsive .priority-badge.priority-5 {
+    background-color: #d1d5db;
+    color: #374151;
+}
+
+.horde-responsive .task-description {
+    line-height: var(--line-height-relaxed);
+    white-space: pre-wrap;
+}
+
+/* Task Form */
+.horde-responsive .task-form-container {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: var(--space-xl);
+}
+
+.horde-responsive .task-form {
+    max-width: 600px;
+}
+
+.horde-responsive .task-form-container h1 {
+    margin: 0 0 var(--space-lg) 0;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+/* Empty State */
+.horde-responsive .empty-state {
+    text-align: center;
+    padding: var(--space-2xl) var(--space-md);
+    color: var(--text-secondary);
+}
+
+.horde-responsive .empty-state-icon {
+    font-size: 64px;
+    margin-bottom: var(--space-lg);
+    opacity: 0.5;
+}
+
+.horde-responsive .empty-state h2 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+    margin: 0 0 var(--space-sm) 0;
+}
+
+.horde-responsive .empty-state p {
+    font-size: var(--font-size-base);
+    margin: 0;
+}
+
+/* Responsive Adjustments */
+@media (min-width: 768px) {
+    .horde-responsive .task-detail {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .horde-responsive .quick-actions {
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media (min-width: 1024px) {
+    .horde-responsive .nag-container {
+        max-width: 1200px;
+    }
+}

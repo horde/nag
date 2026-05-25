@@ -21,6 +21,8 @@ declare(strict_types=1);
 
 namespace Horde\Nag\Responsive;
 
+use Horde\Core\Assets\GraphicDiscoverer;
+use Horde\Core\Assets\ThemeResolver;
 use Horde\Core\Controller\ResponsiveControllerTrait;
 use Horde_Registry;
 use Horde_Variables;
@@ -55,7 +57,9 @@ class ResponsiveController implements RequestHandlerInterface
         private Horde_Registry $registry,
         private UriFactoryInterface $uriFactory,
         private ResponseFactoryInterface $responseFactory,
-        private StreamFactoryInterface $streamFactory
+        private StreamFactoryInterface $streamFactory,
+        private ?GraphicDiscoverer $graphicDiscoverer = null,
+        private ?ThemeResolver $themeResolver = null,
     ) {}
 
     /**
@@ -104,6 +108,22 @@ class ResponsiveController implements RequestHandlerInterface
     protected function getStreamFactory(): StreamFactoryInterface
     {
         return $this->streamFactory;
+    }
+
+    /**
+     * Get graphic discoverer for topbar app icons
+     */
+    protected function getGraphicDiscoverer(): ?GraphicDiscoverer
+    {
+        return $this->graphicDiscoverer;
+    }
+
+    /**
+     * Get theme resolver for topbar icon cascade
+     */
+    protected function getThemeResolver(): ?ThemeResolver
+    {
+        return $this->themeResolver;
     }
 
     /**
