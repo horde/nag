@@ -80,6 +80,11 @@ class Nag
     public const SORT_DESCEND = 1;
 
     /**
+     * Cache key prefix for cross-session task list invalidation markers.
+     */
+    public const TASKLIST_CACHE_TS_PREFIX = 'nag.tasklist_cache_ts.';
+
+    /**
      * Incomplete tasks
      */
     public const VIEW_INCOMPLETE = 0;
@@ -623,6 +628,7 @@ class Nag
             self::addTasklistToSyncLists($tasklist->getName());
             self::notifyActiveSyncOfTaskListChange();
         } elseif ($display) {
+            self::markTasklistCacheChanged();
             self::persistPrefs();
         }
 
@@ -1781,7 +1787,21 @@ class Nag
      */
     public static function refreshWebSessionState()
     {
-        if ($GLOBALS['registry']->getApp() !== 'nag') {
+        if ($GLOBALS['registry']->getApp() !== 'nag'
+            || empty($GLOBALS['session'])) {
+            return;
+        }
+
+        $cacheTs = self::_getTasklistCacheTimestamp();
+        if (!$cacheTs) {
+            return;
+        }
+
+        $sessionTs = (float) $GLOBALS['session']->get(
+            'nag',
+            'tasklist_cache_ts'
+        );
+        if ($cacheTs <= $sessionTs) {
             return;
         }
 
@@ -1791,6 +1811,14 @@ class Nag
         if (!empty($GLOBALS['nag_shares'])) {
             $GLOBALS['nag_shares']->expireListCache();
         }
+
+        $tasklistIds = array_keys(self::listTasklists());
+        self::_pruneTasklistPrefList('display_tasklists', $tasklistIds);
+        self::getDefaultTasklist(Horde_Perms::EDIT);
+        self::getSyncLists(true);
+        self::persistPrefs();
+
+        $GLOBALS['session']->set('nag', 'tasklist_cache_ts', $cacheTs);
     }
 
     /**
@@ -1822,11 +1850,12 @@ class Nag
      */
     public static function notifyActiveSyncOfTaskListChange()
     {
+        self::markTasklistCacheChanged();
+        self::persistPrefs();
+
         if (!self::_isActiveSyncEnabled()) {
             return false;
         }
-
-        self::persistPrefs();
 
         if (!empty($GLOBALS['nag_shares'])) {
             $GLOBALS['nag_shares']->expireListCache();
@@ -1848,6 +1877,22 @@ class Nag
         }
 
         return $updated;
+    }
+
+    /**
+     * Mark task list data as changed for other web sessions.
+     */
+    public static function markTasklistCacheChanged()
+    {
+        try {
+            $cache = $GLOBALS['injector']->getInstance('Horde_Cache');
+            $timestamp = sprintf('%.6F', microtime(true));
+            foreach (self::_tasklistCacheKeysForCurrentUser() as $key) {
+                $cache->set($key, $timestamp, 0);
+            }
+        } catch (Exception $e) {
+            Horde::log($e);
+        }
     }
 
     /**
@@ -2293,35 +2338,99 @@ class Nag
     }
 
     /**
+     * Remove stale task list ids from a serialized list preference.
+     *
+     * @param string $pref         Preference name.
+     * @param array  $tasklistIds  Existing task list share ids.
+     */
+    protected static function _pruneTasklistPrefList($pref, array $tasklistIds)
+    {
+        $list = self::_getPrefList($pref);
+        $pruned = array_values(array_intersect($list, $tasklistIds));
+        if ($pruned !== $list) {
+            self::_setPrefList($pref, $pruned);
+        }
+    }
+
+    /**
+     * Read the current cross-session task list marker.
+     *
+     * @return float  Timestamp marker, or 0 if none exists.
+     */
+    protected static function _getTasklistCacheTimestamp()
+    {
+        try {
+            $cache = $GLOBALS['injector']->getInstance('Horde_Cache');
+            $timestamp = 0;
+            foreach (self::_tasklistCacheKeysForCurrentUser() as $key) {
+                $value = $cache->get($key, 0);
+                if ($value !== false) {
+                    $timestamp = max($timestamp, (float) $value);
+                }
+            }
+            return $timestamp;
+        } catch (Exception $e) {
+            Horde::log($e);
+            return 0;
+        }
+    }
+
+    /**
+     * Return cache keys for auth ids that may address the same user.
+     *
+     * @return array  Cache keys.
+     */
+    protected static function _tasklistCacheKeysForCurrentUser()
+    {
+        $registry = $GLOBALS['registry'];
+        $userIds = array_unique(array_filter([
+            $registry->getAuth(),
+            $registry->getAuth('original'),
+        ]));
+
+        $keys = [];
+        foreach ($userIds as $userId) {
+            $keys[] = self::TASKLIST_CACHE_TS_PREFIX . hash('sha256', $userId);
+        }
+
+        return $keys;
+    }
+
+    /**
      * Returns the tasklists that should be used for syncing.
+     *
+     * @param boolean $prune  Persist removal of stale list ids from sync_lists.
      *
      * @return array  An array of task list ids
      */
-    public static function getSyncLists()
+    public static function getSyncLists($prune = false)
     {
-        $cs = unserialize($GLOBALS['prefs']->getValue('sync_lists'));
-
         // Bug #14585 Filter out erroneous null values.
-        $cs = array_filter($cs);
+        $cs = array_filter(self::_getPrefList('sync_lists'));
 
         if (!empty($cs)) {
-            // Have a pref, make sure it's still available
-            $lists = self::listTasklists(false, Horde_Perms::DELETE);
+            $lists = self::listTasklists(false, Horde_Perms::DELETE, false);
             $cscopy = array_flip($cs);
+            $haveRemoved = false;
             foreach ($cs as $c) {
                 if (empty($lists[$c])) {
                     unset($cscopy[$c]);
+                    $haveRemoved = true;
                 }
             }
 
-            // Have at least one
+            if ($haveRemoved && $prune) {
+                $cs = array_values(array_flip($cscopy));
+                self::_setPrefList('sync_lists', $cs);
+            }
+
             if (count($cscopy)) {
                 return array_flip($cscopy);
             }
         }
 
-        if ($cs = self::getDefaultTasklist(Horde_Perms::EDIT)) {
-            return [$cs];
+        if ($default = self::getDefaultTasklist(Horde_Perms::EDIT)) {
+            return [$default];
         }
 
         return [];
