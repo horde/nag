@@ -79,7 +79,8 @@ class Nag_Driver_Sql extends Nag_Driver
         }
         if (empty($task)) {
             $readable_lists = Nag::listTasklists();
-            foreach ($results as $row) {
+            $results->reset();
+            while ($row = $results->each()) {
                 if (isset($readable_lists[$row->tasklist])) {
                     $task = $row;
                     break;
@@ -135,8 +136,15 @@ class Nag_Driver_Sql extends Nag_Driver
         }
 
         if (!is_array($taskIds)) {
-            $results = new Nag_Task($this, $this->_buildTask(reset($rows)));
-            $this->_tasklist = $results->tasklist;
+            if (count($rows) === 1) {
+                $results = new Nag_Task($this, $this->_buildTask(reset($rows)));
+                $this->_tasklist = $results->tasklist;
+            } else {
+                $results = new Nag_Task();
+                foreach ($rows as $row) {
+                    $results->add(new Nag_Task($this, $this->_buildTask($row)));
+                }
+            }
         } else {
             $results = new Nag_Task();
             foreach ($rows as $row) {
