@@ -719,7 +719,7 @@ class Nag_Driver_Sql extends Nag_Driver
                 ?? null,
             'alarm' => $row['task_alarm'],
             'methods' => Horde_String::convertCharset(
-                @unserialize($row['task_alarm_methods']),
+                @unserialize($row['task_alarm_methods'], ['allowed_classes' => false]),
                 $this->_params['charset'],
                 'UTF-8'
             ),

@@ -1297,7 +1297,7 @@ class Nag_Task
             $prefs = $GLOBALS['prefs'];
         }
 
-        $methods = !empty($this->methods) ? $this->methods : @unserialize($prefs->getValue('task_alarms'));
+        $methods = !empty($this->methods) ? $this->methods : @unserialize($prefs->getValue('task_alarms'), ['allowed_classes' => false]);
         if (!$methods) {
             $methods = [];
         }

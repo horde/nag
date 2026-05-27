@@ -131,7 +131,7 @@ class Nag_View_List
         $view->sortdir = $prefs->getValue('sortdir');
         $view->sortdirclass = $view->sortdir ? 'sortup' : 'sortdown';
         $view->dateFormat = $prefs->getValue('date_format');
-        $view->columns = @unserialize($prefs->getValue('tasklist_columns'));
+        $view->columns = @unserialize($prefs->getValue('tasklist_columns'), ['allowed_classes' => false]);
         $view->smartShare = $this->_smartShare;
         $view->haveSearch = $this->_haveSearch;
         $view->tab_name = $this->_vars->get('tab_name', $prefs->getValue('show_completed'));

@@ -251,7 +251,7 @@ class Nag
         $tasks->process();
 
         if ($options['external']
-            && ($apps = @unserialize($prefs->getValue('show_external')))
+            && ($apps = @unserialize($prefs->getValue('show_external'), ['allowed_classes' => false]))
             && is_array($apps)) {
             foreach ($apps as $app) {
                 // We look for registered apis that support listAs(taskHash).
@@ -510,7 +510,7 @@ class Nag
             return $tasklists;
         }
 
-        $display_tasklists = @unserialize($GLOBALS['prefs']->getValue('display_tasklists'));
+        $display_tasklists = @unserialize($GLOBALS['prefs']->getValue('display_tasklists'), ['allowed_classes' => false]);
         if (is_array($display_tasklists)) {
             foreach ($display_tasklists as $id) {
                 try {
@@ -2151,7 +2151,7 @@ class Nag
      *
      * @throws Horde_ActiveSync_Exception
      */
-    public static function pruneActiveSyncTaskCache(array $allowedShareIds = null)
+    public static function pruneActiveSyncTaskCache(?array $allowedShareIds = null)
     {
         if (!self::_isActiveSyncEnabled()
             || !$GLOBALS['prefs']->getValue('activesync_no_multiplex')) {
@@ -2278,7 +2278,7 @@ class Nag
      */
     protected static function _getPrefList($pref)
     {
-        $list = @unserialize($GLOBALS['prefs']->getValue($pref));
+        $list = @unserialize($GLOBALS['prefs']->getValue($pref), ['allowed_classes' => false]);
 
         return is_array($list) ? array_values($list) : [];
     }
