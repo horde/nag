@@ -243,6 +243,44 @@
     [jan] Import iCalendar 2.0 alarms.
     [jan] Import and export recurrence rules to iCalendar.
     [jan] Return ETags with browse() API method.
+5.0.0-RC3:
+  api: 5.0.0-RC3
+  state:
+    release: RC
+    api: RC
+  date: 2026-05-28
+  license:
+    identifier: GPL-2.0-only
+    uri: https://spdx.org/licenses/GPL-2.0-only.html
+  notes: |-
+    Refactor tasklist cache and sync list handling
+    Refactor task retrieval logic in Sql.php
+    fix(security): restrict unserialize allowed_classes (ZDI-20-1051)
+    refactor: Transition to unified screen.css
+    Remove persistPrefs() calls from tasklist methods
+    Refactor ActiveSync task list cache handling
+    Update Nag.php
+    Refactor tasklist creation to include sync options
+    Enhance addTasklist with synchronization and persistence
+    Enhance tasklist management with sync functionality
+    Refactor ActiveSync error handling and notifications
+    Sync tasklist after adding it
+    Refactor synchronization of tasklist addition
+    Refactor sync_lists handling in task management
+    chore: Update workflow dependency
+    Merge pull request #23 from horde/refactor/adopt-format-parse
+    refactor(nag): delegate parseDate() to Format::parse()
+    Update addTasklist method documentation
+    Merge pull request #22 from horde/fix/array_offset_access
+    Merge pull request #21 from horde/fix/date_format
+    Enhance validation checks in NagMethod
+    Refactor getInfo and isValid methods for NagAlarm
+    Add ICU date formatting support in parseDate method
+    Merge pull request #20 from horde/refactor/multi_tasklist_usage_2
+    refactor: Use controllers rather than globals. Addresses horde/nag#19
+    refactor: Replace strftime with IntlDateFormatter
+    refactor(injector): Widen type hints from Horde_Injector to Horde_Injector|Injector
+    style: constrain tag list icon size to 16px
 5.0.0-RC2:
   api: 5.0.0-RC2
   state:
