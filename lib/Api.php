@@ -803,7 +803,9 @@ class Nag_Api extends Horde_Registry_Api
      * Returns an array of UIDs for all tasks that the current user is authorized
      * to see.
      *
-     * @param mixed $tasklists  The tasklist or an array of taskslists to list.
+     * @param mixed $tasklists       The tasklist or an array of taskslists to list.
+     * @param integer $completed     Which tasks to retrieve. One of the
+     *                               Nag::VIEW_* constants. Defaults to all.
      *
      * @return array             An array of UIDs for all tasks
      *                           the user can access.
@@ -811,10 +813,14 @@ class Nag_Api extends Horde_Registry_Api
      * @throws Horde_Exception_PermissionDenied
      * @throws Nag_Exception
      */
-    public function listUids($tasklists = null)
+    public function listUids($tasklists = null, $completed = null)
     {
         if (!isset($GLOBALS['conf']['storage']['driver'])) {
             throw new Nag_Exception(_("Not configured"));
+        }
+
+        if ($completed === null) {
+            $completed = Nag::VIEW_ALL;
         }
 
         if (empty($tasklists)) {
@@ -833,7 +839,7 @@ class Nag_Api extends Horde_Registry_Api
         $tasks = Nag::listTasks(
             [
                 'tasklists' => $tasklists,
-                'completed' => Nag::VIEW_ALL,
+                'completed' => $completed,
                 'include_history' => false]
         );
         $uids = [];
@@ -843,6 +849,31 @@ class Nag_Api extends Horde_Registry_Api
         }
 
         return $uids;
+    }
+
+    /**
+     * Returns whether the specified task is marked complete.
+     *
+     * @param string $uid       The task uid.
+     * @param string $tasklist  The tasklist id, or null to search sync lists.
+     *
+     * @return boolean
+     */
+    public function isComplete($uid, $tasklist = null)
+    {
+        if ($tasklist === null) {
+            foreach (Nag::getSyncLists() as $list) {
+                try {
+                    return Nag::getTask($list, $uid)->completed;
+                } catch (Horde_Exception $e) {
+                    continue;
+                }
+            }
+
+            return false;
+        }
+
+        return Nag::getTask($tasklist, $uid)->completed;
     }
 
     /**
