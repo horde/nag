@@ -105,7 +105,10 @@ class Nag_Block_Summary extends Horde_Core_Block
                     . '</em>';
             }
             foreach ($alarmList as $task) {
-                $differential = $task->getNextDue()->timestamp() - $_SERVER['REQUEST_TIME'];
+                if (!($nextDue = $task->getNextDue())) {
+                    continue;
+                }
+                $differential = $nextDue->timestamp() - $_SERVER['REQUEST_TIME'];
                 $key = $differential;
                 while (isset($messages[$key])) {
                     $key++;
