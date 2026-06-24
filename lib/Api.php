@@ -1101,7 +1101,36 @@ class Nag_Api extends Horde_Registry_Api
 
             case 'activesync':
                 $task = new Nag_Task();
+                $task->tasklist = $tasklist;
                 $task->fromASTask($content);
+                $master = $this->_activeSyncFindSeriesMaster(
+                    $tasklist,
+                    $task->name
+                );
+                if (!$master) {
+                    $master = $this->_activeSyncFindSeriesMasterInAllTasklists(
+                        $task->name
+                    );
+                }
+                if ($master && $this->_activeSyncShouldMergeInstanceImport(
+                    $content,
+                    $master
+                )) {
+                    $merged = new Nag_Task();
+                    $merged->tasklist = $tasklist;
+                    $merged->fromASTask($content, $master);
+                    $merged->uid = $master->uid;
+                    $merged->owner = $master->owner;
+                    $storage->modifyFromHash($master->id, $merged->toHash());
+                    Horde::log(
+                        sprintf(
+                            'Merged ActiveSync recurrence instance into task %s',
+                            $master->uid
+                        ),
+                        Horde_Log::INFO
+                    );
+                    return $master->uid;
+                }
                 $hash = $task->toHash();
                 unset($hash['uid']);
                 $results = $storage->add($hash);
@@ -1414,11 +1443,29 @@ class Nag_Api extends Horde_Registry_Api
                 break;
 
             case 'activesync':
+                if (!($content instanceof Horde_ActiveSync_Message_Task)) {
+                    throw new Nag_Exception(_("Invalid ActiveSync task message."));
+                }
+                $master = $this->_activeSyncResolveSeriesMasterForReplace(
+                    $existing,
+                    $content
+                );
+                if ($master) {
+                    $existing = $master;
+                    $taskId = $existing->id;
+                    $uid = $existing->uid;
+                    $owner = $existing->owner;
+                }
                 $task = new Nag_Task();
-                $task->fromASTask($content);
+                $task->fromASTask($content, $existing);
                 $task->owner = $owner;
                 $task->uid = $uid;
-                $factory->create($existing->tasklist)->modify($taskId, $task->toHash());
+                $storage = $factory->create($existing->tasklist);
+                if ($this->_activeSyncIsRecurrenceInstanceMessage($content)) {
+                    $storage->modifyFromHash($taskId, $task->toHash());
+                } else {
+                    $storage->modify($taskId, $task->toHash());
+                }
                 break;
             default:
                 throw new Nag_Exception(sprintf(_("Unsupported Content-Type: %s"), $contentType));
@@ -1744,5 +1791,288 @@ class Nag_Api extends Horde_Registry_Api
         }
 
         return $return;
+    }
+
+    /**
+     * Returns whether an inbound ActiveSync task is a completed series instance.
+     *
+     * @param Horde_ActiveSync_Message_Task $message
+     *
+     * @return boolean
+     */
+    protected function _activeSyncIsDeadOccurrenceImport(
+        Horde_ActiveSync_Message_Task $message
+    ) {
+        if ($message->complete) {
+            return true;
+        }
+        if (!empty($message->deadoccur)) {
+            return true;
+        }
+        if ($message->recurrence && !empty($message->recurrence->deadoccur)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns whether an inbound ActiveSync task should merge into $master.
+     *
+     * @param Horde_ActiveSync_Message_Task $message
+     * @param Nag_Task                      $master
+     *
+     * @return boolean
+     */
+    protected function _activeSyncShouldMergeInstanceImport(
+        Horde_ActiveSync_Message_Task $message,
+        Nag_Task $master
+    ) {
+        if (!$master->recurs()) {
+            return false;
+        }
+        if ($this->_activeSyncIsDeadOccurrenceImport($message)) {
+            return $this->_activeSyncShouldMergeDeadOccurrenceImport(
+                $message,
+                $master
+            );
+        }
+        if ($message->getRecurrence() || $message->complete) {
+            return false;
+        }
+
+        if ($this->_activeSyncMessageDueMatchesCompletion($message, $master)) {
+            return true;
+        }
+
+        return $this->_activeSyncIsInstanceUncompleteBeforeMasterDue(
+            $message,
+            $master
+        );
+    }
+
+    /**
+     * Whether an uncomplete instance is due before the series master due date.
+     *
+     * @param Horde_ActiveSync_Message_Task $message
+     * @param Nag_Task                      $master
+     *
+     * @return boolean
+     */
+    protected function _activeSyncIsInstanceUncompleteBeforeMasterDue(
+        Horde_ActiveSync_Message_Task $message,
+        Nag_Task $master
+    ) {
+        $occurrence = Nag_Task::activeSyncMessageOccurrenceDate($message);
+        if (!$occurrence || !$master->due) {
+            return false;
+        }
+        $occurrenceTs = $occurrence->timestamp();
+        if (!is_numeric($occurrenceTs)
+            || (int) $occurrenceTs < strtotime('1980-01-01')) {
+            return false;
+        }
+
+        $masterDue = new Horde_Date($master->due);
+
+        return $occurrence->compareDate($masterDue) <= 0;
+    }
+
+    /**
+     * Returns whether a message due date matches a stored series completion.
+     *
+     * @param Horde_ActiveSync_Message_Task $message
+     * @param Nag_Task                      $master
+     *
+     * @return boolean
+     */
+    protected function _activeSyncMessageDueMatchesCompletion(
+        Horde_ActiveSync_Message_Task $message,
+        Nag_Task $master
+    ) {
+        return Nag_Task::activeSyncFindMatchingCompletion(
+            $master->recurrence,
+            $message
+        ) !== null;
+    }
+
+    /**
+     * Resolve the series master UID for an ActiveSync task change.
+     *
+     * iOS maps dead occurrence client IDs to ghost task UIDs; instance
+     * completion toggles must be applied to the recurring series master.
+     *
+     * @param string                          $uid      Mapped server UID
+     * @param Horde_ActiveSync_Message_Task   $message  Incoming task
+     *
+     * @return string  Series master UID, or $uid when none applies
+     */
+    public function resolveActiveSyncSeriesMasterUid(
+        $uid,
+        Horde_ActiveSync_Message_Task $message
+    ) {
+        $factory = $GLOBALS['injector']->getInstance('Nag_Factory_Driver');
+        try {
+            $existing = $factory->create('')->getByUID($uid);
+        } catch (Horde_Exception_NotFound $e) {
+            return $uid;
+        }
+
+        $master = $this->_activeSyncResolveSeriesMasterForReplace(
+            $existing,
+            $message
+        );
+
+        return $master ? $master->uid : $uid;
+    }
+
+    /**
+     * Returns whether an inbound ActiveSync task is a recurrence instance
+     * (dead occurrence) rather than a series master update.
+     *
+     * @param Horde_ActiveSync_Message_Task $message
+     *
+     * @return boolean
+     */
+    protected function _activeSyncIsRecurrenceInstanceMessage(
+        Horde_ActiveSync_Message_Task $message
+    ) {
+        if ($message->getRecurrence()) {
+            return false;
+        }
+        if (!empty($message->deadoccur)
+            || ($message->recurrence && !empty($message->recurrence->deadoccur))) {
+            return true;
+        }
+
+        return (bool) ($message->duedate || $message->utcduedate);
+    }
+
+    /**
+     * Redirect ActiveSync replace to a series master when needed.
+     *
+     * iOS dead-occurrence Adds may be stored as separate non-recurring tasks
+     * while duplicate client ids still map to those UIDs.
+     *
+     * @param Nag_Task                        $existing
+     * @param Horde_ActiveSync_Message_Task   $message
+     *
+     * @return Nag_Task|null
+     */
+    protected function _activeSyncResolveSeriesMasterForReplace(
+        Nag_Task $existing,
+        Horde_ActiveSync_Message_Task $message
+    ) {
+        if (!$this->_activeSyncIsRecurrenceInstanceMessage($message)) {
+            return null;
+        }
+
+        $subject = $message->subject ?: $existing->name;
+        if ($subject === null || $subject === '') {
+            return null;
+        }
+
+        if ($existing->recurs()) {
+            return $existing;
+        }
+
+        $master = $this->_activeSyncFindSeriesMaster(
+            $existing->tasklist,
+            $subject
+        );
+        if ($master) {
+            return $master;
+        }
+
+        return $this->_activeSyncFindSeriesMasterInAllTasklists($subject);
+    }
+
+    /**
+     * Find a recurring series master by subject across all editable tasklists.
+     *
+     * @param string $subject
+     *
+     * @return Nag_Task|null
+     */
+    protected function _activeSyncFindSeriesMasterInAllTasklists($subject)
+    {
+        try {
+            $tasklists = Nag::listTasklists(false, Horde_Perms::EDIT);
+        } catch (Horde_Exception $e) {
+            Horde::log($e, Horde_Log::ERR);
+
+            return null;
+        }
+
+        foreach (array_keys($tasklists) as $tasklist) {
+            $master = $this->_activeSyncFindSeriesMaster($tasklist, $subject);
+            if ($master) {
+                return $master;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns whether a dead occurrence import should merge into $master.
+     *
+     * @param Horde_ActiveSync_Message_Task $message
+     * @param Nag_Task                      $master
+     *
+     * @return boolean
+     */
+    protected function _activeSyncShouldMergeDeadOccurrenceImport(
+        Horde_ActiveSync_Message_Task $message,
+        Nag_Task $master
+    ) {
+        if (!$this->_activeSyncIsDeadOccurrenceImport($message)) {
+            return false;
+        }
+        if ($message->getRecurrence()
+            && empty($message->deadoccur)
+            && !($message->recurrence && !empty($message->recurrence->deadoccur))) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Find a recurring series master by normalized subject in a tasklist.
+     *
+     * @param string $tasklist
+     * @param string $subject
+     *
+     * @return Nag_Task|null
+     */
+    protected function _activeSyncFindSeriesMaster($tasklist, $subject)
+    {
+        $storage = $GLOBALS['injector']
+            ->getInstance('Nag_Factory_Driver')
+            ->create($tasklist);
+        $storage->retrieve(Nag::VIEW_ALL, false);
+        $normalized = $this->_activeSyncNormalizeSubject($subject);
+        $storage->tasks->reset();
+        while ($task = $storage->tasks->each()) {
+            if ($task->recurs()
+                && $this->_activeSyncNormalizeSubject($task->name) === $normalized) {
+                return $storage->get($task->id);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Normalize a task subject for ActiveSync series matching.
+     *
+     * @param string $subject
+     *
+     * @return string
+     */
+    protected function _activeSyncNormalizeSubject($subject)
+    {
+        return trim($subject);
     }
 }

@@ -707,6 +707,7 @@ class Nag_Task
                 /* Only mark this due date completed if there is another
                  * occurence. */
                 if ($next = $this->recurrence->nextActiveRecurrence($current)) {
+                    $this->due = $next->timestamp();
                     $this->completed = false;
                     return;
                 }
@@ -756,15 +757,34 @@ class Nag_Task
      */
     public function getNextDue()
     {
-        if (!$this->due) {
-            return null;
-        }
         if (!$this->recurs()) {
-            return new Horde_Date($this->due);
+            return ($this->due && $this->_isPlausibleTaskDue($this->due))
+                ? new Horde_Date($this->due)
+                : null;
         }
-        if (!($nextActive = $this->recurrence->nextActiveRecurrence($this->due))) {
+
+        $after = ($this->due && $this->_isPlausibleTaskDue($this->due))
+            ? $this->due
+            : null;
+        if ($after === null) {
+            $start = $this->recurrence->getRecurStart();
+            if ($start && $this->_isPlausibleTaskDue($start->timestamp())) {
+                $probe = clone $start;
+                $probe->mday--;
+                $after = $probe;
+            }
+        }
+        if ($after === null) {
             return null;
         }
+
+        if (!($nextActive = $this->recurrence->nextActiveRecurrence($after))) {
+            return null;
+        }
+        if (!$this->_isPlausibleTaskDue($nextActive->timestamp())) {
+            return null;
+        }
+
         return $nextActive;
     }
 
@@ -949,9 +969,16 @@ class Nag_Task
         /* Create task links. */
         $this->view_link = $view_url_list[$this->tasklist]->copy()->add('task', $this->id);
 
+        $listReturnUrl = Horde::url('list.php');
+        $vars = Horde_Variables::getDefaultVariables();
+        if ($vars->exists('show_completed')) {
+            $listReturnUrl->add('show_completed', (int) $vars->get('show_completed'));
+        } elseif ($vars->exists('tab_name') && Nag::isTaskViewFilter($vars->get('tab_name'))) {
+            $listReturnUrl->add('show_completed', (int) $vars->get('tab_name'));
+        }
         $task_url_task = $task_url_list[$this->tasklist]->copy()->add('task', $this->id);
         $this->complete_link = Horde::url('t/complete')->add([
-            'url' => Horde::signUrl(Horde::url('list.php')),
+            'url' => Horde::signUrl($listReturnUrl),
             'task' => $this->id,
             'tasklist' => $this->tasklist,
         ]);
@@ -1562,7 +1589,7 @@ class Nag_Task
         $message->subject = $this->name;
 
         /* Completion */
-        if ($this->completed) {
+        if ($this->seriesIsFullyComplete()) {
             if ($this->completed_date) {
                 $message->datecompleted = new Horde_Date($this->completed_date);
             }
@@ -1572,11 +1599,15 @@ class Nag_Task
         }
 
         /* Due Date */
-        if (!empty($this->due)) {
-            if ($this->due) {
-                $message->utcduedate = new Horde_Date($this->getNextDue());
+        if ($this->due) {
+            $nextDue = $this->getNextDue();
+            if ($nextDue) {
+                $message->utcduedate = clone $nextDue;
+                $message->duedate = clone $nextDue;
+            } elseif ($this->_isPlausibleTaskDue($this->due)) {
+                $message->utcduedate = new Horde_Date($this->due);
+                $message->duedate = clone $message->utcduedate;
             }
-            $message->duedate = clone($message->utcduedate);
         }
 
         /* Start Date */
@@ -1612,7 +1643,10 @@ class Nag_Task
 
         /* Recurrence */
         if ($this->recurs()) {
-            $message->setRecurrence($this->recurrence);
+            $message->setRecurrence(
+                $this->recurrence,
+                $this->getRemainingOccurrenceCount()
+            );
         }
 
         /* Categories */
@@ -1945,11 +1979,68 @@ class Nag_Task
     }
 
     /**
+     * Returns how many series instances are still open for a COUNT-limited
+     * recurrence.
+     *
+     * ActiveSync clients treat POOMTASKS:Occurrences as the remaining instance
+     * count from the current master due forward, not the original RRULE COUNT.
+     *
+     * @return integer|null  Remaining instances, or null if not count-limited.
+     */
+    public function getRemainingOccurrenceCount()
+    {
+        if (!$this->recurs() || !$this->recurrence->hasRecurCount()) {
+            return null;
+        }
+
+        $remaining = 0;
+        $probe = clone $this->recurrence->getRecurStart();
+        $probe->mday--;
+        $total = $this->recurrence->getRecurCount();
+
+        for ($i = 0; $i < $total; $i++) {
+            $next = $this->recurrence->nextRecurrence($probe);
+            if (!$next) {
+                break;
+            }
+            if (!$this->recurrence->hasCompletion(
+                $next->year,
+                $next->month,
+                $next->mday
+            )) {
+                $remaining++;
+            }
+            $probe = clone $next;
+            $probe->mday++;
+        }
+
+        return $remaining;
+    }
+
+    /**
+     * Returns whether a recurring task series has no remaining occurrences.
+     *
+     * @return boolean
+     */
+    public function seriesIsFullyComplete()
+    {
+        if ($this->completed) {
+            return true;
+        }
+        if (!$this->recurs()) {
+            return false;
+        }
+
+        return !$this->getNextDue();
+    }
+
+    /**
      * Create a nag Task object from an activesync message
      *
-     * @param Horde_ActiveSync_Message_Task $message  The task object
+     * @param Horde_ActiveSync_Message_Task $message   The task object
+     * @param Nag_Task|null                 $existing  Existing task on replace
      */
-    public function fromASTask(Horde_ActiveSync_Message_Task $message)
+    public function fromASTask(Horde_ActiveSync_Message_Task $message, ?Nag_Task $existing = null)
     {
         /* Owner is always current user. */
         $this->owner = $GLOBALS['registry']->getAuth();
@@ -1962,28 +2053,24 @@ class Nag_Task
 
         /* Notes and Title */
         if ($message->getProtocolVersion() >= Horde_ActiveSync::VERSION_TWELVE) {
-            if ($message->airsyncbasebody->type == Horde_ActiveSync::BODYPREF_TYPE_HTML) {
-                $this->desc = Horde_Text_Filter::filter($message->airsyncbasebody->data, 'Html2text');
+            $body = $message->getProperty('airsyncbasebody');
+            if ($body instanceof Horde_ActiveSync_Message_AirSyncBaseBody) {
+                if ($body->type == Horde_ActiveSync::BODYPREF_TYPE_HTML) {
+                    $this->desc = Horde_Text_Filter::filter($body->data ?? '', 'Html2text');
+                } else {
+                    $this->desc = $body->data ?? '';
+                }
+            } elseif (!empty($message->body)) {
+                $this->desc = $message->body;
             } else {
-                $this->desc = $message->airsyncbasebody->data;
+                $this->desc = '';
             }
         } else {
-            $this->desc = $message->body;
+            $this->desc = $message->body ?? '';
         }
 
         $this->name = $message->subject;
         $tz = date_default_timezone_get();
-
-        /* Completion: Note we don't use self::toggleCompletion() becuase of
-         * the way that EAS hanldes recurring tasks (see below). */
-        if ($this->completed = $message->complete) {
-            if ($message->datecompleted) {
-                $message->datecompleted->setTimezone($tz);
-                $this->completed_date = $message->datecompleted->timestamp();
-            } else {
-                $this->completed_date = null;
-            }
-        }
 
         /* Due Date */
         if ($due = $message->utcduedate) {
@@ -2046,11 +2133,42 @@ class Nag_Task
             $this->alarm = ($this->due - $alarm->timestamp()) / 60;
         }
 
-        $this->tasklist = $GLOBALS['prefs']->getValue('default_tasklist');
+        if (empty($this->tasklist)) {
+            $this->tasklist = $GLOBALS['prefs']->getValue('default_tasklist');
+        }
 
         /* Categories */
         if (is_array($message->categories) && count($message->categories)) {
             $this->tags = implode(',', $message->categories);
+        }
+
+        if ($existing && $existing->recurs()) {
+            if (isset($this->due) && !$this->_isPlausibleTaskDue($this->due)) {
+                $this->due = null;
+            }
+            $deadOccur = !empty($message->deadoccur)
+                || ($message->recurrence
+                    && !empty($message->recurrence->deadoccur));
+            if ($message->getRecurrence() && !$deadOccur) {
+                $this->_applyActiveSyncRecurrenceMasterChange(
+                    $message,
+                    $existing
+                );
+                return;
+            }
+            $this->_applyActiveSyncRecurrenceInstance($message, $existing);
+            return;
+        }
+
+        /* Completion: Note we don't use self::toggleCompletion() because of
+         * the way that EAS handles recurring tasks (see below). */
+        if ($this->completed = $message->complete) {
+            if ($message->datecompleted) {
+                $message->datecompleted->setTimezone($tz);
+                $this->completed_date = $message->datecompleted->timestamp();
+            } else {
+                $this->completed_date = null;
+            }
         }
 
         // Recurrence is handled by the client deleting the original event
@@ -2066,6 +2184,397 @@ class Nag_Task
                 $this->recurrence = $rrule;
             }
         }
+    }
+
+    /**
+     * Calendar date of a recurring instance in an ActiveSync task message.
+     *
+     * iOS sends both UtcDueDate and DueDate; the latter encodes the user's
+     * local occurrence date and must be preferred when matching completions.
+     *
+     * @param Horde_ActiveSync_Message_Task $message
+     *
+     * @return Horde_Date|null
+     */
+    public static function activeSyncMessageOccurrenceDate(
+        Horde_ActiveSync_Message_Task $message
+    ) {
+        if ($message->duedate) {
+            $tz = date_default_timezone_get();
+
+            return new Horde_Date(
+                [
+                    'year' => (int) $message->duedate->year,
+                    'month' => (int) $message->duedate->month,
+                    'mday' => (int) $message->duedate->mday,
+                    'hour' => 12,
+                    'min' => 0,
+                ],
+                $tz
+            );
+        }
+        if ($message->utcduedate) {
+            $due = clone $message->utcduedate;
+            $due->setTimezone(date_default_timezone_get());
+
+            return $due;
+        }
+
+        return null;
+    }
+
+    /**
+     * Find a stored completion date matching an ActiveSync instance message.
+     *
+     * @param Horde_Date_Recurrence           $recurrence
+     * @param Horde_ActiveSync_Message_Task   $message
+     *
+     * @return Horde_Date|null
+     */
+    public static function activeSyncFindMatchingCompletion(
+        Horde_Date_Recurrence $recurrence,
+        Horde_ActiveSync_Message_Task $message
+    ) {
+        $dates = [];
+        if ($occurrence = self::activeSyncMessageOccurrenceDate($message)) {
+            $dates[] = $occurrence;
+        }
+        if ($message->utcduedate) {
+            $utc = clone $message->utcduedate;
+            $utc->setTimezone(date_default_timezone_get());
+            $dates[] = $utc;
+        }
+
+        $seen = [];
+        foreach ($dates as $date) {
+            $key = sprintf(
+                '%04d%02d%02d',
+                (int) $date->year,
+                (int) $date->month,
+                (int) $date->mday
+            );
+            if (isset($seen[$key])) {
+                continue;
+            }
+            $seen[$key] = true;
+            if ($recurrence->hasCompletion(
+                (int) $date->year,
+                (int) $date->month,
+                (int) $date->mday
+            )) {
+                return $date;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Remove stored completions matching an ActiveSync instance message.
+     *
+     * @param Horde_Date_Recurrence           $recurrence
+     * @param Horde_ActiveSync_Message_Task   $message
+     */
+    public static function activeSyncDeleteMatchingCompletions(
+        Horde_Date_Recurrence $recurrence,
+        Horde_ActiveSync_Message_Task $message
+    ) {
+        $dates = [];
+        if ($occurrence = self::activeSyncMessageOccurrenceDate($message)) {
+            $dates[] = $occurrence;
+        }
+        if ($message->utcduedate) {
+            $utc = clone $message->utcduedate;
+            $utc->setTimezone(date_default_timezone_get());
+            $dates[] = $utc;
+        }
+
+        $seen = [];
+        foreach ($dates as $date) {
+            $key = sprintf(
+                '%04d%02d%02d',
+                (int) $date->year,
+                (int) $date->month,
+                (int) $date->mday
+            );
+            if (isset($seen[$key])) {
+                continue;
+            }
+            $seen[$key] = true;
+            if ($recurrence->hasCompletion(
+                (int) $date->year,
+                (int) $date->month,
+                (int) $date->mday
+            )) {
+                $recurrence->deleteCompletion(
+                    (int) $date->year,
+                    (int) $date->month,
+                    (int) $date->mday
+                );
+            }
+        }
+    }
+
+    /**
+     * Apply a recurring series master update from ActiveSync (next due date,
+     * remaining occurrence count). Completions are left to companion dead-
+     * occurrence Adds in the same SYNC batch.
+     *
+     * @param Horde_ActiveSync_Message_Task $message   The task object
+     * @param Nag_Task                      $existing  Existing recurring task
+     */
+    protected function _applyActiveSyncRecurrenceMasterChange(
+        Horde_ActiveSync_Message_Task $message,
+        Nag_Task $existing
+    ) {
+        $this->recurrence = Horde_Date_Recurrence::fromHash(
+            $existing->recurrence->toHash()
+        );
+        $this->tasklist = $existing->tasklist;
+        $this->uid = $existing->uid;
+
+        $reopened = false;
+        if (!$message->complete && $existing->seriesIsFullyComplete()) {
+            $occurrence = self::activeSyncMessageOccurrenceDate($message);
+            if ($occurrence
+                && $this->_isPlausibleTaskDue($occurrence->timestamp())) {
+                self::activeSyncDeleteMatchingCompletions(
+                    $this->recurrence,
+                    $message
+                );
+                $this->due = $occurrence->timestamp();
+                $this->_setActiveSyncCompletion(false, $message);
+                $reopened = true;
+            }
+        }
+
+        // Do not adopt POOMTASKS:Occurrences here: ActiveSync clients send the
+        // *remaining* instance count from the current master due forward, while
+        // Horde_Date_Recurrence::setRecurCount() expects the *total* series
+        // count. Overwriting it would truncate the series. The stored total
+        // count stays canonical; completions track progress and
+        // getRemainingOccurrenceCount() derives the remaining value for export.
+
+        if (!$reopened) {
+            if (!isset($this->due) || !$this->_isPlausibleTaskDue($this->due)) {
+                $this->due = $existing->due;
+            }
+
+            $this->_setActiveSyncCompletion(
+                $this->getRemainingOccurrenceCount() === 0,
+                $message
+            );
+        }
+    }
+
+    /**
+     * Set this task's completion flag and date from an ActiveSync update.
+     *
+     * Centralizes the "mark complete using the message's DateCompleted (or
+     * now), otherwise clear completion" logic shared by the master-change and
+     * single-instance recurrence paths.
+     *
+     * @param boolean                       $completed  Whether the task/series
+     *                                                  is complete.
+     * @param Horde_ActiveSync_Message_Task $message    Source message, used for
+     *                                                  the completion date.
+     */
+    protected function _setActiveSyncCompletion(
+        $completed,
+        Horde_ActiveSync_Message_Task $message
+    ) {
+        if (!$completed) {
+            $this->completed = false;
+            $this->completed_date = null;
+
+            return;
+        }
+
+        $this->completed = true;
+        if ($message->datecompleted) {
+            $tz = date_default_timezone_get();
+            $message->datecompleted->setTimezone($tz);
+            $this->completed_date = $message->datecompleted->timestamp();
+        } else {
+            $this->completed_date = time();
+        }
+    }
+
+    /**
+     * Apply single-instance completion state from an ActiveSync message to an
+     * existing recurring task.
+     *
+     * @param Horde_ActiveSync_Message_Task $message   The task object
+     * @param Nag_Task                      $existing  Existing recurring task
+     */
+    protected function _applyActiveSyncRecurrenceInstance(
+        Horde_ActiveSync_Message_Task $message,
+        Nag_Task $existing
+    ) {
+        if (isset($this->due) && !$this->_isPlausibleTaskDue($this->due)) {
+            $this->due = null;
+        }
+
+        $this->recurrence = Horde_Date_Recurrence::fromHash(
+            $existing->recurrence->toHash()
+        );
+        $this->tasklist = $existing->tasklist;
+        $this->uid = $existing->uid;
+
+        $deadOccur = !empty($message->deadoccur)
+            || ($message->recurrence && !empty($message->recurrence->deadoccur));
+        $messageComplete = (bool) $message->complete;
+        $completedOccurrence = null;
+        $reopenedOccurrence = false;
+        $occurrenceDate = self::activeSyncMessageOccurrenceDate($message);
+
+        if ($messageComplete && $occurrenceDate) {
+            if ($existing->getRemainingOccurrenceCount() === 0) {
+                $this->_restoreActiveSyncRecurrenceMaster($existing);
+                return;
+            }
+            $completedOccurrence = clone $occurrenceDate;
+            $this->recurrence->addCompletion(
+                $completedOccurrence->year,
+                $completedOccurrence->month,
+                $completedOccurrence->mday
+            );
+        } elseif (!$messageComplete && $occurrenceDate) {
+            $storedCompletion = self::activeSyncFindMatchingCompletion(
+                $this->recurrence,
+                $message
+            );
+            if ($storedCompletion) {
+                $this->recurrence->deleteCompletion(
+                    $storedCompletion->year,
+                    $storedCompletion->month,
+                    $storedCompletion->mday
+                );
+                $this->due = $storedCompletion->timestamp();
+                $reopenedOccurrence = true;
+            } elseif (!$deadOccur && $existing->due) {
+                $masterDue = new Horde_Date($existing->due);
+                if ($occurrenceDate->compareDate($masterDue) <= 0
+                    && $this->_isPlausibleTaskDue($occurrenceDate->timestamp())) {
+                    self::activeSyncDeleteMatchingCompletions(
+                        $this->recurrence,
+                        $message
+                    );
+                    $this->due = $occurrenceDate->timestamp();
+                    $reopenedOccurrence = true;
+                } else {
+                    $previous = $existing->getNextDue();
+                    if ($previous
+                        && $occurrenceDate->compareDate($previous) > 0) {
+                        if ($existing->getRemainingOccurrenceCount() === 0) {
+                            self::activeSyncDeleteMatchingCompletions(
+                                $this->recurrence,
+                                $message
+                            );
+                            $this->due = $occurrenceDate->timestamp();
+                            $reopenedOccurrence = true;
+                        } else {
+                            $completedOccurrence = clone $previous;
+                            $this->recurrence->addCompletion(
+                                $previous->year,
+                                $previous->month,
+                                $previous->mday
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($completedOccurrence) {
+            $this->due = $completedOccurrence->timestamp();
+        } elseif (!$reopenedOccurrence && $existing->due) {
+            $this->due = $existing->due;
+        }
+
+        if (!$reopenedOccurrence && ($messageComplete || $completedOccurrence)
+            && ($nextDue = $this->getNextDue())) {
+            $this->due = $nextDue->timestamp();
+        }
+
+        $this->_finalizeActiveSyncRecurrenceState(
+            $message,
+            $messageComplete,
+            $completedOccurrence
+        );
+    }
+
+    /**
+     * Set due date and completion flags after applying recurrence instance
+     * changes from ActiveSync.
+     *
+     * @param Horde_ActiveSync_Message_Task $message              The task object
+     * @param boolean                       $messageComplete      Message complete flag
+     * @param Horde_Date|null               $completedOccurrence  Completed instance
+     */
+    protected function _finalizeActiveSyncRecurrenceState(
+        Horde_ActiveSync_Message_Task $message,
+        $messageComplete,
+        $completedOccurrence = null
+    ) {
+        if (!$this->recurs()) {
+            return;
+        }
+
+        $seriesContinues = false;
+        if ($completedOccurrence) {
+            $probe = clone $completedOccurrence;
+            $probe->mday++;
+            if ($this->recurrence->nextActiveRecurrence($probe)) {
+                $seriesContinues = true;
+            }
+        } elseif ($this->due) {
+            $probe = new Horde_Date($this->due);
+            $probe->mday++;
+            if ($this->recurrence->nextActiveRecurrence($probe)) {
+                $seriesContinues = true;
+            }
+        }
+
+        if ($seriesContinues && $this->getRemainingOccurrenceCount() !== 0) {
+            $this->_setActiveSyncCompletion(false, $message);
+            return;
+        }
+
+        $this->_setActiveSyncCompletion(
+            $messageComplete || $this->getRemainingOccurrenceCount() === 0,
+            $message
+        );
+    }
+
+    /**
+     * Restore master state when a client sends a completion past COUNT.
+     *
+     * @param Nag_Task $existing  Existing recurring task
+     */
+    protected function _restoreActiveSyncRecurrenceMaster(Nag_Task $existing)
+    {
+        $this->recurrence = Horde_Date_Recurrence::fromHash(
+            $existing->recurrence->toHash()
+        );
+        $this->tasklist = $existing->tasklist;
+        $this->uid = $existing->uid;
+        $this->due = $existing->due;
+        $this->completed = $existing->completed;
+        $this->completed_date = $existing->completed_date;
+    }
+
+    /**
+     * Returns whether a stored due timestamp is usable for task scheduling.
+     *
+     * @param integer $timestamp  Unix timestamp.
+     *
+     * @return boolean
+     */
+    protected function _isPlausibleTaskDue($timestamp)
+    {
+        return is_numeric($timestamp)
+            && (int) $timestamp >= strtotime('1980-01-01');
     }
 
 }
