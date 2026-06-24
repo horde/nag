@@ -386,6 +386,50 @@ abstract class Nag_Driver
     }
 
     /**
+     * Persists task properties without toggleComplete() side effects.
+     *
+     * ActiveSync recurrence instance updates already encode completion
+     * state and recurrence completions in $properties.
+     *
+     * @param string $taskId      The task to modify.
+     * @param array  $properties  A hash with properties.
+     *
+     * @return Nag_Task  The updated task.
+     */
+    public function modifyFromHash($taskId, array $properties)
+    {
+        $task = $this->get($taskId);
+        if (isset($properties['parent'])
+            && $properties['parent'] == $taskId) {
+            unset($properties['parent']);
+        }
+
+        $this->_modify($taskId, array_merge($task->toHash(), $properties));
+
+        $new_task = $this->get($task->id);
+        if (!empty($task->uid)) {
+            try {
+                $GLOBALS['injector']->getInstance('Horde_History')
+                    ->log(
+                        'nag:' . $this->_tasklist . ':' . $task->uid,
+                        ['action' => 'modify'],
+                        true
+                    );
+            } catch (Exception $e) {
+                Horde::log($e, 'ERR');
+            }
+        }
+
+        try {
+            Nag::sendNotification('edit', $new_task, $task);
+        } catch (Nag_Exception $e) {
+            Horde::log($e, 'ERR');
+        }
+
+        return $new_task;
+    }
+
+    /**
      * @see modify()
      */
     abstract protected function _modify($taskId, array $task);
