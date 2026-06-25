@@ -110,6 +110,24 @@ class Nag
     public const VIEW_FUTURE_INCOMPLETE = 4;
 
     /**
+     * Returns whether a value is a Nag::VIEW_* task list filter.
+     *
+     * @param mixed $filter  Tab name or show_completed value.
+     *
+     * @return bool
+     */
+    public static function isTaskViewFilter($filter): bool
+    {
+        if (!is_int($filter) && !(is_string($filter) && $filter !== '' && ctype_digit($filter))) {
+            return false;
+        }
+
+        $filter = (int) $filter;
+
+        return $filter >= self::VIEW_INCOMPLETE && $filter <= self::VIEW_FUTURE_INCOMPLETE;
+    }
+
+    /**
      * WebDAV task list.
      */
     public const DAV_WEBDAV = 1;
