@@ -11,6 +11,9 @@
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @coversNothing
+ */
 class Nag_Unit_Task_ActiveSyncRecurrenceTest extends TestCase
 {
     protected function setUp(): void
