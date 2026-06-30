@@ -1,248 +1,14 @@
 ---
-5.0.0-beta6:
-  api: 5.0.0-beta6
+5.0.0:
+  api: 5.0.0
   state:
-    release: beta
-    api: beta
-  date: 2026-05-02
+    release: stable
+    api: stable
+  date: 2026-06-30
   license:
     identifier: GPL-2.0-only
     uri: https://spdx.org/licenses/GPL-2.0-only.html
-  notes: |-
-    docs: icon license
-    style: Changed CSS and icon assets to Lucide Icons with proper attribution
-    refactor: Accept Horde\Util\Variables in most places which accept Horde_Variables
-5.0.0-beta5:
-  api: 5.0.0-beta5
-  state:
-    release: beta
-    api: beta
-  date: 2026-04-27
-  license:
-    identifier: GPL-2.0-only
-    uri: https://spdx.org/licenses/GPL-2.0-only.html
-  notes: |-
-    fix: Wrong level for urlencode
-    fix(js): guard against missing form element and fix auto-generated form ID
-5.0.0-beta4:
-  api: 5.0.0-beta4
-  state:
-    release: beta
-    api: beta
-  date: 2026-04-17
-  license:
-    identifier: GPL-2.0-only
-    uri: https://spdx.org/licenses/GPL-2.0-only.html
-  notes: |-
-    fix: This is fatal in php 8.5
-    docs: create/update conf.php.dist
-    docs: Provide config example
-    refactor: Remove most reliance on prototype.js
-    fix: More defensive code when trying to drop tables
-    fix: Accept both types of Horde Variable in turba
-    feat(kolab)!: Remove Kolab backends
-    feat(kolab)!: Remove Kolab options from config xml
-    chore: It was good while it lasted
-5.0.0-beta3:
-  api: 5.0.0-beta3
-  state:
-    release: beta
-    api: beta
-  date: 2026-03-26
-  license:
-    identifier: GPL-2.0-only
-    uri: https://spdx.org/licenses/GPL-2.0-only.html
-  notes: |-
-    fix: Address horde/nag#8 deprecation of implicit null
-5.0.0-beta2:
-  api: 5.0.0-beta2
-  state:
-    release: beta
-    api: beta
-  date: 2026-03-17
-  license:
-    identifier: GPL-2.0-only
-    uri: https://spdx.org/licenses/GPL-2.0-only.html
-  notes: |-
-    chore(autoloader): Properly setup autoloading for app/ and lib/ dirs.
-5.0.0-beta1:
-  api: 5.0.0-beta1
-  state:
-    release: beta
-    api: beta
-  date: 2026-03-17
-  license:
-    identifier: GPL-2.0-only
-    uri: https://spdx.org/licenses/GPL-2.0-only.html
-  notes: |-
-    refactor(routes): migrate responsive routes to builder pattern
-    Merge pull request #6 from horde/feat/nag-responsive
-    feat: Nag Responsive UI
-5.0.0-alpha12:
-  api: 5.0.0-alpha12
-  state:
-    release: alpha
-    api: alpha
-  date: 2026-03-07
-  license:
-    identifier: GPL-2.0-only
-    uri: https://spdx.org/licenses/GPL-2.0-only.html
-  notes: |-
-    fix(forms): declare $_completedVar property to fix PHP 8.2+ deprecation
-    fix(forms): handle null values in strcasecmp calls
-    Merge pull request #5 from amulet1/fix_hook_class
-    Revert "fix: Add conditional to hook class template to prevent double declaration issues"
-    Merge pull request #4 from amulet1/autoload_renderer
-    fix: Modify VarRenderer class name to facilitate autoloading
-    fix: Correctly set message in isValid() calls, simplify getInfo() calls
-    fix: Drop unnecessary / uninitialized form parameter
-5.0.0-alpha11:
-  api: 5.0.0-alpha1
-  state:
-    release: alpha
-    api: alpha
-  date: 2025-06-04
-  license:
-    identifier: GPL-2.0-only
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    fix: Add conditional to hook class template to prevent double declaration issues
-    fix: Use compat library for strftime calls
-    fix: Log spam on task with null description
-5.0.0-alpha10:
-  api: 5.0.0-alpha1
-  state:
-    release: alpha
-    api: alpha
-  date: 2025-05-29
-  license:
-    identifier: GPL-2.0-only
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    ci: Add php-cs-fixer rule for nullables
-    chore: Update minimum PHP to 8.1
-    fix: Save new task (detailed mode) works again.
-5.0.0-alpha9:
-  api: 5.0.0-alpha1
-  state:
-    release: true
-    api: true
-  date: 2025-05-21
-  license:
-    identifier: GPL-2.0-only
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    fix: Solve issues with nag search screen on modern PHP
-    fix: Remove reference from signatures.
-5.0.0-alpha8:
-  api: 5.0.0-alpha1
-  state:
-    release: alpha
-    api: alpha
-  date: 2025-05-18
-  license:
-    identifier: GPL-2.0-only
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    fix: Preliminary patch for handling externally removed ldap groups related to shared tasklists. (Jean Charles Delépine <delepine@u-picardie.fr>)
-5.0.0-alpha7:
-  api: 5.0.0-alpha1
-  state:
-    release: true
-    api: true
-  date: 2025-05-12
-  license:
-    identifier: GPL-2.0-only
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    ci: Add modern pipeline though it still fails
-    style: Apply php-cs-fixer
-5.0.0-alpha6:
-  api: 5.0.0-alpha1
-  state:
-    release: true
-    api: true
-  date: 2025-05-12
-  license:
-    identifier: GPL-2.0-only
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    fix: Use classmap autoloader as nag is not strictly PSR-0
-    ci: Remove old tool chain
-5.0.0-alpha5:
-  api: 5.0.0alpha1
-  state:
-    release: alpha
-    api: alpha
-  date: 2022-10-08
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    Original version string was 5.0.0alpha5
-    [rla] Fix some PHP 8.1 issues.
-    |+
-5.0.0-alpha4:
-  api: 5.0.0alpha1
-  state:
-    release: alpha
-    api: alpha
-  date: 2021-10-06
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |-
-    Original version string was 5.0.0alpha4
-    |+
-5.0.0-alpha3:
-  api: 5.0.0alpha1
-  state:
-    release: alpha
-    api: alpha
-  date: 2021-03-13
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |-
-    Original version string was 5.0.0alpha3
-    |+
-5.0.0-alpha2:
-  api: 5.0.0alpha1
-  state:
-    release: alpha
-    api: alpha
-  date: 2021-02-24
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |-
-    Original version string was 5.0.0alpha2
-    |+
-5.0.0-alpha1:
-  api: 5.0.0alpha1
-  state:
-    release: beta
-    api: beta
-  date: 2021-02-24
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    Original version string was 5.0.0alpha1
-    [jan] Display recurrence rule in task view.
-    [jan] Add API to backup and restore user data.
-    [jan] Add support for monthly recurrence on last weekday (Request #1922).
-    [jan] Keep original file names when PUTing tasks via WebDAV.
-    [mjr] Add an "actual" field for tracking actual time spent.
-    [mjr] Add support for task organizer and iTip functionality.
-    [jan] Fall back to sort by name if sort criteria are equal.
-    [jan] Remove configuration option for database table.
-    [jan] Improve priority display in basic view.
-    [jan] Display task list background color in basic view.
-    [jan] Import snooze information from iCalendar alarms.
-    [jan] Import iCalendar 2.0 alarms.
-    [jan] Import and export recurrence rules to iCalendar.
-    [jan] Return ETags with browse() API method.
+  notes: "test: add @coversNothing to coverage-neutral test\nchore: update CI\nfeat(nag): ActiveSync recurring task instance completion\nfix(nag): add missing Nag::isTaskViewFilter() helper\nfeat(nag): sync recurring task instance completion via ActiveSync\nfix(nag): guard null getNextDue() in task view and summary block\nfeat(nag): sync recurring task instance completion via ActiveSync\nfix(nag): add completed filter to ActiveSync listUids API\nfix(nag): add completed filter to ActiveSync listUids API"
 5.0.0-RC3:
   api: 5.0.0-RC3
   state:
@@ -252,35 +18,7 @@
   license:
     identifier: GPL-2.0-only
     uri: https://spdx.org/licenses/GPL-2.0-only.html
-  notes: |-
-    Refactor tasklist cache and sync list handling
-    Refactor task retrieval logic in Sql.php
-    fix(security): restrict unserialize allowed_classes (ZDI-20-1051)
-    refactor: Transition to unified screen.css
-    Remove persistPrefs() calls from tasklist methods
-    Refactor ActiveSync task list cache handling
-    Update Nag.php
-    Refactor tasklist creation to include sync options
-    Enhance addTasklist with synchronization and persistence
-    Enhance tasklist management with sync functionality
-    Refactor ActiveSync error handling and notifications
-    Sync tasklist after adding it
-    Refactor synchronization of tasklist addition
-    Refactor sync_lists handling in task management
-    chore: Update workflow dependency
-    Merge pull request #23 from horde/refactor/adopt-format-parse
-    refactor(nag): delegate parseDate() to Format::parse()
-    Update addTasklist method documentation
-    Merge pull request #22 from horde/fix/array_offset_access
-    Merge pull request #21 from horde/fix/date_format
-    Enhance validation checks in NagMethod
-    Refactor getInfo and isValid methods for NagAlarm
-    Add ICU date formatting support in parseDate method
-    Merge pull request #20 from horde/refactor/multi_tasklist_usage_2
-    refactor: Use controllers rather than globals. Addresses horde/nag#19
-    refactor: Replace strftime with IntlDateFormatter
-    refactor(injector): Widen type hints from Horde_Injector to Horde_Injector|Injector
-    style: constrain tag list icon size to 16px
+  notes: "Refactor tasklist cache and sync list handling\nRefactor task retrieval logic in Sql.php\nfix(security): restrict unserialize allowed_classes (ZDI-20-1051)\nrefactor: Transition to unified screen.css\nRemove persistPrefs() calls from tasklist methods\nRefactor ActiveSync task list cache handling\nUpdate Nag.php\nRefactor tasklist creation to include sync options\nEnhance addTasklist with synchronization and persistence\nEnhance tasklist management with sync functionality\nRefactor ActiveSync error handling and notifications\nSync tasklist after adding it\nRefactor synchronization of tasklist addition\nRefactor sync_lists handling in task management\nchore: Update workflow dependency\nMerge pull request #23 from horde/refactor/adopt-format-parse\nrefactor(nag): delegate parseDate() to Format::parse()\nUpdate addTasklist method documentation\nMerge pull request #22 from horde/fix/array_offset_access\nMerge pull request #21 from horde/fix/date_format\nEnhance validation checks in NagMethod\nRefactor getInfo and isValid methods for NagAlarm\nAdd ICU date formatting support in parseDate method\nMerge pull request #20 from horde/refactor/multi_tasklist_usage_2\nrefactor: Use controllers rather than globals. Addresses horde/nag#19\nrefactor: Replace strftime with IntlDateFormatter\nrefactor(injector): Widen type hints from Horde_Injector to Horde_Injector|Injector\nstyle: constrain tag list icon size to 16px"
 5.0.0-RC2:
   api: 5.0.0-RC2
   state:
@@ -290,11 +28,7 @@
   license:
     identifier: GPL-2.0-only
     uri: https://spdx.org/licenses/GPL-2.0-only.html
-  notes: |-
-    refactor: Explicitly declare the default stack as a prestep to removing fallback logic
-    refactor: Explicitly declare the default stack as a prestep to removing fallback logic
-    chore: Remove app/ from the autoloader definitions.
-    refactor: Remove fallback endpoints
+  notes: "refactor: Explicitly declare the default stack as a prestep to removing fallback logic\nrefactor: Explicitly declare the default stack as a prestep to removing fallback logic\nchore: Remove app/ from the autoloader definitions.\nrefactor: Remove fallback endpoints"
 5.0.0-RC1:
   api: 5.0.0-RC1
   state:
@@ -304,10 +38,187 @@
   license:
     identifier: GPL-2.0-only
     uri: https://spdx.org/licenses/GPL-2.0-only.html
-  notes: |-
-    chore(metadata): Update autoloader definition and remove dependency on horde/controller
-    style: php-cs-fixer
-    refactor: Migrate from horde/controller to PSR-7/14/15 horde/http_server
+  notes: "chore(metadata): Update autoloader definition and remove dependency on horde/controller\nstyle: php-cs-fixer\nrefactor: Migrate from horde/controller to PSR-7/14/15 horde/http_server"
+5.0.0-beta6:
+  api: 5.0.0-beta6
+  state:
+    release: beta
+    api: beta
+  date: 2026-05-02
+  license:
+    identifier: GPL-2.0-only
+    uri: https://spdx.org/licenses/GPL-2.0-only.html
+  notes: "docs: icon license\nstyle: Changed CSS and icon assets to Lucide Icons with proper attribution\nrefactor: Accept Horde\\Util\\Variables in most places which accept Horde_Variables"
+5.0.0-beta5:
+  api: 5.0.0-beta5
+  state:
+    release: beta
+    api: beta
+  date: 2026-04-27
+  license:
+    identifier: GPL-2.0-only
+    uri: https://spdx.org/licenses/GPL-2.0-only.html
+  notes: "fix: Wrong level for urlencode\nfix(js): guard against missing form element and fix auto-generated form ID"
+5.0.0-beta4:
+  api: 5.0.0-beta4
+  state:
+    release: beta
+    api: beta
+  date: 2026-04-17
+  license:
+    identifier: GPL-2.0-only
+    uri: https://spdx.org/licenses/GPL-2.0-only.html
+  notes: "fix: This is fatal in php 8.5\ndocs: create/update conf.php.dist\ndocs: Provide config example\nrefactor: Remove most reliance on prototype.js\nfix: More defensive code when trying to drop tables\nfix: Accept both types of Horde Variable in turba\nfeat(kolab)!: Remove Kolab backends\nfeat(kolab)!: Remove Kolab options from config xml\nchore: It was good while it lasted"
+5.0.0-beta3:
+  api: 5.0.0-beta3
+  state:
+    release: beta
+    api: beta
+  date: 2026-03-26
+  license:
+    identifier: GPL-2.0-only
+    uri: https://spdx.org/licenses/GPL-2.0-only.html
+  notes: 'fix: Address horde/nag#8 deprecation of implicit null'
+5.0.0-beta2:
+  api: 5.0.0-beta2
+  state:
+    release: beta
+    api: beta
+  date: 2026-03-17
+  license:
+    identifier: GPL-2.0-only
+    uri: https://spdx.org/licenses/GPL-2.0-only.html
+  notes: 'chore(autoloader): Properly setup autoloading for app/ and lib/ dirs.'
+5.0.0-beta1:
+  api: 5.0.0-beta1
+  state:
+    release: beta
+    api: beta
+  date: 2026-03-17
+  license:
+    identifier: GPL-2.0-only
+    uri: https://spdx.org/licenses/GPL-2.0-only.html
+  notes: "refactor(routes): migrate responsive routes to builder pattern\nMerge pull request #6 from horde/feat/nag-responsive\nfeat: Nag Responsive UI"
+5.0.0-alpha12:
+  api: 5.0.0-alpha12
+  state:
+    release: alpha
+    api: alpha
+  date: 2026-03-07
+  license:
+    identifier: GPL-2.0-only
+    uri: https://spdx.org/licenses/GPL-2.0-only.html
+  notes: "fix(forms): declare $_completedVar property to fix PHP 8.2+ deprecation\nfix(forms): handle null values in strcasecmp calls\nMerge pull request #5 from amulet1/fix_hook_class\nRevert \"fix: Add conditional to hook class template to prevent double declaration issues\"\nMerge pull request #4 from amulet1/autoload_renderer\nfix: Modify VarRenderer class name to facilitate autoloading\nfix: Correctly set message in isValid() calls, simplify getInfo() calls\nfix: Drop unnecessary / uninitialized form parameter"
+5.0.0-alpha11:
+  api: 5.0.0-alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2025-06-04
+  license:
+    identifier: GPL-2.0-only
+    uri: http://www.horde.org/licenses/gpl
+  notes: "fix: Add conditional to hook class template to prevent double declaration issues\nfix: Use compat library for strftime calls\nfix: Log spam on task with null description\n"
+5.0.0-alpha10:
+  api: 5.0.0-alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2025-05-29
+  license:
+    identifier: GPL-2.0-only
+    uri: http://www.horde.org/licenses/gpl
+  notes: "ci: Add php-cs-fixer rule for nullables\nchore: Update minimum PHP to 8.1\nfix: Save new task (detailed mode) works again.\n"
+5.0.0-alpha9:
+  api: 5.0.0-alpha1
+  state:
+    release: true
+    api: true
+  date: 2025-05-21
+  license:
+    identifier: GPL-2.0-only
+    uri: http://www.horde.org/licenses/gpl
+  notes: "fix: Solve issues with nag search screen on modern PHP\nfix: Remove reference from signatures.\n"
+5.0.0-alpha8:
+  api: 5.0.0-alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2025-05-18
+  license:
+    identifier: GPL-2.0-only
+    uri: http://www.horde.org/licenses/gpl
+  notes: "fix: Preliminary patch for handling externally removed ldap groups related to shared tasklists. (Jean Charles Delépine <delepine@u-picardie.fr>)\n"
+5.0.0-alpha7:
+  api: 5.0.0-alpha1
+  state:
+    release: true
+    api: true
+  date: 2025-05-12
+  license:
+    identifier: GPL-2.0-only
+    uri: http://www.horde.org/licenses/gpl
+  notes: "ci: Add modern pipeline though it still fails\nstyle: Apply php-cs-fixer\n"
+5.0.0-alpha6:
+  api: 5.0.0-alpha1
+  state:
+    release: true
+    api: true
+  date: 2025-05-12
+  license:
+    identifier: GPL-2.0-only
+    uri: http://www.horde.org/licenses/gpl
+  notes: "fix: Use classmap autoloader as nag is not strictly PSR-0\nci: Remove old tool chain\n"
+5.0.0-alpha5:
+  api: 5.0.0alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2022-10-08
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: "Original version string was 5.0.0alpha5\n[rla] Fix some PHP 8.1 issues.\n|+\n"
+5.0.0-alpha4:
+  api: 5.0.0alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2021-10-06
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: "Original version string was 5.0.0alpha4\n|+"
+5.0.0-alpha3:
+  api: 5.0.0alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2021-03-13
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: "Original version string was 5.0.0alpha3\n|+"
+5.0.0-alpha2:
+  api: 5.0.0alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2021-02-24
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: "Original version string was 5.0.0alpha2\n|+"
+5.0.0-alpha1:
+  api: 5.0.0alpha1
+  state:
+    release: beta
+    api: beta
+  date: 2021-02-24
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: "Original version string was 5.0.0alpha1\n[jan] Display recurrence rule in task view.\n[jan] Add API to backup and restore user data.\n[jan] Add support for monthly recurrence on last weekday (Request #1922).\n[jan] Keep original file names when PUTing tasks via WebDAV.\n[mjr] Add an \"actual\" field for tracking actual time spent.\n[mjr] Add support for task organizer and iTip functionality.\n[jan] Fall back to sort by name if sort criteria are equal.\n[jan] Remove configuration option for database table.\n[jan] Improve priority display in basic view.\n[jan] Display task list background color in basic view.\n[jan] Import snooze information from iCalendar alarms.\n[jan] Import iCalendar 2.0 alarms.\n[jan] Import and export recurrence rules to iCalendar.\n[jan] Return ETags with browse() API method.\n"
 4.2.20:
   api: 4.2.0
   state:
@@ -317,8 +228,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [mjr] Fix generating view links from searchTag API.
+  notes: "[mjr] Fix generating view links from searchTag API.\n"
 4.2.19:
   api: 4.2.0
   state:
@@ -328,8 +238,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [mjr] SECURITY: Fix multiple XSS vulnerabilities when displaying and filtering task lists.
+  notes: "[mjr] SECURITY: Fix multiple XSS vulnerabilities when displaying and filtering task lists.\n"
 4.2.18:
   api: 4.2.0
   state:
@@ -339,11 +248,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [mjr] Fix handling of recurring task completion over EAS.
-    [mjr] Fix issue with NULL created dates breaking EAS.
-    [jan] Fix notice when re-exporting tasks without priority (Bug #14699).
-    [jan] Fix regression in exporting single tags to iCalendar CATEGORIES (Bug #14699).
+  notes: "[mjr] Fix handling of recurring task completion over EAS.\n[mjr] Fix issue with NULL created dates breaking EAS.\n[jan] Fix notice when re-exporting tasks without priority (Bug #14699).\n[jan] Fix regression in exporting single tags to iCalendar CATEGORIES (Bug #14699).\n"
 4.2.17:
   api: 4.2.0
   state:
@@ -353,10 +258,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] SECURITY: Fix unauthorized access to task exports.
-    [jan] Fix regression when exporting single tags to iCalendar CATEGORIES.
-    [jan] Officially support PHP 7.
+  notes: "[jan] SECURITY: Fix unauthorized access to task exports.\n[jan] Fix regression when exporting single tags to iCalendar CATEGORIES.\n[jan] Officially support PHP 7.\n"
 4.2.16:
   api: 4.2.0
   state:
@@ -366,13 +268,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Fix parsing sub-tasks from the quick enter dialog (Bug #14681).
-    [jan] Fix positioning of due time drop down list (Bug #12288).
-    [jan] Improve compatibilty when synchronizing tasks via CalDAV/ICS (Bug #14057).
-    [jan] Fix exporting multiple tags to iCalendar CATEGORIES (Bug #14057).
-    [jan] Don't include external tasks into drop down list for parent tasks.
-    [jan] Fix redirecting to task list after completing a task (Bug #14678).
+  notes: "[jan] Fix parsing sub-tasks from the quick enter dialog (Bug #14681).\n[jan] Fix positioning of due time drop down list (Bug #12288).\n[jan] Improve compatibilty when synchronizing tasks via CalDAV/ICS (Bug #14057).\n[jan] Fix exporting multiple tags to iCalendar CATEGORIES (Bug #14057).\n[jan] Don't include external tasks into drop down list for parent tasks.\n[jan] Fix redirecting to task list after completing a task (Bug #14678).\n"
 4.2.15:
   api: 4.2.0
   state:
@@ -382,9 +278,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] SECURITY: Fix open redirects.
-    [mjr] Fix handling of delayed start dates (Bug #14634).
+  notes: "[jan] SECURITY: Fix open redirects.\n[mjr] Fix handling of delayed start dates (Bug #14634).\n"
 4.2.14:
   api: 4.2.0
   state:
@@ -394,9 +288,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [mjr] Fix saving sync preference when no default tasklist exists (Bug #14585).
-    [mjr] Avoid PHP warnings due to corrupt preference values (Bug #14585).
+  notes: "[mjr] Fix saving sync preference when no default tasklist exists (Bug #14585).\n[mjr] Avoid PHP warnings due to corrupt preference values (Bug #14585).\n"
 4.2.13:
   api: 4.2.0
   state:
@@ -406,8 +298,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Fix sorting by due date with PHP < 5.5 (Bug #14507).
+  notes: "[jan] Fix sorting by due date with PHP < 5.5 (Bug #14507).\n"
 4.2.12:
   api: 4.2.0
   state:
@@ -417,8 +308,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [mjr] Fix fatal error caused by regression in sorting recurring tasks with due dates (Bug #14504).
+  notes: "[mjr] Fix fatal error caused by regression in sorting recurring tasks with due dates (Bug #14504).\n"
 4.2.11:
   api: 4.2.0
   state:
@@ -428,8 +318,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [mjr] Fix sorting recurring tasks by due date (Bug #14403).
+  notes: "[mjr] Fix sorting recurring tasks by due date (Bug #14403).\n"
 4.2.10:
   api: 4.2.0
   state:
@@ -439,12 +328,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [mjr] Fix handling of start and due dates when synching via EAS.
-    [jan] Avoid fatal errors if tasks don't have a UID.
-    [mjr] Fix parsing certain date formats (Bug #14348).
-    [jan] Fix deleteing alarms when completing a task.
-    [mjr] Require Horde_Perms::DELETE for including a tasklist as sync-able.
+  notes: "[mjr] Fix handling of start and due dates when synching via EAS.\n[jan] Avoid fatal errors if tasks don't have a UID.\n[mjr] Fix parsing certain date formats (Bug #14348).\n[jan] Fix deleteing alarms when completing a task.\n[mjr] Require Horde_Perms::DELETE for including a tasklist as sync-able.\n"
 4.2.9:
   api: 4.2.0
   state:
@@ -454,9 +338,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Fix regression with date picker in tasks form (Bug #14303).
-    [mjr] Fix handling EAS categories/tags.
+  notes: "[jan] Fix regression with date picker in tasks form (Bug #14303).\n[mjr] Fix handling EAS categories/tags.\n"
 4.2.8:
   api: 4.2.0
   state:
@@ -466,9 +348,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [mjr] Honor date_format prefs in Task form (Bug #14287).
-    [jan] Update Greek translation (Limperis Antonis <limperis@cti.gr>).
+  notes: "[mjr] Honor date_format prefs in Task form (Bug #14287).\n[jan] Update Greek translation (Limperis Antonis <limperis@cti.gr>).\n"
 4.2.7:
   api: 4.2.0
   state:
@@ -478,16 +358,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [mjr] Enforce child tasks must be completed before parent tasks in edit form (Bug #12308).
-    [jan] Use access rules compatible with both Apache 2.2 and 2.4.
-    [mjr] Fix possible fatal error due to tasks created with an alarm but no due date (Bug #14214).
-    [mjr] Fix storage of parent field when using Kolab driver (Bug #14197, mike.gabriel@das-netzwerkteam.de).
-    [mjr] Fix switching tab/filters when using Kolab driver (Bug #14196, mike.gabriel@das-netzwerkteam.de).
-    [mjr] Fix moving subtasks to another tasklist when parent task is moved (Bug #14209).
-    [mjr] Fix fatal error when saving tasks when system shares are present in certain cases.
-    [mjr] Return recurring tasks via listTimeObjects API (Bug #14137).
-    [mjr] Prevent orphaning tasks via the API.
+  notes: "[mjr] Enforce child tasks must be completed before parent tasks in edit form (Bug #12308).\n[jan] Use access rules compatible with both Apache 2.2 and 2.4.\n[mjr] Fix possible fatal error due to tasks created with an alarm but no due date (Bug #14214).\n[mjr] Fix storage of parent field when using Kolab driver (Bug #14197, mike.gabriel@das-netzwerkteam.de).\n[mjr] Fix switching tab/filters when using Kolab driver (Bug #14196, mike.gabriel@das-netzwerkteam.de).\n[mjr] Fix moving subtasks to another tasklist when parent task is moved (Bug #14209).\n[mjr] Fix fatal error when saving tasks when system shares are present in certain cases.\n[mjr] Return recurring tasks via listTimeObjects API (Bug #14137).\n[mjr] Prevent orphaning tasks via the API.\n"
 4.2.6:
   api: 4.2.0
   state:
@@ -497,12 +368,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Update Italian translation.
-    [mjr] Fix indentation level when searching (Bug #14138).
-    [mjr] Remove object reference from Content when object is deleted (Bug #14112).
-    [mjr] Remove tags from Content when tagged object is deleted (Bug #14112).
-    [jan] Fix linking to external tasks from smartmobile view.
+  notes: "[jan] Update Italian translation.\n[mjr] Fix indentation level when searching (Bug #14138).\n[mjr] Remove object reference from Content when object is deleted (Bug #14112).\n[mjr] Remove tags from Content when tagged object is deleted (Bug #14112).\n[jan] Fix linking to external tasks from smartmobile view.\n"
 4.2.5:
   api: 4.2.0
   state:
@@ -512,10 +378,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Fix positioning of dialog windows.
-    [jan] Don't delete existing completions when editing a recurring task.
-    [jan] Only delete the last completion when toggling a recurring task to incomplete.
+  notes: "[jan] Fix positioning of dialog windows.\n[jan] Don't delete existing completions when editing a recurring task.\n[jan] Only delete the last completion when toggling a recurring task to incomplete.\n"
 4.2.4:
   api: 4.2.0
   state:
@@ -525,12 +388,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Don't list task lists without SHOW permissions (Bug #13837).
-    [jan] Use consistent checkbox.
-    [jan] Don't allow deletion of tasks with sub-tasks (Bug #13809).
-    [jan] Don't allow completion of tasks with incomplete sub-tasks and vice versa.
-    [jan] Don't wipe out whole task lists when PUTing individual tasks via WebDAV.
+  notes: "[jan] Don't list task lists without SHOW permissions (Bug #13837).\n[jan] Use consistent checkbox.\n[jan] Don't allow deletion of tasks with sub-tasks (Bug #13809).\n[jan] Don't allow completion of tasks with incomplete sub-tasks and vice versa.\n[jan] Don't wipe out whole task lists when PUTing individual tasks via WebDAV.\n"
 4.2.3:
   api: 4.2.0
   state:
@@ -540,8 +398,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [mjr] Fix issue with initially creating nag_shares table.
+  notes: "[mjr] Fix issue with initially creating nag_shares table.\n"
 4.2.2:
   api: 4.2.0
   state:
@@ -551,18 +408,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Export nicer display names for users and resources via WebDAV.
-    [jan] Export custom owner and read-only properties via WebDAV.
-    [jan] Fix search attribute of SQL shares on Oracle.
-    [mjr] Fix adding a new tasklist to the syncronized tasklists (Bug #13642).
-    [jan] Pass current start date of recurring tasks to dynamic interface.
-    [jan] Fix setting task list name for external tasks.
-    [jan] Fix link to create sub-task from a task view.
-    [jan] Fix listing of recurring tasks with start dates.
-    [mjr] Add missing categories to EAS tasks.
-    [jan] Fix sidebar display of system task lists in basic view.
-    [jan] Fix retrieving individual tasks via WebDAV.
+  notes: "[jan] Export nicer display names for users and resources via WebDAV.\n[jan] Export custom owner and read-only properties via WebDAV.\n[jan] Fix search attribute of SQL shares on Oracle.\n[mjr] Fix adding a new tasklist to the syncronized tasklists (Bug #13642).\n[jan] Pass current start date of recurring tasks to dynamic interface.\n[jan] Fix setting task list name for external tasks.\n[jan] Fix link to create sub-task from a task view.\n[jan] Fix listing of recurring tasks with start dates.\n[mjr] Add missing categories to EAS tasks.\n[jan] Fix sidebar display of system task lists in basic view.\n[jan] Fix retrieving individual tasks via WebDAV.\n"
 4.2.1:
   api: 4.2.0
   state:
@@ -572,71 +418,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Don't include external tasks with WebDAV task list.
-    [jan] Fix displayed CalDAV URLs for shared task lists (Bug #12380).
-    [mjr] Fix remembering auto determined default share (Bug #13360).
-    [mjr] Add EAS client created shares to the sync_lists preference (Bug #13359).
-    [mjr] Add missing API support for searchTags API (Bug #13364).
-    [mjr] Fix detecting task completion when sending task change notifications (Alfonso Marín Marín <almarin@um.es>, Bug #13350).
-4.2.0-beta2:
-  api: 4.2.0
-  state:
-    release: beta
-    api: alpha
-  date: 2014-06-17
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    Original version string was 4.2.0beta2
-    [jan] Always display system task lists to administrators.
-    [mjr] Group task fields into tabs on edit form (Request #13228).
-4.2.0-beta1:
-  api: 4.2.0
-  state:
-    release: beta
-    api: alpha
-  date: 2014-06-04
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    Original version string was 4.2.0beta1
-    [jan] Only use URL rewriting for saving/completing tasks if pretty URLs are enabled in the configuration.
-    [jan] Don't include smart lists in top menu.
-    [jan] Fix top menu URLs to create new tasks in specific task lists.
-4.2.0-alpha1:
-  api: 4.2.0
-  state:
-    release: alpha
-    api: alpha
-  date: 2014-05-05
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    Original version string was 4.2.0alpha1
-    [jan] Show external tasks in the correct task type.
-    [jan] Purge old tasks from versions < 2.3 too.
-    [jan] Allow to synchronize shared task lists via CalDAV (Request #12380).
-    [jan] Add script to import tasks from Open-Xchange.
-    [jan] Add recurrence controls to basic view (Request #11545).
-    [mjr] Add button for creating sub-task from task view (Request #12309).
-    [mjr] Add ability to return to existing search results after navigating to a task (Request #12879).
-    [jan] Make shares table compatible with Oracle.
-    [mjr] Add API support for multiple tasklists via ActiveSync.
-4.2.0-RC1:
-  api: 4.2.0
-  state:
-    release: beta
-    api: alpha
-  date: 2014-07-01
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    Original version string was 4.2.0RC1
+  notes: "[jan] Don't include external tasks with WebDAV task list.\n[jan] Fix displayed CalDAV URLs for shared task lists (Bug #12380).\n[mjr] Fix remembering auto determined default share (Bug #13360).\n[mjr] Add EAS client created shares to the sync_lists preference (Bug #13359).\n[mjr] Add missing API support for searchTags API (Bug #13364).\n[mjr] Fix detecting task completion when sending task change notifications (Alfonso Marín Marín <almarin@um.es>, Bug #13350).\n"
 4.2.0:
   api: 4.2.0
   state:
@@ -646,9 +428,47 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [mjr] Fix returning to previously selected tab after task is saved (Bug #13308).
-    [mjr] Fix fatal error when saving a task, only one tasklist exists, and at least one SmartList exists.
+  notes: "[mjr] Fix returning to previously selected tab after task is saved (Bug #13308).\n[mjr] Fix fatal error when saving a task, only one tasklist exists, and at least one SmartList exists.\n"
+4.2.0-RC1:
+  api: 4.2.0
+  state:
+    release: beta
+    api: alpha
+  date: 2014-07-01
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: "Original version string was 4.2.0RC1\n"
+4.2.0-beta2:
+  api: 4.2.0
+  state:
+    release: beta
+    api: alpha
+  date: 2014-06-17
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: "Original version string was 4.2.0beta2\n[jan] Always display system task lists to administrators.\n[mjr] Group task fields into tabs on edit form (Request #13228).\n"
+4.2.0-beta1:
+  api: 4.2.0
+  state:
+    release: beta
+    api: alpha
+  date: 2014-06-04
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: "Original version string was 4.2.0beta1\n[jan] Only use URL rewriting for saving/completing tasks if pretty URLs are enabled in the configuration.\n[jan] Don't include smart lists in top menu.\n[jan] Fix top menu URLs to create new tasks in specific task lists.\n"
+4.2.0-alpha1:
+  api: 4.2.0
+  state:
+    release: alpha
+    api: alpha
+  date: 2014-05-05
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: "Original version string was 4.2.0alpha1\n[jan] Show external tasks in the correct task type.\n[jan] Purge old tasks from versions < 2.3 too.\n[jan] Allow to synchronize shared task lists via CalDAV (Request #12380).\n[jan] Add script to import tasks from Open-Xchange.\n[jan] Add recurrence controls to basic view (Request #11545).\n[mjr] Add button for creating sub-task from task view (Request #12309).\n[mjr] Add ability to return to existing search results after navigating to a task (Request #12879).\n[jan] Make shares table compatible with Oracle.\n[mjr] Add API support for multiple tasklists via ActiveSync.\n"
 4.1.5:
   api: 4.1.0
   state:
@@ -658,9 +478,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Fix link to task in alarm emails.
-    [jan] Update Korean translation (Deokgon Kim <dgkim@dgkim.net>).
+  notes: "[jan] Fix link to task in alarm emails.\n[jan] Update Korean translation (Deokgon Kim <dgkim@dgkim.net>).\n"
 4.1.4:
   api: 4.1.0
   state:
@@ -670,9 +488,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Update Danish translation (Erling Preben Hansen <erling@eph.dk>).
-    [jan] Don't return future tasks from cost objects API.
+  notes: "[jan] Update Danish translation (Erling Preben Hansen <erling@eph.dk>).\n[jan] Don't return future tasks from cost objects API.\n"
 4.1.3:
   api: 4.1.0
   state:
@@ -682,10 +498,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] SECURITY: Fix XSS vulnerabilities when deleting task lists.
-    [jan] Fix updating alarm if completing a task recurrence.
-    [jan] Fix editing tasks via CalDAV (Bug #12745).
+  notes: "[jan] SECURITY: Fix XSS vulnerabilities when deleting task lists.\n[jan] Fix updating alarm if completing a task recurrence.\n[jan] Fix editing tasks via CalDAV (Bug #12745).\n"
 4.1.2:
   api: 4.1.0
   state:
@@ -695,10 +508,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Fix highlighting task type tabs in list view.
-    [jan] Fix fatal errors if DAV support is disabled (Bug #12481).
-    [mjr] Fix requesting changes by modification sequence (Bug #12507, Thomas Jarosch <thomas.jarosch@intra2net.com>).
+  notes: "[jan] Fix highlighting task type tabs in list view.\n[jan] Fix fatal errors if DAV support is disabled (Bug #12481).\n[mjr] Fix requesting changes by modification sequence (Bug #12507, Thomas Jarosch <thomas.jarosch@intra2net.com>).\n"
 4.1.1:
   api: 4.1.0
   state:
@@ -708,53 +518,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Display CalDAV URL of system tasklists (Bug #12342).
-    [mjr] Only query Horde_History when it's required.
-    [jan] Fix system tasklist listing via WebDAV.
-    [rla] Add system tasklist support for Nag CalDAV access (Request #12342).
-    [jan] Fix task description tooltip (Bug #12421).
-    [mjr] Persist the tasklist and parent when creating a new task and using "Save and New" (Bug #12400).
-    [mjr] Fix tag browsing of shared tasklists (Bug #12405).
-    [mjr] Fix importing VTODOs containing RELATED-TO fields (Bug #12355).
-    [mjr] Add API methods for using history modification sequences.
-4.1.0-beta2:
-  api: 4.0.0
-  state:
-    release: beta
-    api: stable
-  date: 2013-05-14
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    Original version string was 4.1.0beta2
-    [jan] Fix incorrect dependencies.
-4.1.0-beta1:
-  api: 4.0.0
-  state:
-    release: beta
-    api: stable
-  date: 2013-05-07
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    Original version string was 4.1.0beta1
-    [jan] Add CalDAV server support (Request #4267).
-    [jan] Update design to closer match the Horde 5 UI.
-4.1.0-RC1:
-  api: 4.1.0
-  state:
-    release: beta
-    api: stable
-  date: 2013-05-29
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    Original version string was 4.1.0RC1
-    [jan] Don't include external tasks in listTasks() API results.
+  notes: "[jan] Display CalDAV URL of system tasklists (Bug #12342).\n[mjr] Only query Horde_History when it's required.\n[jan] Fix system tasklist listing via WebDAV.\n[rla] Add system tasklist support for Nag CalDAV access (Request #12342).\n[jan] Fix task description tooltip (Bug #12421).\n[mjr] Persist the tasklist and parent when creating a new task and using \"Save and New\" (Bug #12400).\n[mjr] Fix tag browsing of shared tasklists (Bug #12405).\n[mjr] Fix importing VTODOs containing RELATED-TO fields (Bug #12355).\n[mjr] Add API methods for using history modification sequences.\n"
 4.1.0:
   api: 4.1.0
   state:
@@ -764,8 +528,37 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    Final release.
+  notes: "Final release.\n"
+4.1.0-RC1:
+  api: 4.1.0
+  state:
+    release: beta
+    api: stable
+  date: 2013-05-29
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: "Original version string was 4.1.0RC1\n[jan] Don't include external tasks in listTasks() API results.\n"
+4.1.0-beta2:
+  api: 4.0.0
+  state:
+    release: beta
+    api: stable
+  date: 2013-05-14
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: "Original version string was 4.1.0beta2\n[jan] Fix incorrect dependencies.\n"
+4.1.0-beta1:
+  api: 4.0.0
+  state:
+    release: beta
+    api: stable
+  date: 2013-05-07
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: "Original version string was 4.1.0beta1\n[jan] Add CalDAV server support (Request #4267).\n[jan] Update design to closer match the Horde 5 UI.\n"
 4.0.3:
   api: 4.0.0
   state:
@@ -775,19 +568,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Fix recurring tasks in Kolab driver (Thomas Jarosch <thomas.jarosch@intra2net.com>, Bug #12222).
-    [mjr] Fix setting alarm time when syncing (Bug #12201, <thomas.jarosch@intra2net.com>).
-    [mjr] Fix issue causing due dates to be offset when syncing (Bug #12200, <thomas.jarosch@intra2net.com>)
-    [jan] Fix listing alarms of recurring tasks.
-    [jan] Fix default task list in portal block (Bug #12133).
-    [jan] Fix displaying of due dates of recurring events in some views.
-    [jan] Update broken rows due to migration bug in PostgreSQL (Bug #12101).
-    [mjr] Fix uncompleting tasks from task view in smartmobile view (Bug #12098, <ctimoteo@sapo.pt>).
-    [jan] Include parent tasks in cost object labels.
-    [jan] Only return completed tasks up to a week old as cost objects.
-    [mjr] Set correct timezone on incoming ActiveSync tasks (Bug #12053).
-    [jan] Update French translation (Paul De Vlieger <paul.de_vlieger@moniut.univ-bpclermont.fr>).
+  notes: "[jan] Fix recurring tasks in Kolab driver (Thomas Jarosch <thomas.jarosch@intra2net.com>, Bug #12222).\n[mjr] Fix setting alarm time when syncing (Bug #12201, <thomas.jarosch@intra2net.com>).\n[mjr] Fix issue causing due dates to be offset when syncing (Bug #12200, <thomas.jarosch@intra2net.com>)\n[jan] Fix listing alarms of recurring tasks.\n[jan] Fix default task list in portal block (Bug #12133).\n[jan] Fix displaying of due dates of recurring events in some views.\n[jan] Update broken rows due to migration bug in PostgreSQL (Bug #12101).\n[mjr] Fix uncompleting tasks from task view in smartmobile view (Bug #12098, <ctimoteo@sapo.pt>).\n[jan] Include parent tasks in cost object labels.\n[jan] Only return completed tasks up to a week old as cost objects.\n[mjr] Set correct timezone on incoming ActiveSync tasks (Bug #12053).\n[jan] Update French translation (Paul De Vlieger <paul.de_vlieger@moniut.univ-bpclermont.fr>).\n"
 4.0.2:
   api: 4.0.0
   state:
@@ -797,15 +578,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [mjr] Fix closing the quick task dialog when cancel is pressed (Bug #11848).
-    [mjr] Fix displaying and editing tasks from search results (Bug #11847).
-    [jan] Update Basque translation (Ibon Igartua <ibon.igartua@ehu.es>).
-    [mjr] Fix incoming task sync with certain combinations of due date values.
-    [mjr] Fix quick task addition without session cookies enabled (Bug #11875, Thomas Jarosch <thomas.jarosch@intra2net.com>).
-    [jan] Fix editing tasks from the merged list view in smartmobile mode (Bug #11840).
-    [jan] Use default Kolab folder for default taks list preference.
-    [jan] Mark Kolab folder as default when changing default task list preference.
+  notes: "[mjr] Fix closing the quick task dialog when cancel is pressed (Bug #11848).\n[mjr] Fix displaying and editing tasks from search results (Bug #11847).\n[jan] Update Basque translation (Ibon Igartua <ibon.igartua@ehu.es>).\n[mjr] Fix incoming task sync with certain combinations of due date values.\n[mjr] Fix quick task addition without session cookies enabled (Bug #11875, Thomas Jarosch <thomas.jarosch@intra2net.com>).\n[jan] Fix editing tasks from the merged list view in smartmobile mode (Bug #11840).\n[jan] Use default Kolab folder for default taks list preference.\n[jan] Mark Kolab folder as default when changing default task list preference.\n"
 4.0.1:
   api: 4.0.0
   state:
@@ -815,66 +588,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Use Kolab modification and creation dates in the UI (Bug #11591).
-    [gwr] Ignore empty dates (Bug #11736).
-    [jan] Use encoded UIDs as IDs in Kolab driver.
-    [mjr] Fix support for due/start dates for certain ActiveSync clients (Bug #11693).
-    [jan] Fix importing tasks from iCalendar (Bug #11681).
-    [jan] Fix listing of recurring tasks via timeobjects API.
-4.0.0-beta2:
-  api: 4.0.0beta1
-  state:
-    release: beta
-    api: beta
-  date: 2012-10-12
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    Original version string was 4.0.0beta2
-    [jan] Synchronize tags with Kolab categories.
-    [mjr] Fix deleting tasks from the task form.
-    [mjr] Implement Purge Completed Tasks LoginTask (Request #2520).
-    [gwr] Mark the initial default share as such with the Kolab backend.
-    [gwr] Always mark the initial share as default tasklist.
-    [jan] Move complete task list management into the sidebar.
-    [jan] Allow to edit task list color in traditional view.
-    [mjr] Tweak display of smartlist links in list view.
-    [mjr] Fix fatal recursion error when searching with smartlists were present.
-4.0.0-beta1:
-  api: 4.0.0beta1
-  state:
-    release: beta
-    api: beta
-  date: 2012-08-29
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    Original version string was 4.0.0beta1
-    [mjr] Add support for smart tasklists.
-    [mjr] Migrate categories to tags.
-    [jan] Fix fatal error if the task form doesn't validate.
-    [jan] Add recurring tasks (Request #2150).
-4.0.0-RC1:
-  api: 4.0.0beta1
-  state:
-    release: beta
-    api: beta
-  date: 2012-10-27
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    Original version string was 4.0.0RC1
-    [jan] Fix export links for tasklists (Bug #11576).
-    [mjr] Fix various issues with importing CSV files.
-    [mjr] Format datetime fields when exporting a task as a hash (Bug #11537).
-    [jan] Fix retrieving tasks from Kolab backend by UID (Bug #11532).
-    [jan] Fix toggling tasklists (Bug #11511).
-    [jan] Fix listing tasks from Kolab backends.
-    [jan] Fix sending alarm e-mail messages.
+  notes: "[jan] Use Kolab modification and creation dates in the UI (Bug #11591).\n[gwr] Ignore empty dates (Bug #11736).\n[jan] Use encoded UIDs as IDs in Kolab driver.\n[mjr] Fix support for due/start dates for certain ActiveSync clients (Bug #11693).\n[jan] Fix importing tasks from iCalendar (Bug #11681).\n[jan] Fix listing of recurring tasks via timeobjects API.\n"
 4.0.0:
   api: 4.0.0
   state:
@@ -884,8 +598,37 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Update Polish translation (Krzysztof Kozera <krzysztof113@o2.pl>).
+  notes: "[jan] Update Polish translation (Krzysztof Kozera <krzysztof113@o2.pl>).\n"
+4.0.0-RC1:
+  api: 4.0.0beta1
+  state:
+    release: beta
+    api: beta
+  date: 2012-10-27
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: "Original version string was 4.0.0RC1\n[jan] Fix export links for tasklists (Bug #11576).\n[mjr] Fix various issues with importing CSV files.\n[mjr] Format datetime fields when exporting a task as a hash (Bug #11537).\n[jan] Fix retrieving tasks from Kolab backend by UID (Bug #11532).\n[jan] Fix toggling tasklists (Bug #11511).\n[jan] Fix listing tasks from Kolab backends.\n[jan] Fix sending alarm e-mail messages.\n"
+4.0.0-beta2:
+  api: 4.0.0beta1
+  state:
+    release: beta
+    api: beta
+  date: 2012-10-12
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: "Original version string was 4.0.0beta2\n[jan] Synchronize tags with Kolab categories.\n[mjr] Fix deleting tasks from the task form.\n[mjr] Implement Purge Completed Tasks LoginTask (Request #2520).\n[gwr] Mark the initial default share as such with the Kolab backend.\n[gwr] Always mark the initial share as default tasklist.\n[jan] Move complete task list management into the sidebar.\n[jan] Allow to edit task list color in traditional view.\n[mjr] Tweak display of smartlist links in list view.\n[mjr] Fix fatal recursion error when searching with smartlists were present.\n"
+4.0.0-beta1:
+  api: 4.0.0beta1
+  state:
+    release: beta
+    api: beta
+  date: 2012-08-29
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: "Original version string was 4.0.0beta1\n[mjr] Add support for smart tasklists.\n[mjr] Migrate categories to tags.\n[jan] Fix fatal error if the task form doesn't validate.\n[jan] Add recurring tasks (Request #2150).\n"
 3.0.9:
   api: 3.0.0
   state:
@@ -895,11 +638,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [mms] Fix getTasklist() API call.
-    [jan] Fix changing sort direction.
-    [jan] Fix sorting by owner if displaying external task sources.
-    [jan] Update Turkish translation (İstanbul Technical University).
+  notes: "[mms] Fix getTasklist() API call.\n[jan] Fix changing sort direction.\n[jan] Fix sorting by owner if displaying external task sources.\n[jan] Update Turkish translation (İstanbul Technical University).\n"
 3.0.8:
   api: 3.0.0
   state:
@@ -909,10 +648,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Update Swedish translation (Per Olof Ljungmark <peo@bsdlabs.com>).
-    [jan] Update Italian translation (Massimo Malabotta <mmalabotta@units.it>).
-    [jan] Update Hungarian translation (Zoltán Németh <nemeth.zoltan@etit.hu>).
+  notes: "[jan] Update Swedish translation (Per Olof Ljungmark <peo@bsdlabs.com>).\n[jan] Update Italian translation (Massimo Malabotta <mmalabotta@units.it>).\n[jan] Update Hungarian translation (Zoltán Németh <nemeth.zoltan@etit.hu>).\n"
 3.0.7:
   api: 3.0.0
   state:
@@ -922,9 +658,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Fix setting custom alarm methods (Bug #9543).
-    [jan] Update Japanese translation (Hiromi Kimura <hiromi@tac.tsukuba.ac.jp>).
+  notes: "[jan] Fix setting custom alarm methods (Bug #9543).\n[jan] Update Japanese translation (Hiromi Kimura <hiromi@tac.tsukuba.ac.jp>).\n"
 3.0.6:
   api: 3.0.0
   state:
@@ -934,9 +668,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Don't display task details of private tasks via the API (Bug #10712).
-    [jan] Use correct locale when parsing quick tasks (thpo+horde@dotrc.de, Bug #10720).
+  notes: "[jan] Don't display task details of private tasks via the API (Bug #10712).\n[jan] Use correct locale when parsing quick tasks (thpo+horde@dotrc.de, Bug #10720).\n"
 3.0.5:
   api: 3.0.0
   state:
@@ -946,10 +678,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [cjh] Nicer date/time input with fewer input fields and helper javascript.
-    [mjr] Add ability to choose which tasklists to synchronize.
-    [mjr] Fix task export to ActiveSync for tasks with no due dates or reminders.
+  notes: "[cjh] Nicer date/time input with fewer input fields and helper javascript.\n[mjr] Add ability to choose which tasklists to synchronize.\n[mjr] Fix task export to ActiveSync for tasks with no due dates or reminders.\n"
 3.0.4:
   api: 3.0.0
   state:
@@ -959,11 +688,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Add missing parameters when PUTing tasks (Bug #10545).
-    [mjr] Fix removeUserData implementation.
-    [gwr] Fix Kolab object attribute handling for tasks.
-    [gwr] Avoid including the owner name into the default share.
+  notes: "[jan] Add missing parameters when PUTing tasks (Bug #10545).\n[mjr] Fix removeUserData implementation.\n[gwr] Fix Kolab object attribute handling for tasks.\n[gwr] Avoid including the owner name into the default share.\n"
 3.0.3:
   api: 3.0.0
   state:
@@ -973,8 +698,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Don't load all shares with requested permissions from the backend if $conf['share']['hidden'] is enabled.
+  notes: "[jan] Don't load all shares with requested permissions from the backend if $conf['share']['hidden'] is enabled.\n"
 3.0.2:
   api: 3.0.0
   state:
@@ -984,8 +708,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Add Ukrainian translation (Andriy Kopystyansky <anri@polynet.lviv.ua>).
+  notes: "[jan] Add Ukrainian translation (Andriy Kopystyansky <anri@polynet.lviv.ua>).\n"
 3.0.1:
   api: 3.0.0
   state:
@@ -995,71 +718,7 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Fix reversed logic of displaying sub-task tree icons depending on the text direction (Bug #10033).
-    [jan] Fix encoding of non-ascii characters in parent task drop-down.
-    [mjr] Fix editing tasklists (Bug #9965).
-3.0.0-beta1:
-  api: 3.0.0
-  state:
-    release: beta
-    api: beta
-  date: 2011-03-16
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    Original version string was 3.0.0beta1
-    [mjr] Fix saving tasks via PUT method.
-    [mjr] Fix deleting task lists.
-    [mjr] Fix hiding the External prefs group (Bug #9643).
-3.0.0-alpha1:
-  api: 3.0.0
-  state:
-    release: alpha
-    api: alpha
-  date: 2011-03-09
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    Original version string was 3.0.0alpha1
-    First alpha release for Horde 4.
-    [jan] Provide default configuration files instead of .dist versions.
-    [jan] Send alarm notifications with HTML part and convert to Horde_View.
-    [jan] Default task lists no longer have the user name as the ID.
-    [jan] Create a default task list if the user doesn't own any yet.
-    [jan] Add start date to possible colums in task list (Joel Smith <js-horde@jk1.net>, Request #9083).
-    [jan] Add system task lists (Request #2059).
-    [jan] Set colors per task list (Request #7480).
-    [cjh] Quick Add support: there is a javascript UI element for quickly adding tasks, and an API method (tasks/quickAdd) that provides the same functionality.
-    [jan] Add individual notification methods for single tasks (Alfonso Marín Marín <almarin@um.es>).
-3.0.0-RC2:
-  api: 3.0.0
-  state:
-    release: beta
-    api: beta
-  date: 2011-03-30
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    Original version string was 3.0.0RC2
-    Second release candidate for Horde 4.
-3.0.0-RC1:
-  api: 3.0.0
-  state:
-    release: beta
-    api: beta
-  date: 2011-03-23
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    Original version string was 3.0.0RC1
-    First release candidate for Horde 4.
-    [jan] Update installation and upgrade instructions.
-    [gwr] Adapted the Kolab driver to Horde 4.
+  notes: "[jan] Fix reversed logic of displaying sub-task tree icons depending on the text direction (Bug #10033).\n[jan] Fix encoding of non-ascii characters in parent task drop-down.\n[mjr] Fix editing tasklists (Bug #9965).\n"
 3.0.0:
   api: 3.0.0
   state:
@@ -1069,334 +728,116 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |
-    First stable release for Horde 4.
-    [jan] Fix application-specific permission checks (Bug #9786).
-    [mjr] Datatree share to SQL upgrade script refactored for Horde 4.
-    [jan] Fix creating new tasks through WebDAV (Bug #9675).
-    [jan] Move all executable scripts to bin/ and prefix with nag-.
+  notes: "First stable release for Horde 4.\n[jan] Fix application-specific permission checks (Bug #9786).\n[mjr] Datatree share to SQL upgrade script refactored for Horde 4.\n[jan] Fix creating new tasks through WebDAV (Bug #9675).\n[jan] Move all executable scripts to bin/ and prefix with nag-.\n"
+3.0.0-RC2:
+  api: 3.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-30
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: "Original version string was 3.0.0RC2\nSecond release candidate for Horde 4.\n"
+3.0.0-RC1:
+  api: 3.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-23
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: "Original version string was 3.0.0RC1\nFirst release candidate for Horde 4.\n[jan] Update installation and upgrade instructions.\n[gwr] Adapted the Kolab driver to Horde 4.\n"
+3.0.0-beta1:
+  api: 3.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-16
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: "Original version string was 3.0.0beta1\n[mjr] Fix saving tasks via PUT method.\n[mjr] Fix deleting task lists.\n[mjr] Fix hiding the External prefs group (Bug #9643).\n"
+3.0.0-alpha1:
+  api: 3.0.0
+  state:
+    release: alpha
+    api: alpha
+  date: 2011-03-09
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: "Original version string was 3.0.0alpha1\nFirst alpha release for Horde 4.\n[jan] Provide default configuration files instead of .dist versions.\n[jan] Send alarm notifications with HTML part and convert to Horde_View.\n[jan] Default task lists no longer have the user name as the ID.\n[jan] Create a default task list if the user doesn't own any yet.\n[jan] Add start date to possible colums in task list (Joel Smith <js-horde@jk1.net>, Request #9083).\n[jan] Add system task lists (Request #2059).\n[jan] Set colors per task list (Request #7480).\n[cjh] Quick Add support: there is a javascript UI element for quickly adding tasks, and an API method (tasks/quickAdd) that provides the same functionality.\n[jan] Add individual notification methods for single tasks (Alfonso Marín Marín <almarin@um.es>).\n"
 2.3.7:
-  notes: |
-    [jan] Add upgrade scripts for next-generation SQL share driver.
+  notes: "[jan] Add upgrade scripts for next-generation SQL share driver.\n"
 2.3.6:
-  notes: |
-    [jan] Remove stray closing tag when displaying the date of completion.
-    [mjr] Do not remove history entries when removing user data (Bug #8755).
+  notes: "[jan] Remove stray closing tag when displaying the date of completion.\n[mjr] Do not remove history entries when removing user data (Bug #8755).\n"
 2.3.5:
-  notes: |
-    [jan] Set an alarm to one minute, if users try to set an alarm without time.
-    [jan] Add missing preference for not sending update notifications to yourself (Joel Smith <js-horde@jk1.net>, Request #8978).
-    [gwr] Fix organizer field not saved in tasks (kolab/issue3888).
+  notes: "[jan] Set an alarm to one minute, if users try to set an alarm without time.\n[jan] Add missing preference for not sending update notifications to yourself (Joel Smith <js-horde@jk1.net>, Request #8978).\n[gwr] Fix organizer field not saved in tasks (kolab/issue3888).\n"
 2.3.4:
-  notes: |
-    [jan] Add and fix Oracle-specific SQL scripts.
-    [jan] Fix importing due date attribute from iCalendar (Bug #8644).
-    [jan] Fix charset when exporting tasks to iCalendar 2.0 (Bug #8637).
-    [jan] Add Croatian translation (Matej Vela <matej.vela@carnet.hr>).
+  notes: "[jan] Add and fix Oracle-specific SQL scripts.\n[jan] Fix importing due date attribute from iCalendar (Bug #8644).\n[jan] Fix charset when exporting tasks to iCalendar 2.0 (Bug #8637).\n[jan] Add Croatian translation (Matej Vela <matej.vela@carnet.hr>).\n"
 2.3.3:
-  notes: |
-    [mms] Upgrade prototype.js to v1.6.1.
-    [jan] Fix synchronization with output compression enabled (Bug #7769).
-    [jan] Display application name as task list name when listing external tasks.
-    [jan] Fix importing vTodo data including more iCalendar components.
+  notes: "[mms] Upgrade prototype.js to v1.6.1.\n[jan] Fix synchronization with output compression enabled (Bug #7769).\n[jan] Display application name as task list name when listing external tasks.\n[jan] Fix importing vTodo data including more iCalendar components.\n"
 2.3.2:
-  notes: |
-    [jan] Don't allow to set alarms if no due date has been set.
-    [cjh] Work around BC break with Horde versions before 3.2 (Bug #7820).
-    [cjh] Add URL access to tasks by "starts-with" search on the task name.
-    [cjh] Add hooks for altering the displayed task description and showing help text next to the task description entry field.
-    [cjh] Add estimated time to the fields available in the task list.
-    [jan] Fix link escaping in notification messages (Alfonso Marín Marín <almarin@um.es>, Bug #7509).
+  notes: "[jan] Don't allow to set alarms if no due date has been set.\n[cjh] Work around BC break with Horde versions before 3.2 (Bug #7820).\n[cjh] Add URL access to tasks by \"starts-with\" search on the task name.\n[cjh] Add hooks for altering the displayed task description and showing help text next to the task description entry field.\n[cjh] Add estimated time to the fields available in the task list.\n[jan] Fix link escaping in notification messages (Alfonso Marín Marín <almarin@um.es>, Bug #7509).\n"
 2.3.1:
-  notes: |
-    [cjh] Add a PostgreSQL-specific upgrade script for 2.2 to 2.3.
-    [cjh] Fix fatal error when completing tasks (Bug #7400).
-    [mms] Upgrade prototype.js to v1.6.0.3.
-2.3.0-RC1:
-  notes: |
-    Original version string was 2.3.0RC1
-    [jan] Log moving of tasks in the history backend (Bug #3207).
-    [jan] Fix deleting all tasks over WebDAV (Bug #7004).
-    [jan] Add Estonian translation (Alar Sing <alar.sing@err.ee>).
-    [jan] Send a more detailed notification message and use the recipient's preferred language and date/time format after a task has changed.
-    [jan] Add Basque translation (Euskal Herriko Unibertsitatea EHU/UPV <xabier.arrieta@ehu.es>).
-    [jan] Fix task relationship getting lost when importing tasks (tkrah@fachschaft.imn.htwk-leipzig.de, bb.apc.ag, Bug #6770).
-    [jan] Add preference to set columns for the list view.
-    [jan] Allow to set task assignee.
-    [jan] Add options to export screen for choosing task lists and task states.
-    [mjr] Remove user permissions on all shares when deleting a user.
-    [mjr] Fix issue with removeUserData api that caused the deleted user's task list to not be deleted (Bug #6969).
+  notes: "[cjh] Add a PostgreSQL-specific upgrade script for 2.2 to 2.3.\n[cjh] Fix fatal error when completing tasks (Bug #7400).\n[mms] Upgrade prototype.js to v1.6.0.3.\n"
 2.3.0:
-  notes: |
-    [jan] Change group field in shares table to work with LDAP groups (Bug #6883).
-    [jan] Log completion date if adding a completed task (Bug #7275).
-    [jan] Fix user name conversion with user hooks in the task list panel (Bug #7366).
-    [jan] Fix displayed WebDAV subscription URLs in the task list manager.
-2.2.0-alpha1:
-  notes: |
-    Original version string was 2.2.0alpha
-    [cjh] Add preferences for turning due dates on by default, setting the default due date's number of days in the future, and setting the default due date's time.
-    [cjh] Add vCalendar 2.0 alarm export (munzli@olmero.ch, Bug #4851).
-    [jan] Add sub-tasks.
-    [jan] Add start dates for tasks.
-    [jan] Add support for the Horde_Alarm framework (requires Horde 3.2).
-    [cjh] Default to a javascript quick search, if available, with options for the full search and a direct link to full search if javascript is unavailable.
-    [cjh] Allow explicitly searching All, Incomplete, or Completed tasks (Request #4222).
-    [cjh] Allow configuring the tasklists that the task summary block shows, and let the user set a title for the block to differentiate multiple instances (Request #2388).
-    [cjh] Show task description tooltips in the task summary block (Request #3444).
-    [cjh] Store completion date and add history entries for task completion.
-    [cjh] Move tasklist selection/deselection to a collapsible panel.
-    [mas] Conform to WCAG 1.0 Priority 2/Section 508 accessibility guidelines. (Request #4080)
-    [cjh] Allow using the checkboxes to mark tasks as incomplete as well as complete (michael.sheldon@credativ.de, Request #4250).
-    [cjh] Sort date fields correctly with JS table sorting.
-    [jan] Add private flag.
-    [jan] Add a field for estimated time being spent on a task.
-    [mdj] Add support for split read/write database.
-    [mdj] Add failover support for SQL backend.
-    [cjh] Add a tree block for showing current alarms.
-2.2.0-RC3:
-  notes: |
-    Original version string was 2.2.0RC3
-    [bak] Move tasklists into per-owner subdirectories when viewed through WebDAV. (Request #6595)
-    [cjh] Apply fix for http://dev.rubyonrails.org/ticket/11473 to prototype.js (Request #6590).
-    [cjh] Add an upgrade script for the new SQL share driver (Request #6109).
-    [jan] Correctly determine default task list in the API (SyncML, WebDAV).
-    [cjh] Show who created or made the last change to a task along with the date (Request #6305).
-    [jan] Add Turkish translation (METU <horde-tr@metu.edu.tr>).
-2.2.0-RC2:
-  notes: |
-    Original version string was 2.2.0RC2
-    [jan] SECURITY: Fix privilege escalation in Horde API.
-    [cjh] SECURITY: Fix missing ownership validation on share changes.
-    [cjh] Fix sorting tasks by Task list.
-    [jan] Fix tasks losing their parent task when being completed (Bug #6035).
-    [cjh] Add the ability to filter the list of task lists in the panel.
-    [cjh] New share management UI that doesn't require JavaScript.
-    [jan] Fix 2006-04-18_add_creator_and_assignee_fields.php upgrade script.
-2.2.0-RC1:
-  notes: |
-    Original version string was 2.2.0RC1
-    [jan] Implement WebDAV access.
-    [jan] Add exportTasklist() API method.
-    [jan] Add SQL upgrade script.
-    [jan] Show estimated time including sub-tasks.
-    [cjh] Fix generation of UIDs with PHP 5.2+.
+  notes: "[jan] Change group field in shares table to work with LDAP groups (Bug #6883).\n[jan] Log completion date if adding a completed task (Bug #7275).\n[jan] Fix user name conversion with user hooks in the task list panel (Bug #7366).\n[jan] Fix displayed WebDAV subscription URLs in the task list manager.\n"
+2.3.0-RC1:
+  notes: "Original version string was 2.3.0RC1\n[jan] Log moving of tasks in the history backend (Bug #3207).\n[jan] Fix deleting all tasks over WebDAV (Bug #7004).\n[jan] Add Estonian translation (Alar Sing <alar.sing@err.ee>).\n[jan] Send a more detailed notification message and use the recipient's preferred language and date/time format after a task has changed.\n[jan] Add Basque translation (Euskal Herriko Unibertsitatea EHU/UPV <xabier.arrieta@ehu.es>).\n[jan] Fix task relationship getting lost when importing tasks (tkrah@fachschaft.imn.htwk-leipzig.de, bb.apc.ag, Bug #6770).\n[jan] Add preference to set columns for the list view.\n[jan] Allow to set task assignee.\n[jan] Add options to export screen for choosing task lists and task states.\n[mjr] Remove user permissions on all shares when deleting a user.\n[mjr] Fix issue with removeUserData api that caused the deleted user's task list to not be deleted (Bug #6969).\n"
 2.2.0:
-  notes: |
-    [cjh] Improve resource usage in datatree_to_sql share migration script (Bug #6740).
-    [jan] Allow to import all fields that can be exported.
-    [cjh] Fix displayed WebDAV subscription URLs in the panel (Bug #6709).
+  notes: "[cjh] Improve resource usage in datatree_to_sql share migration script (Bug #6740).\n[jan] Allow to import all fields that can be exported.\n[cjh] Fix displayed WebDAV subscription URLs in the panel (Bug #6709).\n"
+2.2.0-RC3:
+  notes: "Original version string was 2.2.0RC3\n[bak] Move tasklists into per-owner subdirectories when viewed through WebDAV. (Request #6595)\n[cjh] Apply fix for http://dev.rubyonrails.org/ticket/11473 to prototype.js (Request #6590).\n[cjh] Add an upgrade script for the new SQL share driver (Request #6109).\n[jan] Correctly determine default task list in the API (SyncML, WebDAV).\n[cjh] Show who created or made the last change to a task along with the date (Request #6305).\n[jan] Add Turkish translation (METU <horde-tr@metu.edu.tr>).\n"
+2.2.0-RC2:
+  notes: "Original version string was 2.2.0RC2\n[jan] SECURITY: Fix privilege escalation in Horde API.\n[cjh] SECURITY: Fix missing ownership validation on share changes.\n[cjh] Fix sorting tasks by Task list.\n[jan] Fix tasks losing their parent task when being completed (Bug #6035).\n[cjh] Add the ability to filter the list of task lists in the panel.\n[cjh] New share management UI that doesn't require JavaScript.\n[jan] Fix 2006-04-18_add_creator_and_assignee_fields.php upgrade script.\n"
+2.2.0-RC1:
+  notes: "Original version string was 2.2.0RC1\n[jan] Implement WebDAV access.\n[jan] Add exportTasklist() API method.\n[jan] Add SQL upgrade script.\n[jan] Show estimated time including sub-tasks.\n[cjh] Fix generation of UIDs with PHP 5.2+.\n"
+2.2.0-alpha1:
+  notes: "Original version string was 2.2.0alpha\n[cjh] Add preferences for turning due dates on by default, setting the default due date's number of days in the future, and setting the default due date's time.\n[cjh] Add vCalendar 2.0 alarm export (munzli@olmero.ch, Bug #4851).\n[jan] Add sub-tasks.\n[jan] Add start dates for tasks.\n[jan] Add support for the Horde_Alarm framework (requires Horde 3.2).\n[cjh] Default to a javascript quick search, if available, with options for the full search and a direct link to full search if javascript is unavailable.\n[cjh] Allow explicitly searching All, Incomplete, or Completed tasks (Request #4222).\n[cjh] Allow configuring the tasklists that the task summary block shows, and let the user set a title for the block to differentiate multiple instances (Request #2388).\n[cjh] Show task description tooltips in the task summary block (Request #3444).\n[cjh] Store completion date and add history entries for task completion.\n[cjh] Move tasklist selection/deselection to a collapsible panel.\n[mas] Conform to WCAG 1.0 Priority 2/Section 508 accessibility guidelines. (Request #4080)\n[cjh] Allow using the checkboxes to mark tasks as incomplete as well as complete (michael.sheldon@credativ.de, Request #4250).\n[cjh] Sort date fields correctly with JS table sorting.\n[jan] Add private flag.\n[jan] Add a field for estimated time being spent on a task.\n[mdj] Add support for split read/write database.\n[mdj] Add failover support for SQL backend.\n[cjh] Add a tree block for showing current alarms.\n"
 2.1.4:
-  notes: |
-    [jan] SECURITY: Fix privilege escalation in Horde API.
-    [cjh] SECURITY: Fix missing ownership validation on share changes.
-    [cjh] Send iCalendar data as UTF-8.
+  notes: "[jan] SECURITY: Fix privilege escalation in Horde API.\n[cjh] SECURITY: Fix missing ownership validation on share changes.\n[cjh] Send iCalendar data as UTF-8.\n"
 2.1.3:
-  notes: |
-    [jan] Show alarms for overdue tasks too.
-    [jan] Add Catalan translation (Jordi Giralt <projecte.k2@upcnet.es>).
+  notes: "[jan] Show alarms for overdue tasks too.\n[jan] Add Catalan translation (Jordi Giralt <projecte.k2@upcnet.es>).\n"
 2.1.2:
-  notes: |
-    [jan] Show error message if imported file didn't contain tasks.
-    [jan] Add categories from imported contacts to the user's categories.
-    [jan] Fix import of CSV data.
-    [jan] Add Slovenian translation (Duck <duck@obala.net>).
-    [jan] Show personal tasklist by default with disabled preferences (Bug #4078).
+  notes: "[jan] Show error message if imported file didn't contain tasks.\n[jan] Add categories from imported contacts to the user's categories.\n[jan] Fix import of CSV data.\n[jan] Add Slovenian translation (Duck <duck@obala.net>).\n[jan] Show personal tasklist by default with disabled preferences (Bug #4078).\n"
 2.1.1:
-  notes: |
-    [jan] Only load completed/incomplete tasks from backend where sufficient (Request #2387).
-    [jan] Don't show tooltips for tasks without read permissions (Bug #3836).
-    [jan] Fix fatal error when dealing with very old tasks that don't have a UID yet (Bug #3818).
-    [jan] Add 1.1 to 2.x upgrade script for Oracle.
-2.1.0-RC1:
-  notes: |
-    Original version string was 2.1.0RC1
-    [jan] Add Portuguese translation (Manuel Menezes de Sequeira <Manuel.Sequeira>).
-    [jan] Add preference to send email notifications to users when tasks have been added, edited, or deleted in their calendars (kevin_myer@iu13.org, Request #2332).
-    [jan] Confirm task deletions (Request #1155).
-    [jan] Add CLI script to import vTodo data.
-    [cjh] Add support for dynamic re-sorting of the task list, including saving the sort preferences on any changes.
-    [cjh] Deprecate the DataTree tasks driver.
-    [cjh] Make the completed checkbox in task view functional (martin@mein-horde.de, Bug #2157).
-    [mas] Change any output of <b> and <i> tags to <strong> and <em> for better accessibility support.
-    [jan] Add permissions to restrict number of tasks.
-    [jan] Add print view to task list (kevin_myer@iu13.org, Bug #1875).
-    [cjh] Add ics.php, which can be used for integration with Sunbird, iCal, et. al.
-    [jan] Show category colors in portal block (Brandon Knitter <knitterb@blandsite.org>, Bug #1126).
+  notes: "[jan] Only load completed/incomplete tasks from backend where sufficient (Request #2387).\n[jan] Don't show tooltips for tasks without read permissions (Bug #3836).\n[jan] Fix fatal error when dealing with very old tasks that don't have a UID yet (Bug #3818).\n[jan] Add 1.1 to 2.x upgrade script for Oracle.\n"
 2.1.0:
-  notes: |
-    [ben] Better support for MS-SQL.
+  notes: "[ben] Better support for MS-SQL.\n"
+2.1.0-RC1:
+  notes: "Original version string was 2.1.0RC1\n[jan] Add Portuguese translation (Manuel Menezes de Sequeira <Manuel.Sequeira>).\n[jan] Add preference to send email notifications to users when tasks have been added, edited, or deleted in their calendars (kevin_myer@iu13.org, Request #2332).\n[jan] Confirm task deletions (Request #1155).\n[jan] Add CLI script to import vTodo data.\n[cjh] Add support for dynamic re-sorting of the task list, including saving the sort preferences on any changes.\n[cjh] Deprecate the DataTree tasks driver.\n[cjh] Make the completed checkbox in task view functional (martin@mein-horde.de, Bug #2157).\n[mas] Change any output of <b> and <i> tags to <strong> and <em> for better accessibility support.\n[jan] Add permissions to restrict number of tasks.\n[jan] Add print view to task list (kevin_myer@iu13.org, Bug #1875).\n[cjh] Add ics.php, which can be used for integration with Sunbird, iCal, et. al.\n[jan] Show category colors in portal block (Brandon Knitter <knitterb@blandsite.org>, Bug #1126).\n"
 2.0.4:
-  notes: |
-    [cjh] Close several XSS vulnerabilities with task and tasklist data.
+  notes: "[cjh] Close several XSS vulnerabilities with task and tasklist data.\n"
 2.0.3:
-  notes: |
-    [jan] Allow to import more than one task from vTodo data at once.
+  notes: "[jan] Allow to import more than one task from vTodo data at once.\n"
 2.0.2:
-  notes: |
-    [cjh] Add a PostgreSQL upgrade script (Bug #1780).
-    [cjh] Use bind variables in the SQL driver (selsky@columbia.edu, Bug #1681).
-    [cjh] Fix problem where you couldn't select any tasklists once you'd deselected all of them.
-    [jan] Add shortcut icon (favicon.ico).
-    [jan] Fix warnings if no tasks to export exist.
-    [jan] Fix CSV imports (Bug #1387).
-    [cjh] Allow hiding the Task List column in the List view.
+  notes: "[cjh] Add a PostgreSQL upgrade script (Bug #1780).\n[cjh] Use bind variables in the SQL driver (selsky@columbia.edu, Bug #1681).\n[cjh] Fix problem where you couldn't select any tasklists once you'd deselected all of them.\n[jan] Add shortcut icon (favicon.ico).\n[jan] Fix warnings if no tasks to export exist.\n[jan] Fix CSV imports (Bug #1387).\n[cjh] Allow hiding the Task List column in the List view.\n"
 2.0.1:
-  notes: |
-    [jan] Allow to select the "Unfiled" category in the portal block (Mathieu Clabaut <mathieu.clabaut@free.fr>, Bug #1237).
-    [cjh] Don't highlight the New Task menu item when editing tasks.
-    [cjh] Use a checkbox for editing completed/incomplete in the task edit view, to match the list view (Bug #1212).
-    [jan] Fix print button.
-    [jan] Add Japanese translation (Hiromi Kimura <hiromi@tac.tsukuba.ac.jp>).
-2.0.0-beta1:
-  notes: |
-    Original version string was 2.0.0beta
-    [jan] Add special black-on-white styles for message printing.
-    [cjh] Users can now specify a secondary sort column (Andrew Coleman <mercury@appisolutions.net>).
-    [cjh] Preserve searches while re-sorting (Francois Marier <francois@nit.ca>).
-    [jan] Add access keys.
-    [cjh] Add Kolab drivers (Stuart Bingë <s.binge@codefusion.co.za>).
-2.0.0-alpha1:
-  notes: |
-    Original version string was 2.0.0alpha
-    [cjh] GUIDs now only contain nag: and the task ID - sharename is not needed.
-    [cjh] Task IDs are now 32-character unique strings, to be useable as GUIDs. The SQL table definition has changed; conversion scripts are in scripts/.
-    [jan] Add Indonesian language (Slamin <slamin@unej.ac.id>).
-    [cjh] Add import and export in vTodo (iCalendar) format.
-    [cjh] Make sure that the correct categories for a task's current tasklist are always used.
-    [cjh] Track addition, modification, and deletion of tasks with the Horde History:: API.
-    [cjh] Change how tasks are stored in the SQL driver. scripts/create_sequence.php will update an existing database with no loss of data.
-    [cjh] Show tooltips containing task descriptions.
-    [cjh] Add a preference for the default category (Brian Keifer <brian@valinor.net>).
-    [cjh] Make the due date in the summary block configurable (Mathieu CLABAUT <mathieu.clabaut@free.fr>).
-    [cjh] Add task alarms (Mathieu CLABAUT <mathieu.clabaut@free.fr>).
-    [jan] Add UTF-8 support and charset parameter for backend drivers.
-    [cjh] Only show selected task categories on the summary screen (John Morrissey <jwm@horde.net>).
-    [cjh] Much more comprehensive permissions checking, and support for guest access.
-    [cjh] Use the global shares editing page for changing/assigning share permissions.
-    [cjh] Add options for showing, sorting by, and grouping by task owner (Brian Keifer <brian@valinor.net>).
-    [mac] Allow importing onto any available Task list.
-    [cjh] Add an option to show only complete tasks, and add links on the task view to switch between all, complete, and incomplete.
-    [mac] Add shared task lists.
-2.0.0-RC3:
-  notes: |
-    Original version string was 2.0.0RC3
-    [jan] Add Polish translation (Piotr Kuczynski <pkuczynski@hypode.pl>).
-    [cjh] Add My Tasklists menu entry.
-2.0.0-RC2:
-  notes: |
-    Original version string was 2.0.0RC2
-    [jan] Add Latvian translation (Janis Eisaks <jancs@dv.lv>).
-2.0.0-RC1:
-  notes: |
-    Original version string was 2.0.0RC1
-    [jan] Tweak layout of the summary block.
+  notes: "[jan] Allow to select the \"Unfiled\" category in the portal block (Mathieu Clabaut <mathieu.clabaut@free.fr>, Bug #1237).\n[cjh] Don't highlight the New Task menu item when editing tasks.\n[cjh] Use a checkbox for editing completed/incomplete in the task edit view, to match the list view (Bug #1212).\n[jan] Fix print button.\n[jan] Add Japanese translation (Hiromi Kimura <hiromi@tac.tsukuba.ac.jp>).\n"
 2.0.0:
-  notes: |
-    [cjh] UIDs need to be stored in the History system with a nag: prefix and with the tasklist_id so as not to confuse different instances of the same task (if two users both have a task on their seperate tasklists, they should have unique histories for that task).
-    [jan] Fix upgrade script to create unique IDs.
+  notes: "[cjh] UIDs need to be stored in the History system with a nag: prefix and with the tasklist_id so as not to confuse different instances of the same task (if two users both have a task on their seperate tasklists, they should have unique histories for that task).\n[jan] Fix upgrade script to create unique IDs.\n"
+2.0.0-RC3:
+  notes: "Original version string was 2.0.0RC3\n[jan] Add Polish translation (Piotr Kuczynski <pkuczynski@hypode.pl>).\n[cjh] Add My Tasklists menu entry.\n"
+2.0.0-RC2:
+  notes: "Original version string was 2.0.0RC2\n[jan] Add Latvian translation (Janis Eisaks <jancs@dv.lv>).\n"
+2.0.0-RC1:
+  notes: "Original version string was 2.0.0RC1\n[jan] Tweak layout of the summary block.\n"
+2.0.0-beta1:
+  notes: "Original version string was 2.0.0beta\n[jan] Add special black-on-white styles for message printing.\n[cjh] Users can now specify a secondary sort column (Andrew Coleman <mercury@appisolutions.net>).\n[cjh] Preserve searches while re-sorting (Francois Marier <francois@nit.ca>).\n[jan] Add access keys.\n[cjh] Add Kolab drivers (Stuart Bingë <s.binge@codefusion.co.za>).\n"
+2.0.0-alpha1:
+  notes: "Original version string was 2.0.0alpha\n[cjh] GUIDs now only contain nag: and the task ID - sharename is not needed.\n[cjh] Task IDs are now 32-character unique strings, to be useable as GUIDs. The SQL table definition has changed; conversion scripts are in scripts/.\n[jan] Add Indonesian language (Slamin <slamin@unej.ac.id>).\n[cjh] Add import and export in vTodo (iCalendar) format.\n[cjh] Make sure that the correct categories for a task's current tasklist are always used.\n[cjh] Track addition, modification, and deletion of tasks with the Horde History:: API.\n[cjh] Change how tasks are stored in the SQL driver. scripts/create_sequence.php will update an existing database with no loss of data.\n[cjh] Show tooltips containing task descriptions.\n[cjh] Add a preference for the default category (Brian Keifer <brian@valinor.net>).\n[cjh] Make the due date in the summary block configurable (Mathieu CLABAUT <mathieu.clabaut@free.fr>).\n[cjh] Add task alarms (Mathieu CLABAUT <mathieu.clabaut@free.fr>).\n[jan] Add UTF-8 support and charset parameter for backend drivers.\n[cjh] Only show selected task categories on the summary screen (John Morrissey <jwm@horde.net>).\n[cjh] Much more comprehensive permissions checking, and support for guest access.\n[cjh] Use the global shares editing page for changing/assigning share permissions.\n[cjh] Add options for showing, sorting by, and grouping by task owner (Brian Keifer <brian@valinor.net>).\n[mac] Allow importing onto any available Task list.\n[cjh] Add an option to show only complete tasks, and add links on the task view to switch between all, complete, and incomplete.\n[mac] Add shared task lists.\n"
 1.1.3:
-  notes: |
-    [jan] Close XSS when setting the parent frame's page title by javascript (cjh).
+  notes: "[jan] Close XSS when setting the parent frame's page title by javascript (cjh).\n"
 1.1.2:
-  notes: |
-    [jan] Add Polish translation (Piotr Kuczynski <pkuczynski@hypode.pl>).
-    [cjh] Fix changing of task attributes that have not been set previously (rvs@angara.ru, Bug #569).
+  notes: "[jan] Add Polish translation (Piotr Kuczynski <pkuczynski@hypode.pl>).\n[cjh] Fix changing of task attributes that have not been set previously (rvs@angara.ru, Bug #569).\n"
 1.1.1:
-  notes: |
-    [jan] Add Indonesian language (Slamin <slamin@unej.ac.id>).
-    [jan] Add Arabic (Syria) translation (Platinum Development Team <devteam@platinum-sy.net>).
-    [jan] Add Romanian translation (Eugen Hoanca <eugenh@urban-grafx.ro>, Marius Dragulescu <mariusd@urban-grafx.ro>).
-    [jon] Display the task navbar above the description in the task view, as well (John Morrissey <jwm@horde.net>).
+  notes: "[jan] Add Indonesian language (Slamin <slamin@unej.ac.id>).\n[jan] Add Arabic (Syria) translation (Platinum Development Team <devteam@platinum-sy.net>).\n[jan] Add Romanian translation (Eugen Hoanca <eugenh@urban-grafx.ro>, Marius Dragulescu <mariusd@urban-grafx.ro>).\n[jon] Display the task navbar above the description in the task view, as well (John Morrissey <jwm@horde.net>).\n"
 1.1.0:
-  notes: |
-    [jan] Add Greek translation (Stefanos I. Dimitriou <sdimitri@teiath.gr>).
-    [jan] Add print task button (mac).
-    [jan] Add Slovak translation (Ivan Noris <vix@vazka.sk>).
-    [jan] Add ability to create new categories (mac).
-    [jan] Add Nag::addParameter().
-    [jan] Add Norwegian Bokmaal translation (Torstein S. Hansen <huleboer@techbee.no>).
-    [jan] Add Bulgarian translation (Miroslav Pendev <miro@cybershade.us>).
-    [jan] Add preferences for showing priorities and due dates in the summary (Brian Keifer <brian@valinor.net>).
-    [jan] Add Lithuanian translation (Darius Matuliauskas <darius@lnk.lt>).
-    [jan] Replace <?= with <?php echo to remove the short_open_tags requirement (cjh).
-    [jan] Show success or failure message on saving the task.
-    [jan] Show completed tasks with strikethrough in the Horde summary screen (Bill Edgington <horde@0x20.com>).
-    [jan] Add Danish translation (Martin List-Petersen <martin@list-petersen.dk>).
+  notes: "[jan] Add Greek translation (Stefanos I. Dimitriou <sdimitri@teiath.gr>).\n[jan] Add print task button (mac).\n[jan] Add Slovak translation (Ivan Noris <vix@vazka.sk>).\n[jan] Add ability to create new categories (mac).\n[jan] Add Nag::addParameter().\n[jan] Add Norwegian Bokmaal translation (Torstein S. Hansen <huleboer@techbee.no>).\n[jan] Add Bulgarian translation (Miroslav Pendev <miro@cybershade.us>).\n[jan] Add preferences for showing priorities and due dates in the summary (Brian Keifer <brian@valinor.net>).\n[jan] Add Lithuanian translation (Darius Matuliauskas <darius@lnk.lt>).\n[jan] Replace <?= with <?php echo to remove the short_open_tags requirement (cjh).\n[jan] Show success or failure message on saving the task.\n[jan] Show completed tasks with strikethrough in the Horde summary screen (Bill Edgington <horde@0x20.com>).\n[jan] Add Danish translation (Martin List-Petersen <martin@list-petersen.dk>).\n"
 1.0.0:
-  notes: |
-    [jan] Add Hungarian translation (Laszlo L. Tornoci <torlasz@xenia.sote.hu>).
-    [jan] Add Simplified Chinese translation (Peter Wang <whw@oulink.net>).
-    [jan] Add Korean translation (J.I Kim <aporie@netian.com>).
-    [jan] Add Norwegian Nynorsk translation (Per-Stian Vatne <psv@orsta.org>).
-    [cjh] Completed tasks aren't overdue, no matter what the due date.
-    [cjh] Filter out completed tasks earlier if requested, so the task count is correct.
-    [cjh] Simplify color scheme a bit.
-    [cjh] Add category column.
-    [cjh] Remove task_added column.
-    [cjh] Keep track of when a task was last modified (for sync purposes).
-    [jan] Add Finnish translation (Tero Matinlassi <terom@iki.fi>).
-    [jan] Add Brazilian Portuguese translation (Antonio Dias <accdias@sst.com.br>).
-    [cjh] Close a potential problem with register_globals On and $js_onLoad.
-    [cjh] Add new task link to the summary (Quinn Wilson <qwilson@midworld.org>).
-    [cjh] Use the new PrefsUI class.
-    [cjh] Remove the STORAGE_* constants in favor of PEAR_Errors.
-    [cjh] Add a preference to not show completed tasks in the task list.
-    [cjh] Fix completion widget in the task modification screen.
-    [jon] Adapt to the new Horde::img() syntax.
-    [cjh] Switch output compression to ob_gzhandler().
-    [cjh] Use NAG_TEMPLATES constant for all template paths.
-    [cjh] Use $registry->get() for all Registry information.
-    [cjh] Prefix all application constants with NAG_.
-    [cjh] Use the new Notification system.
-    [jon] Enable the "portability" option in the SQL driver.
-    [jan] Remove the standard value for the language preference. The language to fall back to should be set Horde wide in lang.php instead.
-    [jan] Add Swedish translation (Andreas Dahlén <andreas@dahlen.ws>).
-    [jan] Add Traditional Chinese translation (David Chang <david@thbuo.gov.tw>).
-    [bjn] Change 'en' and 'en_EN' locales to 'en_US' (default).
-    [cjh] Change Nag_Storage:: to Nag_Driver::.
-    [cjh] Allow setting priority for multiple tasks in the list view.
-    [cjh] Change task priorities to be 1-5 (matches Palm todo list).
-    [jon] Apply a "strike-through" style to closed (completed) tasks.
-    [jon] Remove task dependency code.
-    [jon] Add completion status. (Paul Cooper <pgc@ucecom.com>)
-    [jan] Add French translation (Mikhaël Janson <mik@galaxie.net>).
-    [cjh] Let the Registry handle retrieving preferences.
-    [jan] Due tasks can now be shown in Kronolith.
-    [jan] Add Italian translation (Giovanni Meneghetti <gmeneghetti@infvic.it>).
-    [cjh] Add Czech translation (pchytil@asp.ogi.edu).
-    [cjh] Add Russian translation (Ignat Ikryanov <ignat@ibd.ru>).
-    [avsm] Replace $conf['paths'] with the $registry equivalents.
-    [jon] Updated to reflect the changes in PEAR DB's quoteString().
-    [cjh] Add $conf['menu']['apps'] support.
-    [cjh] Add low and high priority icons.
-    [cjh] Show a note icon if a task has a description.
-    [jon] Added the concept of task priorities (low, medium, high).
-    [jon] Return to the task detail view after additions or modifications.
-    [jon] Allow a task to be dependent on another task.
-    [cjh] Add translation framework.
-    [jon] Added Nag::formatDate() to format internal date values.
+  notes: "[jan] Add Hungarian translation (Laszlo L. Tornoci <torlasz@xenia.sote.hu>).\n[jan] Add Simplified Chinese translation (Peter Wang <whw@oulink.net>).\n[jan] Add Korean translation (J.I Kim <aporie@netian.com>).\n[jan] Add Norwegian Nynorsk translation (Per-Stian Vatne <psv@orsta.org>).\n[cjh] Completed tasks aren't overdue, no matter what the due date.\n[cjh] Filter out completed tasks earlier if requested, so the task count is correct.\n[cjh] Simplify color scheme a bit.\n[cjh] Add category column.\n[cjh] Remove task_added column.\n[cjh] Keep track of when a task was last modified (for sync purposes).\n[jan] Add Finnish translation (Tero Matinlassi <terom@iki.fi>).\n[jan] Add Brazilian Portuguese translation (Antonio Dias <accdias@sst.com.br>).\n[cjh] Close a potential problem with register_globals On and $js_onLoad.\n[cjh] Add new task link to the summary (Quinn Wilson <qwilson@midworld.org>).\n[cjh] Use the new PrefsUI class.\n[cjh] Remove the STORAGE_* constants in favor of PEAR_Errors.\n[cjh] Add a preference to not show completed tasks in the task list.\n[cjh] Fix completion widget in the task modification screen.\n[jon] Adapt to the new Horde::img() syntax.\n[cjh] Switch output compression to ob_gzhandler().\n[cjh] Use NAG_TEMPLATES constant for all template paths.\n[cjh] Use $registry->get() for all Registry information.\n[cjh] Prefix all application constants with NAG_.\n[cjh] Use the new Notification system.\n[jon] Enable the \"portability\" option in the SQL driver.\n[jan] Remove the standard value for the language preference. The language to fall back to should be set Horde wide in lang.php instead.\n[jan] Add Swedish translation (Andreas Dahlén <andreas@dahlen.ws>).\n[jan] Add Traditional Chinese translation (David Chang <david@thbuo.gov.tw>).\n[bjn] Change 'en' and 'en_EN' locales to 'en_US' (default).\n[cjh] Change Nag_Storage:: to Nag_Driver::.\n[cjh] Allow setting priority for multiple tasks in the list view.\n[cjh] Change task priorities to be 1-5 (matches Palm todo list).\n[jon] Apply a \"strike-through\" style to closed (completed) tasks.\n[jon] Remove task dependency code.\n[jon] Add completion status. (Paul Cooper <pgc@ucecom.com>)\n[jan] Add French translation (Mikhaël Janson <mik@galaxie.net>).\n[cjh] Let the Registry handle retrieving preferences.\n[jan] Due tasks can now be shown in Kronolith.\n[jan] Add Italian translation (Giovanni Meneghetti <gmeneghetti@infvic.it>).\n[cjh] Add Czech translation (pchytil@asp.ogi.edu).\n[cjh] Add Russian translation (Ignat Ikryanov <ignat@ibd.ru>).\n[avsm] Replace $conf['paths'] with the $registry equivalents.\n[jon] Updated to reflect the changes in PEAR DB's quoteString().\n[cjh] Add $conf['menu']['apps'] support.\n[cjh] Add low and high priority icons.\n[cjh] Show a note icon if a task has a description.\n[jon] Added the concept of task priorities (low, medium, high).\n[jon] Return to the task detail view after additions or modifications.\n[jon] Allow a task to be dependent on another task.\n[cjh] Add translation framework.\n[jon] Added Nag::formatDate() to format internal date values.\n"
 0.0.1:
-  notes: |
-    [cjh] Start application-specific constants at 100 and prefix them with NAG_.
-    [cjh] Add a Horde summary API function.
-    [jon] Added initial help text.
-    [cjh] Use prefs.gif and generic prefs templates from Horde.
-    [jon] Display task descriptions using a proportional (fixed) font.
-    [jon] Added externally-accessible API for registry integration.
-    [jon] HORDE_BASE is now defined in lib/base.php instead of config/conf.php.
-    [jon] Added detailed installation documentation (doc/INSTALL).
-    [jon] Moved task retrieval out of base.php for more efficiency and granularity.
-    [jon] Display overdue tasks in a different color.
-    [jon] Added status support for Horde messages / errors.
-    [cjh] Make multiple task deletion from the task list work.
-    [cjh] Make task storage work when deleting more than one task.
-    [jon] Added rudimentary searching capabilities.
-    [cjh] Define the HORDE_BASE constant in config/conf.php, and use it when referring to any of Horde's files.
-    [jon] Added the ability to add, remove, and delete tasks.
-    [jon] Made the task view date and time formats separately configurable.
-    [jon] Added individual task viewing (with descriptions).
-    [jon] Added sorting to the task list.
-    [jon] Added initial preferences support.
-    [jon] Added an initial "List Tasks" implementation
-    [jon] Added the 'sql' storage implementation.
+  notes: "[cjh] Start application-specific constants at 100 and prefix them with NAG_.\n[cjh] Add a Horde summary API function.\n[jon] Added initial help text.\n[cjh] Use prefs.gif and generic prefs templates from Horde.\n[jon] Display task descriptions using a proportional (fixed) font.\n[jon] Added externally-accessible API for registry integration.\n[jon] HORDE_BASE is now defined in lib/base.php instead of config/conf.php.\n[jon] Added detailed installation documentation (doc/INSTALL).\n[jon] Moved task retrieval out of base.php for more efficiency and granularity.\n[jon] Display overdue tasks in a different color.\n[jon] Added status support for Horde messages / errors.\n[cjh] Make multiple task deletion from the task list work.\n[cjh] Make task storage work when deleting more than one task.\n[jon] Added rudimentary searching capabilities.\n[cjh] Define the HORDE_BASE constant in config/conf.php, and use it when referring to any of Horde's files.\n[jon] Added the ability to add, remove, and delete tasks.\n[jon] Made the task view date and time formats separately configurable.\n[jon] Added individual task viewing (with descriptions).\n[jon] Added sorting to the task list.\n[jon] Added initial preferences support.\n[jon] Added an initial \"List Tasks\" implementation\n[jon] Added the 'sql' storage implementation.\n"
