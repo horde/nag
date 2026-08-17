@@ -153,31 +153,19 @@ class Nag
         $hours = floor($seconds / 3600);
         $minutes = ($seconds / 60) % 60;
 
-        if ($hours > 1) {
-            if ($minutes == 0) {
-                return sprintf(_("%d hours"), $hours);
-            } elseif ($minutes == 1) {
-                return sprintf(_("%d hours, %d minute"), $hours, $minutes);
-            } else {
-                return sprintf(_("%d hours, %d minutes"), $hours, $minutes);
-            }
-        } elseif ($hours == 1) {
-            if ($minutes == 0) {
-                return sprintf(_("%d hour"), $hours);
-            } elseif ($minutes == 1) {
-                return sprintf(_("%d hour, %d minute"), $hours, $minutes);
-            } else {
-                return sprintf(_("%d hour, %d minutes"), $hours, $minutes);
-            }
-        } else {
-            if ($minutes == 0) {
-                return _("no time");
-            } elseif ($minutes == 1) {
-                return sprintf(_("%d minute"), $minutes);
-            } else {
-                return sprintf(_("%d minutes"), $minutes);
-            }
+        if (!$hours && !$minutes) {
+            return _("no time");
         }
+
+        $parts = array();
+        if ($hours) {
+            $parts[] = sprintf(ngettext('%d hour', '%d hours', $hours), $hours);
+        }
+        if ($minutes) {
+            $parts[] = sprintf(ngettext('%d minute', '%d minutes', $minutes), $minutes);
+        }
+
+        return implode(', ', $parts);
     }
 
     /**
