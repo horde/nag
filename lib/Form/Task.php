@@ -1,5 +1,6 @@
 <?php
 
+use Horde\Nag\NagConfig;
 use Horde\Util\Util;
 
 /**
@@ -167,7 +168,7 @@ class Nag_Form_Task extends Horde_Form
             if (!in_array($registry->getAuth(), $users)) {
                 $users[] = $registry->getAuth();
             }
-            if (empty($GLOBALS['conf']['assignees']['allow_external'])) {
+            if (empty($GLOBALS['injector']->get(NagConfig::class)->get('assignees.allow_external'))) {
                 $users = array_flip($users);
                 if (count($users)) {
                     foreach (array_keys($users) as $user) {

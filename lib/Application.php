@@ -13,6 +13,7 @@
  */
 
 use Horde\Backup;
+use Horde\Nag\NagConfig;
 use Horde\Util\Variables;
 use Sabre\CalDAV;
 
@@ -90,7 +91,7 @@ class Nag_Application extends Horde_Registry_Application
      */
     public function menu($menu)
     {
-        global $conf;
+
 
         $menu->add(Horde::url('list.php'), _("_List Tasks"), 'nag-list', null, null, null, (basename($_SERVER['PHP_SELF']) == 'list.php' || strpos($_SERVER['PHP_SELF'], 'nag/index.php') !== false) ? 'current' : null);
 
@@ -98,7 +99,7 @@ class Nag_Application extends Horde_Registry_Application
         $menu->add(Horde::url('search.php'), _("_Search"), 'nag-search');
 
         /* Import/Export. */
-        if ($conf['menu']['import_export']) {
+        if ($GLOBALS['injector']->get(NagConfig::class)->get('menu.import_export')) {
             $menu->add(Horde::url('data.php'), _("_Import/Export"), 'horde-data');
         }
     }

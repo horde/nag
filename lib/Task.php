@@ -1,6 +1,7 @@
 <?php
 
 use Horde\Date\Formatter\IcuFormatter;
+use Horde\Nag\NagConfig;
 
 /**
  * Nag_Task handles as single task as well as a list of tasks and implements a
@@ -1714,11 +1715,12 @@ class Nag_Task
                     $attendee = $addr_ob->bare_address;
                     $name = $atparms[$index]['CN'] ?? null;
                 }
+                $allowExternal = $GLOBALS['injector']->get(NagConfig::class)->get('assignees.allow_external');
                 if (in_array($attendee, $all_addrs) !== false) {
-                    $this->assignee = $GLOBALS['conf']['assignees']['allow_external'] ? $attendee : $GLOBALS['registry']->getAuth();
+                    $this->assignee = $allowExternal ? $attendee : $GLOBALS['registry']->getAuth();
                     $this->status = Nag::RESPONSE_ACCEPTED;
                     break;
-                } elseif ($GLOBALS['conf']['assignees']['allow_external']) {
+                } elseif ($allowExternal) {
                     $this->assignee = $attendee;
                 }
             }

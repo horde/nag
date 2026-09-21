@@ -815,7 +815,7 @@ class Nag_Api extends Horde_Registry_Api
      */
     public function listUids($tasklists = null, $completed = null)
     {
-        if (!isset($GLOBALS['conf']['storage']['driver'])) {
+        if (null === $GLOBALS['injector']->get(\Horde\Nag\NagConfig::class)->get('storage.driver')) {
             throw new Nag_Exception(_("Not configured"));
         }
 

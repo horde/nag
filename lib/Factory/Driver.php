@@ -37,7 +37,7 @@ class Nag_Factory_Driver extends Horde_Core_Factory_Base
             }
         }
         if (!$driver) {
-            $driver = $GLOBALS['conf']['storage']['driver'];
+            $driver = $GLOBALS['injector']->get(\Horde\Nag\NagConfig::class)->get('storage.driver');
             $params = Horde::getDriverConfig('storage', $driver);
             $signature = serialize([$tasklist, $driver, $params]);
         }

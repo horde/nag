@@ -16,7 +16,8 @@ use Horde\Util\Util;
 require_once __DIR__ . '/lib/Application.php';
 $app_ob = Horde_Registry::appInit('nag');
 
-if (!$conf['menu']['import_export']) {
+$config = $injector->get(\Horde\Nag\NagConfig::class);
+if (!$config->get('menu.import_export')) {
     require NAG_BASE . '/index.php';
     exit;
 }

@@ -1,5 +1,6 @@
 <?php
 
+use Horde\Nag\NagConfig;
 use Horde\Util\Util;
 use Horde\Date\Format;
 
@@ -744,11 +745,11 @@ class Nag
      */
     public static function getUrl($type, $tasklist)
     {
-        global $conf, $injector, $registry;
+        global $injector, $registry;
+        $config = $injector->get(NagConfig::class);
 
         $url = $registry->get('webroot', 'horde');
-        $rewrite = isset($conf['urls']['pretty'])
-            && $conf['urls']['pretty'] == 'rewrite';
+        $rewrite = $config->get('urls.pretty') === 'rewrite';
 
         switch ($type) {
             case Nag::DAV_WEBDAV:
@@ -979,7 +980,7 @@ class Nag
             return '';
         }
 
-        if ($GLOBALS['conf']['assignees']['allow_external']) {
+        if ($GLOBALS['injector']->get(NagConfig::class)->get('assignees.allow_external')) {
             $email = new Horde_Mail_Rfc822_Address($assignee);
             $fullname = $email->personal;
             $email = $email->bare_address;
@@ -1073,7 +1074,7 @@ class Nag
     {
         global $notification;
 
-        if (empty($GLOBALS['conf']['alarms']['driver'])) {
+        if (empty($GLOBALS['injector']->get(NagConfig::class)->get('alarms.driver'))) {
             // Get any alarms in the next hour.
             try {
                 $alarmList = self::listAlarms($_SERVER['REQUEST_TIME']);
@@ -1955,7 +1956,7 @@ class Nag
      */
     protected static function _isActiveSyncEnabled()
     {
-        return !empty($GLOBALS['conf']['activesync']['enabled']);
+        return !empty($GLOBALS['injector']->get(NagConfig::class)->get('activesync.enabled'));
     }
 
     /**

@@ -23,6 +23,7 @@ use Horde_Perms;
 use Horde_Registry;
 use Horde_Share_Exception;
 use Horde_Variables;
+use Horde\Nag\NagConfig;
 use Horde\Util\Util;
 use Nag;
 use Nag_Exception;
@@ -54,7 +55,8 @@ class SaveTaskController implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        global $nag_shares, $prefs, $conf;
+        global $nag_shares, $prefs;
+        $config = $GLOBALS['injector']->get(NagConfig::class);
 
         $vars = Horde_Variables::getDefaultVariables();
 
@@ -143,7 +145,7 @@ class SaveTaskController implements RequestHandlerInterface
             $method = Nag::ITIP_REQUEST;
         }
 
-        if ($conf['assignees']['allow_external']) {
+        if ($config->get('assignees.allow_external')) {
             Nag::sendITipNotifications($storage->get($newid[0]), $this->notification, $method);
         }
 

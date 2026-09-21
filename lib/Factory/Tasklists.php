@@ -1,6 +1,7 @@
 <?php
 
 use Horde\Injector\Injector;
+use Horde\Nag\NagConfig;
 
 /**
  * The factory for the tasklists handler.
@@ -44,16 +45,17 @@ class Nag_Factory_Tasklists
      */
     public function create()
     {
-        if (!isset($GLOBALS['conf']['tasklists']['driver'])) {
+        $config = $this->_injector->get(NagConfig::class);
+        if (null === $config->get('tasklists.driver')) {
             $driver = 'Default';
         } else {
-            $driver = Horde_String::ucfirst($GLOBALS['conf']['tasklists']['driver']);
+            $driver = Horde_String::ucfirst($config->get('tasklists.driver'));
         }
         if (empty($this->_instances[$driver])) {
             $class = 'Nag_Tasklists_' . $driver;
             if (class_exists($class)) {
                 $params = [];
-                if (!empty($GLOBALS['conf']['share']['auto_create'])) {
+                if (!empty($config->get('share.auto_create'))) {
                     $params['auto_create'] = true;
                 }
                 switch ($driver) {

@@ -142,7 +142,7 @@ class Nag_Form_EditTaskList extends Horde_Form
         );
 
         /* Permissions link. */
-        if (empty($GLOBALS['conf']['share']['no_sharing']) && $owner) {
+        if (empty($GLOBALS['injector']->get(\Horde\Nag\NagConfig::class)->get('share.no_sharing')) && $owner) {
             $url = Horde::url($GLOBALS['registry']->get('webroot', 'horde')
                               . '/services/shares/edit.php')
                 ->add(['app' => 'nag', 'share' => $tasklist->getName()]);
