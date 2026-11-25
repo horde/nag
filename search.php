@@ -11,7 +11,7 @@ require_once __DIR__ . '/lib/Application.php';
 Horde_Registry::appInit('nag');
 
 $page_output->addInlineScript([
-    '$("search_pattern")',
+    'document.getElementById("search_pattern")',
 ], true);
 
 $page_output->header([
